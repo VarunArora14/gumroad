@@ -592,7 +592,7 @@ describe Api::V2::SalesController do
 
   describe "POST 'resend_receipt'" do
     before do
-      @sale = create(:purchase, seller: @seller)
+      @sale = create(:purchase, seller: @seller, link: @product)
       @params = { id: @sale.external_id }
     end
 
@@ -606,25 +606,26 @@ describe Api::V2::SalesController do
         expect_any_instance_of(Purchase).to receive(:resend_receipt)
         post :resend_receipt, params: @params
         expect(response).to be_successful
-        expect(json_response[:success]).to be true
+        expect(response.parsed_body["success"]).to be true
       end
 
       it "returns a not found error when sale does not exist" do
         @params[:id] = "non-existent"
         post :resend_receipt, params: @params
         expect(response).to be_successful
-        expect(json_response[:success]).to be false
-        expect(json_response[:message]).to eq("The sale was not found.")
+        expect(response.parsed_body["success"]).to be false
+        expect(response.parsed_body["message"]).to eq("The sale was not found.")
       end
 
       it "returns a not found error when sale belongs to another user" do
         other_user = create(:user)
-        other_sale = create(:purchase, seller: other_user)
+        other_product = create(:product, user: other_user)
+        other_sale = create(:purchase, seller: other_user, link: other_product)
         @params[:id] = other_sale.external_id
         post :resend_receipt, params: @params
         expect(response).to be_successful
-        expect(json_response[:success]).to be false
-        expect(json_response[:message]).to eq("The sale was not found.")
+        expect(response.parsed_body["success"]).to be false
+        expect(response.parsed_body["message"]).to eq("The sale was not found.")
       end
     end
 
