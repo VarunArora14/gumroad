@@ -603,10 +603,10 @@ describe Api::V2::SalesController do
       end
 
       it "resends the receipt" do
-        expect_any_instance_of(Purchase).to receive(:resend_receipt)
         post :resend_receipt, params: @params
         expect(response).to be_successful
         expect(response.parsed_body["success"]).to be true
+        expect(SendPurchaseReceiptJob).to have_enqueued_sidekiq_job(@sale.id).on("critical")
       end
 
       it "returns a not found error when sale does not exist" do
