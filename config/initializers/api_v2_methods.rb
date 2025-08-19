@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 GUMROAD_API_V2_METHODS = [
-
   {
     name: "Products",
     methods: [
