@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAvailablePriceUsdCentsToProductIndex < ActiveRecord::Migration[6.1]
+class AddAvailablePriceUsdCentsToProductIndex < ActiveRecord::Migration[7.1]
   def up
     EsClient.indices.put_mapping(
       index: Link.index_name,
@@ -12,5 +12,3 @@ class AddAvailablePriceUsdCentsToProductIndex < ActiveRecord::Migration[6.1]
     )
   end
 end
-
-
