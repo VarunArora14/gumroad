@@ -1,19 +1,7 @@
 # frozen_string_literal: true
 
 GUMROAD_API_V2_METHODS = [
-  {
-    name: "Purchases",
-    methods: [
-      {
-        type: :post,
-        path: "/purchases/:id/resend_receipt",
-        description: "Resend the purchase receipt to the customer's email.",
-        response_layout: :resend_receipt,
-        curl_layout: :resend_receipt,
-        scope: :resend_receipt
-      }
-    ]
-  },
+
   {
     name: "Products",
     methods: [
@@ -362,6 +350,13 @@ GUMROAD_API_V2_METHODS = [
         response_layout: :sale_refunded,
         curl_layout: :refund_sale,
         parameters_layout: :refund_sale
+      },
+      {
+        type: :post,
+        path: "/sales/:id/resend_receipt",
+        description: "Resend the purchase receipt to the customer's email. Available with the 'resend_receipt' scope.",
+        response_layout: :resend_receipt,
+        curl_layout: :resend_receipt
       }
     ]
   },

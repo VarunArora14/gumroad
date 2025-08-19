@@ -589,4 +589,55 @@ describe Api::V2::SalesController do
       end
     end
   end
+
+  describe "POST 'resend_receipt'" do
+    before do
+      @sale = create(:purchase, seller: @seller)
+      @params = { id: @sale.external_id }
+    end
+
+    describe "when logged in with resend_receipt scope" do
+      before do
+        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "resend_receipt")
+        @params.merge!(format: :json, access_token: @token.token)
+      end
+
+      it "resends the receipt" do
+        expect_any_instance_of(Purchase).to receive(:resend_receipt)
+        post :resend_receipt, params: @params
+        expect(response).to be_successful
+        expect(json_response[:success]).to be true
+      end
+
+      it "returns a not found error when sale does not exist" do
+        @params[:id] = "non-existent"
+        post :resend_receipt, params: @params
+        expect(response).to be_successful
+        expect(json_response[:success]).to be false
+        expect(json_response[:message]).to eq("The sale was not found.")
+      end
+
+      it "returns a not found error when sale belongs to another user" do
+        other_user = create(:user)
+        other_sale = create(:purchase, seller: other_user)
+        @params[:id] = other_sale.external_id
+        post :resend_receipt, params: @params
+        expect(response).to be_successful
+        expect(json_response[:success]).to be false
+        expect(json_response[:message]).to eq("The sale was not found.")
+      end
+    end
+
+    describe "when logged in with incorrect scope" do
+      before do
+        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "view_sales")
+        @params.merge!(format: :json, access_token: @token.token)
+      end
+
+      it "the response is 403 forbidden for incorrect scope" do
+        post :resend_receipt, params: @params
+        expect(response.code).to eq "403"
+      end
+    end
+  end
 end
