@@ -66,6 +66,11 @@ Rails.application.routes.draw do
       end
       resources :payouts, only: [:index, :show]
       resources :subscribers, only: [:show]
+      resources :purchases, only: [] do
+        member do
+          post :resend_receipt
+        end
+      end
 
       put "/resource_subscriptions", to: "resource_subscriptions#create"
       delete "/resource_subscriptions/:id", to: "resource_subscriptions#destroy"
