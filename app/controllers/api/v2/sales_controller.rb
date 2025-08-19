@@ -125,7 +125,7 @@ class Api::V2::SalesController < Api::V2::BaseController
     return error_with_sale if purchase.nil?
 
     purchase.resend_receipt
-    success_with_sale
+    render_response(true)
   end
 
   private
