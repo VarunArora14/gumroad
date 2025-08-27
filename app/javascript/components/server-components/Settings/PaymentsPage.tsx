@@ -949,7 +949,7 @@ const PaymentsPage = (props: Props) => {
           <header>
             <h2>Payout method</h2>
             <div>
-              <a data-helper-prompt="I have a question about my payout settings?">
+              <a href="/help/article/260-your-payout-settings-page" target="_blank" rel="noreferrer">
                 Any questions about these payout settings?
               </a>
             </div>
@@ -1047,6 +1047,7 @@ const PaymentsPage = (props: Props) => {
                 feeInfoText={props.fee_info.paypal_fee_info_text}
                 updatePayoutMethod={updatePayoutMethod}
                 errorFieldNames={errorFieldNames}
+                user={props.user}
               />
             ) : null}
             {selectedPayoutMethod !== "stripe" ? (
