@@ -596,9 +596,9 @@ describe Api::V2::SalesController do
       @params = { id: @sale.external_id }
     end
 
-    describe "when logged in with resend_receipt scope" do
+    describe "when logged in with refund_sales scope" do
       before do
-        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "resend_receipt")
+        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "refund_sales")
         @params.merge!(format: :json, access_token: @token.token)
       end
 

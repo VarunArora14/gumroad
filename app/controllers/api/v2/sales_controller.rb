@@ -3,8 +3,7 @@
 class Api::V2::SalesController < Api::V2::BaseController
   before_action(only: [:index, :show]) { doorkeeper_authorize! :view_sales }
   before_action(only: [:mark_as_shipped]) { doorkeeper_authorize! :mark_sales_as_shipped }
-  before_action(only: [:refund]) { doorkeeper_authorize! :refund_sales }
-  before_action(only: [:resend_receipt]) { doorkeeper_authorize! :resend_receipt }
+  before_action(only: [:refund, :resend_receipt]) { doorkeeper_authorize! :refund_sales }
   before_action :set_page, only: :index
 
   RESULTS_PER_PAGE = 10

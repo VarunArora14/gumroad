@@ -353,7 +353,7 @@ GUMROAD_API_V2_METHODS = [
       {
         type: :post,
         path: "/sales/:id/resend_receipt",
-        description: "Resend the purchase receipt to the customer's email. Available with the 'resend_receipt' scope.",
+        description: "Resend the purchase receipt to the customer's email. Available with the 'refund_sales' scope.",
         response_layout: :resend_receipt,
         curl_layout: :resend_receipt
       }
