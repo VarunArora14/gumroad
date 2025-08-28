@@ -6,6 +6,7 @@ import { formatOrderOfMagnitude } from "$app/utils/formatOrderOfMagnitude";
 import { getCssVariable } from "$app/utils/styles";
 
 import { Icon } from "$app/components/Icons";
+import { useLoggedInUser } from "$app/components/LoggedInUser";
 import { AuthorByline } from "$app/components/Product/AuthorByline";
 import { useFollowWishlist } from "$app/components/Wishlist/FollowButton";
 
@@ -24,12 +25,21 @@ export type CardWishlist = {
   can_follow: boolean;
 };
 
-export const Card = ({ wishlist, hideSeller }: { wishlist: CardWishlist; hideSeller?: boolean }) => {
+export const Card = ({
+  wishlist,
+  hideSeller,
+  eager,
+}: {
+  wishlist: CardWishlist;
+  hideSeller?: boolean;
+  eager?: boolean;
+}) => {
   const { isFollowing, isLoading, toggleFollowing } = useFollowWishlist({
     wishlistId: wishlist.id,
     wishlistName: wishlist.name,
     initialValue: wishlist.following,
   });
+  const loggedInUser = useLoggedInUser();
 
   const thumbnailUrl = wishlist.thumbnails.find((thumbnail) => thumbnail.url)?.url;
   const [backgroundColor, setBackgroundColor] = React.useState<string>(thumbnailUrl ? "transparent" : "var(--pink)");
@@ -70,6 +80,12 @@ export const Card = ({ wishlist, hideSeller }: { wishlist: CardWishlist; hideSel
             src={url ?? cast(nativeTypeThumbnails(`./${native_type}.svg`))}
             role="presentation"
             crossOrigin="anonymous"
+            {...(eager == null || !loggedInUser?.lazyLoadOffscreenDiscoverImages
+              ? {}
+              : {
+                  loading: eager ? ("eager" as const) : ("lazy" as const),
+                  fetchpriority: eager ? "high" : "auto",
+                })}
           />
         ))}
         {wishlist.thumbnails.length === 0 ? <img role="presentation" /> : null}
