@@ -345,7 +345,7 @@ GUMROAD_API_V2_METHODS = [
       {
         type: :put,
         path: "/sales/:id/refund",
-        description: "Refunds a sale. Available with the 'refund_sales' scope.",
+        description: "Refunds a sale. Available with the 'edit_sales' scope.",
         response_layout: :sale_refunded,
         curl_layout: :refund_sale,
         parameters_layout: :refund_sale
@@ -353,7 +353,7 @@ GUMROAD_API_V2_METHODS = [
       {
         type: :post,
         path: "/sales/:id/resend_receipt",
-        description: "Resend the purchase receipt to the customer's email. Available with the 'refund_sales' scope.",
+        description: "Resend the purchase receipt to the customer's email. Available with the 'edit_sales' scope.",
         response_layout: :resend_receipt,
         curl_layout: :resend_receipt
       }

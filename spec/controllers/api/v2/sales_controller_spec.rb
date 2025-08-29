@@ -383,11 +383,11 @@ describe Api::V2::SalesController do
       @params = { id: @purchase.external_id }
     end
 
-    describe "when logged in with refund_sales scope" do
+    describe "when logged in with edit_sales scope" do
       before do
         @token = create("doorkeeper/access_token", application: @app,
                                                    resource_owner_id: @seller.id,
-                                                   scopes: "refund_sales")
+                                                   scopes: "edit_sales")
         @params.merge!(access_token: @token.token)
       end
 
@@ -596,9 +596,9 @@ describe Api::V2::SalesController do
       @params = { id: @sale.external_id }
     end
 
-    describe "when logged in with refund_sales scope" do
+    describe "when logged in with edit_sales scope" do
       before do
-        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "refund_sales")
+        @token = create("doorkeeper/access_token", application: @app, resource_owner_id: @seller.id, scopes: "edit_sales")
         @params.merge!(format: :json, access_token: @token.token)
       end
 
