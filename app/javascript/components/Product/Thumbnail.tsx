@@ -1,9 +1,8 @@
 import * as React from "react";
 import { cast } from "ts-safe-cast";
 
+import useLazyLoadingProps from "$app/hooks/useLazyLoadingProps";
 import { ProductNativeType } from "$app/parsers/product";
-
-import { useLoggedInUser } from "$app/components/LoggedInUser";
 
 const nativeTypeThumbnails = require.context("$assets/images/native_types/thumbnails/");
 
@@ -16,18 +15,11 @@ export const Thumbnail = ({
   nativeType: ProductNativeType;
   eager?: boolean | undefined;
 }) => {
-  const loggedInUser = useLoggedInUser();
-  const commonProps: React.ImgHTMLAttributes<HTMLImageElement> = {
-    ...(eager == null || !loggedInUser?.lazyLoadOffscreenDiscoverImages
-      ? {}
-      : {
-          fetchpriority: eager ? "high" : "auto",
-          loading: eager ? ("eager" as const) : ("lazy" as const),
-        }),
-  };
+  const lazyLoadingProps = useLazyLoadingProps({ eager });
+
   return url ? (
-    <img src={url} {...commonProps} />
+    <img src={url} {...lazyLoadingProps} />
   ) : (
-    <img src={cast(nativeTypeThumbnails(`./${nativeType}.svg`))} {...commonProps} />
+    <img src={cast(nativeTypeThumbnails(`./${nativeType}.svg`))} {...lazyLoadingProps} />
   );
 };
