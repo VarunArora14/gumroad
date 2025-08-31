@@ -118,7 +118,6 @@ export const NavigationButton = React.forwardRef<HTMLAnchorElement, NavigationBu
   ({ className, color, outline, small, disabled, ...props }, ref) => {
     useValidateClassName(className);
 
-    // Map legacy props to ShadCN variants
     const variant = outline ? "outline" : color === "danger" ? "destructive" : "default";
     const size = small ? "sm" : "default";
 
