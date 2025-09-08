@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Admin::BaseController < ApplicationController
-  include ActionView::Helpers::DateHelper, ActionView::Helpers::NumberHelper, AdminActionTracker, Impersonate
+  include ActionView::Helpers::DateHelper, ActionView::Helpers::NumberHelper, AdminActionTracker, Impersonate, AdminHelper
 
-  layout "admin"
+  # layout "admin"
+  layout 'admin_inertia', only: :index
+
+  inertia_share card_types: -> { card_types_for_react }
 
   before_action :require_admin!
   before_action :hide_layouts
@@ -14,6 +17,7 @@ class Admin::BaseController < ApplicationController
   end
 
   def index
+    render inertia: "Admin/Base/Index", props: inertia_props(title: @title)
   end
 
   def impersonate

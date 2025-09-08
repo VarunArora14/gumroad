@@ -5,7 +5,7 @@ import { register } from "$app/utils/serverComponentUtil";
 
 import { useAppDomain } from "$app/components/DomainSettings";
 import { useLoggedInUser } from "$app/components/LoggedInUser";
-import { Nav as NavFramework, NavLink, NavLinkDropdownItem, UnbecomeDropdownItem } from "$app/components/Nav";
+import { Nav as NavFramework, NavLink, NavLinkDropdownItem, UnbecomeDropdownItem } from "$app/components/Nav/Base";
 import { Popover } from "$app/components/Popover";
 
 type ImpersonatedUser = {

@@ -11,6 +11,17 @@ import { TeamMembership } from "$app/components/LoggedInUser";
 import { showAlert } from "$app/components/server-components/Alert";
 import { useOriginalLocation } from "$app/components/useOriginalLocation";
 
+type NavLinkProps = {
+  text: string;
+  icon?: IconName;
+  badge?: React.ReactNode;
+  href: string;
+  exactHrefMatch?: boolean;
+  dataTurbo?: boolean;
+  additionalPatterns?: string[];
+  onClick?: (ev: React.MouseEvent<HTMLAnchorElement>) => void;
+};
+
 export const NavLink = ({
   text,
   icon,
@@ -20,16 +31,7 @@ export const NavLink = ({
   dataTurbo = false,
   additionalPatterns = [],
   onClick,
-}: {
-  text: string;
-  icon?: IconName;
-  badge?: React.ReactNode;
-  href: string;
-  exactHrefMatch?: boolean;
-  dataTurbo?: boolean;
-  additionalPatterns?: string[];
-  onClick?: (ev: React.MouseEvent<HTMLAnchorElement>) => void;
-}) => {
+}: NavLinkProps) =>  {
   const { href: originalHref } = new URL(useOriginalLocation());
   const ariaCurrent = [href, ...additionalPatterns].some((pattern) => {
     const escaped = escapeRegExp(pattern);

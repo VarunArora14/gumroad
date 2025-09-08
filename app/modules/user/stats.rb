@@ -23,6 +23,15 @@ module User::Stats
     }
   end
 
+  def stats
+    {
+      total: formatted_dollar_amount(sales_cents_total),
+      balance: balance_formatted,
+      chargeback_volume: lost_chargebacks[:volume],
+      chargeback_count: lost_chargebacks[:count]
+    }
+  end
+
   def active_subscribers?(charge_processor_id:, merchant_account: nil)
     active_subscriptions = Subscription.distinct
                                        .joins(link: :user)

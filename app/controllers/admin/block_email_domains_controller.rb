@@ -2,14 +2,15 @@
 
 class Admin::BlockEmailDomainsController < Admin::BaseController
   include MassBlocker
+  layout "admin_inertia", only: :show
 
   def show
-    @title = "Mass-block email domains"
+    render inertia: "Admin/BlockEmailDomains/Show", props: inertia_props(title: "Mass-block email domains")
   end
 
   def update
     schedule_mass_block(identifiers: email_domains_params[:identifiers], object_type: "email_domain")
-    redirect_to admin_block_email_domains_url, notice: "Blocking email domains in progress!"
+    redirect_to admin_block_email_domains_url, notice: "Blocking email domains in progress!", status: :see_other, inertia: {}
   end
 
   private

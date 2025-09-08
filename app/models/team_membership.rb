@@ -6,12 +6,14 @@ class TeamMembership < ApplicationRecord
 
   has_paper_trail
 
+  # TODO: this should be defined as an ActiveRecord::Enum
   ROLES = %w(owner accountant admin marketing support).freeze
 
   ROLES.each do |role|
     self.const_set("ROLE_#{role.upcase}", role)
 
     scope "role_#{role}", -> { where(role:) }
+    scope "role_not_#{role}", -> { where.not(role:) }
     define_method("role_#{role}?") do
       attributes["role"] == role
     end

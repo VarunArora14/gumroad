@@ -30,12 +30,13 @@ module Deletable
   end
 
   def alive?
-    deleted_at.nil?
+    !deleted?
   end
 
   def deleted?
-    deleted_at.present?
+    deleted_at?
   end
+  alias_method :deleted, :deleted?
 
   def being_marked_as_deleted?
     deleted_at_changed?(from: nil)

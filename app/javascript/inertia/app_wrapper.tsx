@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Nav } from "$app/components/client-components/Nav";
+import { Nav } from "$app/components/Nav";
 import { CurrentSellerProvider, parseCurrentSeller } from "$app/components/CurrentSeller";
 import { DesignContextProvider, DesignSettings } from "$app/components/DesignSettings";
 import { DomainSettingsProvider } from "$app/components/DomainSettings";
@@ -10,49 +10,17 @@ import { SSRLocationProvider } from "$app/components/useOriginalLocation";
 import { UserAgentProvider } from "$app/components/UserAgent";
 import useRouteLoading from "$app/components/useRouteLoading";
 
+import { LoggedInUser, Seller } from "$app/types/user";
+import { DomainSettings } from "$app/types/domain_settings";
+
 type GlobalProps = {
   design_settings: DesignSettings;
-  domain_settings: {
-    scheme: string;
-    app_domain: string;
-    root_domain: string;
-    short_domain: string;
-    discover_domain: string;
-    third_party_analytics_domain: string;
-  };
+  domain_settings: DomainSettings;
   user_agent_info: {
     is_mobile: boolean;
   };
-  logged_in_user: {
-    id: number;
-    email: string;
-    name: string;
-    avatar_url: string;
-    confirmed: boolean;
-    team_memberships: {
-      id: string;
-      seller_name: string;
-      seller_avatar_url: string | null;
-      has_some_read_only_access: boolean;
-      is_selected: boolean;
-    }[];
-    policies: Record<string, Record<string, boolean>>;
-    is_gumroad_admin: boolean;
-    is_impersonating: boolean;
-  };
-  current_seller: {
-    id: number;
-    email: string;
-    name: string;
-    avatar_url: string;
-    has_published_products: boolean;
-    subdomain: string;
-    is_buyer: boolean;
-    time_zone: {
-      name: string;
-      offset: number;
-    };
-  };
+  logged_in_user: LoggedInUser;
+  current_seller: Seller;
   href: string;
   locale: string;
 };

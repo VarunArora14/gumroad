@@ -156,6 +156,10 @@ class User < ApplicationRecord
   attr_json_data_accessor :custom_fee_per_thousand
   attr_json_data_accessor :payouts_paused_by
 
+  attr_blockable :email
+  attr_blockable :form_email, attribute: :email
+  attr_blockable :form_email_domain, attribute: :email_domain
+
   validates :username, uniqueness: { case_sensitive: true },
                        length: { minimum: 3, maximum: 20 },
                        exclusion: { in: DENYLIST },
@@ -417,6 +421,10 @@ class User < ApplicationRecord
     username.presence || form_email
   end
 
+  def display_name_or_email
+    display_name(prefer_email_over_default_username: true)
+  end
+
   def support_or_form_email
     support_email.presence || form_email
   end
@@ -635,8 +643,11 @@ class User < ApplicationRecord
   end
 
   def form_email
-    return unconfirmed_email if unconfirmed_email.present?
-    email if email.present?
+    unconfirmed_email.presence || email.presence
+  end
+
+  def form_email_domain
+    Mail::Address.new(form_email).domain.presence
   end
 
   def currency_symbol
@@ -1029,6 +1040,11 @@ class User < ApplicationRecord
 
     has_completed_payouts?
   end
+
+  def has_payments?
+    payments.any?
+  end
+  alias_method :has_payments, :has_payments?
 
   protected
     def after_confirmation

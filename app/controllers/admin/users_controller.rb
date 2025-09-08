@@ -225,7 +225,8 @@ class Admin::UsersController < Admin::BaseController
         @user = User.find_by(email: params[:id])
       else
         @user = User.find_by(username: params[:id]) ||
-                User.find_by(id: params[:id])
+                User.find_by(id: params[:id]) ||
+                User.find_by(external_id: params[:id])
       end
 
       e404 unless @user
