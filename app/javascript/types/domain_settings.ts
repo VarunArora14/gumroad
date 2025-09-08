@@ -5,4 +5,5 @@ export type DomainSettings = {
   short_domain: string;
   discover_domain: string;
   third_party_analytics_domain: string;
+  api_domain: string;
 };
