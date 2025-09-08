@@ -15,23 +15,22 @@ const Membership = ({ membership }: MembershipProps) => {
         <img src={membership.seller.avatar_url} className="user-avatar" alt={membership.seller.display_name_or_email} />
         <div className="grid">
           <h5><Link href={Routes.admin_user_url(membership.seller.id)}>{membership.seller.display_name_or_email}</Link></h5>
-          <div className="small">{membership.role}</div>
+          <div>{membership.role}</div>
         </div>
       </div>
       <div className="text-right">
         {membership.last_accessed_at && (
-          <div className="small">
-            last accessed
+          <div className="space-x-1">
+            <span>last accessed</span>
             <DateTimeWithRelativeTooltip date={membership.last_accessed_at} />
           </div>
         )}
       </div>
-      <div className="small">
-        invited
+      <div className="space-x-1">
+        <span>invited</span>
         <DateTimeWithRelativeTooltip date={membership.created_at} />
       </div>
     </div>
-
   )
 };
 

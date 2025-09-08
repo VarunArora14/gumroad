@@ -28,6 +28,7 @@ class Admin::RefundQueuesController < Admin::BaseController
                     verified
                     deleted
                     all_adult_products
+                    unpaid_balance_cents
                   ],
                   include: {
                     admin_manageable_user_memberships: {
@@ -40,7 +41,14 @@ class Admin::RefundQueuesController < Admin::BaseController
                     }
                   }
                 ).merge(
-                  impersonatable: policy([:admin, :impersonators, user]).create?
+                  impersonatable: policy([:admin, :impersonators, user]).create?,
+                  compliant: user.compliant?,
+                  suspended: user.suspended?,
+                  unpaid_balance_cents: user.unpaid_balance_cents,
+                  disable_paypal_sales: user.disable_paypal_sales?,
+                  flagged_for_fraud: user.flagged_for_fraud?,
+                  on_probation: user.on_probation?,
+                  user_risk_state: user.user_risk_state.humanize
                 )
              end
            )

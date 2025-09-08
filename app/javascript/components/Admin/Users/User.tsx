@@ -9,6 +9,9 @@ import BlockedUserTooltip from "$app/components/Admin/Users/BlockedUserTooltip";
 import AdminUserStats from "$app/components/Admin/Users/Stats";
 import AdminUserActions from "$app/components/Admin/Users/Actions";
 import AdminUserMemberships from "$app/components/Admin/Users/Memberships";
+import AdminUserPermissionRisk from "$app/components/Admin/Users/PermissionRisk";
+
+import { CurrentUser } from "$app/types/user";
 
 export type Seller = {
   id: number;
@@ -43,7 +46,15 @@ export type User = {
   verified: boolean;
   deleted: boolean;
   all_adult_products: boolean;
-  admin_manageable_user_memberships: UserMembership[];
+  admin_manageable_user_memberships: UserMembership[];\
+  compliant: boolean;
+  suspended: boolean;
+  unpaid_balance_cents: number;
+  disable_paypal_sales: boolean;
+  flagged_for_fraud: boolean;
+  on_probation: boolean;
+  user_risk_state: string;
+  bio: string;
   created_at: string;
 };
 
@@ -53,7 +64,7 @@ export type Props = {
 };
 
 const User = ({ user, is_affiliate_user }: Props) => {
-  const { url } = usePage();
+  const { url, props: { current_user } } = usePage() as unknown as { url: string; props: { current_user: CurrentUser } };
 
   const displayName = user.name || `User ${user.username}`;
   const adminUserUrl = is_affiliate_user ? Routes.admin_affiliate_url(user.id) : Routes.admin_user_url(user.id);
@@ -114,6 +125,7 @@ const User = ({ user, is_affiliate_user }: Props) => {
 
       <AdminUserActions user={user} />
       <AdminUserMemberships user={user} />
+      <AdminUserPermissionRisk user={user} current_user={current_user} />
     </div>
   );
 }

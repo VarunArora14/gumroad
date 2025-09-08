@@ -17,14 +17,7 @@ import useRouteLoading from "$app/components/useRouteLoading";
 import { LoggedInUser, Seller } from "$app/types/user";
 import { DomainSettings } from "$app/types/domain_settings";
 
-type CurrentUser = {
-  name: string;
-  avatar_url: string;
-  impersonated_user: {
-    name: string;
-    avatar_url: string;
-  } | null;
-};
+import { CurrentUser } from "$app/types/user";
 
 type CardType = {
   id: string;
