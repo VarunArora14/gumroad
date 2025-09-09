@@ -18,6 +18,10 @@ interface SelectPopoverProps<T extends string> {
 export function SelectPopover<T extends string>({ options, value, onChange, ariaLabel }: SelectPopoverProps<T>) {
   const selectedOption = options.find((opt) => opt.value === value);
 
+  const setOption = (optionValue: T) => {
+    onChange(optionValue);
+  };
+
   return (
     <Popover
       trigger={
@@ -30,7 +34,7 @@ export function SelectPopover<T extends string>({ options, value, onChange, aria
       <fieldset>
         {options.map((option) => (
           <label key={option.value}>
-            <input type="radio" checked={value === option.value} onChange={() => onChange(option.value)} />
+            <input type="radio" checked={value === option.value} onChange={() => setOption(option.value)} />
             {option.label}
           </label>
         ))}
