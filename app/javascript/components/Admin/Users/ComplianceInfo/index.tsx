@@ -1,0 +1,45 @@
+import React from "react";
+
+import type { User } from "$app/components/Admin/Users/User";
+
+import { useLazyFetch } from "$app/hooks/useLazyFetch";
+import { cast } from "ts-safe-cast";
+
+import ComplianceInfo, { type ComplianceInfoProps } from "$app/components/Admin/Users/ComplianceInfo/ComplianceInfo";
+
+type AdminUserComplianceInfoProps = {
+  user: User;
+};
+
+const AdminUserComplianceInfo = ({ user }: AdminUserComplianceInfoProps) => {
+  const [open, setOpen] = React.useState(false);
+
+  const { data: complianceInfo, isLoading, fetchData: fetchComplianceInfo } = useLazyFetch<ComplianceInfoProps>(
+    {} as ComplianceInfoProps,
+    {
+      url: Routes.admin_user_compliance_info_path(user.id, { format: "json" }),
+      responseParser: (data) => cast<ComplianceInfoProps>(data.compliance_info),
+    }
+  );
+
+  const onToggle = (e: React.MouseEvent<HTMLDetailsElement>) => {
+    setOpen(e.currentTarget.open);
+    if (e.currentTarget.open) {
+      fetchComplianceInfo();
+    }
+  }
+
+  return (
+    <>
+      <hr />
+      <details open={open} onToggle={onToggle}>
+        <summary>
+          <h3>Compliance Info</h3>
+        </summary>
+        <ComplianceInfo complianceInfo={complianceInfo} isLoading={isLoading} />
+      </details>
+    </>
+  );
+};
+
+export default AdminUserComplianceInfo;

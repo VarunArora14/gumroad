@@ -58,7 +58,10 @@ class Admin::RefundQueuesController < Admin::BaseController
 
     def set_users
       @users = User.refund_queue
-                   .includes(:payments, :admin_manageable_user_memberships)
+                   .includes(
+                     :admin_manageable_user_memberships,
+                     :payments
+                   )
                    .with_blocked_attributes_for(:form_email, :form_email_domain)
     end
 end

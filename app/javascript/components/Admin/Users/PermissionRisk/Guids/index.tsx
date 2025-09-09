@@ -8,7 +8,6 @@ import Guid from "$app/components/Admin/Users/PermissionRisk/Guids/Guid";
 type UserGuids = { guid: string; user_ids: number[] }[];
 
 const UserGuidsContent = ({ userGuids, isLoading }: { userGuids: UserGuids, isLoading: boolean }) => {
-
   if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
   if (userGuids.length > 0) return (
     <div className="stack">
