@@ -23,7 +23,6 @@ module ApplicationHelper
     {
       name: current_user.display_name,
       avatar_url: current_user.avatar_url,
-      has_risk_privilege: current_user.has_risk_privilege,
       impersonated_user: impersonated_user.present? ? {
         name: impersonated_user.display_name,
         avatar_url: impersonated_user.avatar_url
