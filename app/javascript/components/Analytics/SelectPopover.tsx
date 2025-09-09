@@ -3,7 +3,7 @@ import * as React from "react";
 import { Icon } from "$app/components/Icons";
 import { Popover } from "$app/components/Popover";
 
-export interface SelectOption<T extends string> {
+interface SelectOption<T extends string> {
   value: T;
   label: string;
 }
@@ -30,7 +30,7 @@ export function SelectPopover<T extends string>({ options, value, onChange, aria
       <fieldset>
         {options.map((option) => (
           <label key={option.value}>
-            <input type="checkbox" checked={value === option.value} onChange={() => onChange(option.value)} />
+            <input type="radio" checked={value === option.value} onChange={() => onChange(option.value)} />
             {option.label}
           </label>
         ))}
