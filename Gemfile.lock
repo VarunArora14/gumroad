@@ -15,6 +15,14 @@ GIT
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.4)
 
+GIT
+  remote: https://github.com/spikex/strongbox.git
+  revision: 1a098ad379aec0b291b350ecb3991a90d6d7522c
+  ref: master
+  specs:
+    strongbox (0.7.2)
+      activerecord
+
 GEM
   remote: https://gems.contribsys.com/
   specs:
@@ -996,8 +1004,6 @@ GEM
       multi_json (~> 1.8)
     stringio (3.1.1)
     stripe (12.5.0)
-    strongbox (0.7.3)
-      activerecord
     subexec (0.2.3)
     suo (0.4.0)
       dalli
@@ -1259,7 +1265,7 @@ DEPENDENCIES
   state_machines-activerecord (~> 0.8)
   streamio-ffmpeg (~> 3.0)
   stripe (~> 12.0)
-  strongbox (~> 0.7)
+  strongbox!
   subexec (~> 0.2)
   suo (~> 0.4)
   super_diff (~> 0.12.0)
