@@ -88,6 +88,6 @@ module User::Posts
   end
 
   def last_5_created_posts
-    self.installments.order(created_at: :desc).limit(5)
+    installments.order(created_at: :desc).limit(5)
   end
 end

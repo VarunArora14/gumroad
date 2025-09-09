@@ -26,6 +26,7 @@ namespace :admin do
           post :sync
         end
       end
+      resources :latest_posts, only: [:index]
       resources :stats, only: [:index]
     end
     resources :service_charges, only: :index

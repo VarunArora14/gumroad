@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class Admin::Users::BaseController < Admin::BaseController
-  before_action :fetch_user
+  include Admin::FetchUser
 
   protected
-
-    def fetch_user
-      @user = User.find_by(id: params[:user_id]) || e404
+    def user_param
+      params[:user_id]
     end
 end

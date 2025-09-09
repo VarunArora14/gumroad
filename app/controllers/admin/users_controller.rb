@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < Admin::BaseController
+  include Admin::FetchUser
   include Pagy::Backend
   include MassTransferPurchases
 
@@ -220,18 +221,6 @@ class Admin::UsersController < Admin::BaseController
   end
 
   private
-    def fetch_user
-      if params[:id].include?("@")
-        @user = User.find_by(email: params[:id])
-      else
-        @user = User.find_by(username: params[:id]) ||
-                User.find_by(id: params[:id]) ||
-                User.find_by(external_id: params[:id])
-      end
-
-      e404 unless @user
-    end
-
     def mass_transfer_purchases_params
       params.require(:mass_transfer_purchases).permit(:new_email)
     end
