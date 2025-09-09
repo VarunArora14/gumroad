@@ -1,7 +1,6 @@
 import React from "react";
 
 import type { User } from "$app/components/Admin/Users/User";
-import type { CurrentUser } from "$app/types/user";
 
 import AdminUserPermissionRiskActions from "$app/components/Admin/Users/PermissionRisk/Actions";
 import CompliantStatus from "$app/components/Admin/Users/PermissionRisk/CompliantStatus";
@@ -13,10 +12,9 @@ import LatestPosts from "$app/components/Admin/Users/PermissionRisk/LatestPosts"
 
 type AdminUserPermissionRiskProps = {
   user: User;
-  current_user: CurrentUser;
 };
 
-const AdminUserPermissionRisk = ({ user, current_user }: AdminUserPermissionRiskProps) => current_user.has_risk_privilege && (
+const AdminUserPermissionRisk = ({ user }: AdminUserPermissionRiskProps) => (
   <>
     <hr />
 

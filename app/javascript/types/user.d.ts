@@ -40,6 +40,5 @@ export type ImpersonatedUser = {
 export type CurrentUser = {
   name: string;
   avatar_url: string;
-  has_risk_privilege: boolean;
   impersonated_user: ImpersonatedUser | null;
 };
