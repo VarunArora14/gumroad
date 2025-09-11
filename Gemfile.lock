@@ -7,6 +7,15 @@ GIT
       capybara (~> 3.36)
 
 GIT
+  remote: https://github.com/emcousin/strongbox.git
+  revision: 4b0286f7e744838e9677e40e11eaf5633c8afe3b
+  ref: master
+  specs:
+    strongbox (0.7.2)
+      activerecord
+      base64 (~> 0.1)
+
+GIT
   remote: https://github.com/isaacsanders/omniauth-stripe-connect.git
   revision: 468dd9acaccdbba38a38cdbcdf7f10c17be25e89
   ref: 468dd9acaccdbba38a38cdbcdf7f10c17be25e89
@@ -14,14 +23,6 @@ GIT
     omniauth-stripe-connect (2.10.1)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.4)
-
-GIT
-  remote: https://github.com/spikex/strongbox.git
-  revision: 1a098ad379aec0b291b350ecb3991a90d6d7522c
-  ref: master
-  specs:
-    strongbox (0.7.2)
-      activerecord
 
 GEM
   remote: https://gems.contribsys.com/
