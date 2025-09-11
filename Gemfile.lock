@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/emcousin/strongbox.git
-  revision: 4b0286f7e744838e9677e40e11eaf5633c8afe3b
+  revision: b33c68cd23d4d8926dbfcb0430f3f583868c385f
   ref: master
   specs:
     strongbox (0.7.2)
@@ -201,7 +201,7 @@ GEM
     bcrypt (3.1.20)
     benchmark (0.4.1)
     benchmark-ips (2.13.0)
-    bigdecimal (3.2.2)
+    bigdecimal (3.2.3)
     bindata (2.5.0)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -233,7 +233,7 @@ GEM
     color (1.8)
     colorize (1.1.0)
     concurrent-ruby (1.3.5)
-    connection_pool (2.5.3)
+    connection_pool (2.5.4)
     cookiejar (0.3.4)
     countries (6.0.1)
       unaccent (~> 0.3)
@@ -1028,7 +1028,7 @@ GEM
     thor (1.3.1)
     thread_safe (0.3.6)
     tilt (2.4.0)
-    timeout (0.4.1)
+    timeout (0.4.3)
     trailblazer-option (0.1.2)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
