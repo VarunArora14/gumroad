@@ -29,6 +29,7 @@ namespace :admin do
       resources :latest_posts, only: [:index]
       resources :stats, only: [:index]
       resource :compliance_info, only: [:show]
+      resource :payout_info, only: [:show]
     end
     resources :service_charges, only: :index
     member do

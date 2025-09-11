@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Users::PayoutsController < Admin::Users::BaseController
+  include Admin::FetchUser
+
   before_action :fetch_payment, only: %i[show retry cancel fail sync]
   before_action :fetch_user, only: [:index, :pause, :resume]
 
@@ -107,9 +109,5 @@ class Admin::Users::PayoutsController < Admin::Users::BaseController
   private
     def fetch_payment
       @payment = Payment.find_by(id: params[:id]) || e404
-    end
-
-    def fetch_user
-      @user = User.find_by(id: params[:user_id]) || e404
     end
 end

@@ -1,0 +1,19 @@
+import React from "react";
+import { type ActiveBankAccountProps } from "./PayoutInfo";
+
+type HeaderProps = {
+  active_bank_account: ActiveBankAccountProps | null;
+  payment_address: string | null;
+};
+
+const Header = ({ active_bank_account, payment_address }: HeaderProps) => {
+  if (active_bank_account) {
+    return <div>{active_bank_account.type} / {active_bank_account.account_holder_full_name} / {active_bank_account.formatted_account}</div>;
+  }
+  if (payment_address) {
+    return <div>PayPal / {payment_address}</div>;
+  }
+  return <div>No payout method</div>;
+};
+
+export default Header;

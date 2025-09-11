@@ -10,7 +10,8 @@ import AdminUserStats from "$app/components/Admin/Users/Stats";
 import AdminUserActions from "$app/components/Admin/Users/Actions";
 import AdminUserMemberships from "$app/components/Admin/Users/Memberships";
 import AdminUserPermissionRisk from "$app/components/Admin/Users/PermissionRisk";
-import AdminUserPermissionPayouts from "$app/components/Admin/Users/PermissionPayouts";
+import AdminUserComplianceInfo from "$app/components/Admin/Users/ComplianceInfo";
+import AdminUserPayoutInfo from "$app/components/Admin/Users/PayoutInfo";
 
 export type Seller = {
   id: number;
@@ -125,7 +126,8 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserActions user={user} />
       <AdminUserMemberships user={user} />
       <AdminUserPermissionRisk user={user} />
-      <AdminUserPermissionPayouts user={user} />
+      <AdminUserComplianceInfo user={user} />
+      <AdminUserPayoutInfo user={user} />
     </div>
   );
 }
