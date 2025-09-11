@@ -14,11 +14,11 @@ type AdminUserComplianceInfoProps = {
 const AdminUserComplianceInfo = ({ user }: AdminUserComplianceInfoProps) => {
   const [open, setOpen] = React.useState(false);
 
-  const { data: complianceInfo, isLoading, fetchData: fetchComplianceInfo } = useLazyFetch<ComplianceInfoProps>(
-    {} as ComplianceInfoProps,
+  const { data: complianceInfo, isLoading, fetchData: fetchComplianceInfo } = useLazyFetch<ComplianceInfoProps | null>(
+    null as ComplianceInfoProps | null,
     {
       url: Routes.admin_user_compliance_info_path(user.id, { format: "json" }),
-      responseParser: (data) => cast<ComplianceInfoProps>(data.compliance_info),
+      responseParser: (data) => cast<ComplianceInfoProps | null>(data.compliance_info),
     }
   );
 
