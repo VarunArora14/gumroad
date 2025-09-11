@@ -75,6 +75,7 @@ gem "aws-sdk-mediaconvert", "~> 1.96"
 gem "aws-sdk-sns", "~> 1.57"
 # End AWS SDK Gems
 gem "babel-transpiler", "~> 0.7"
+gem "base64", "~> 0.1"
 gem "bootsnap", "~> 1.15", require: false
 gem "braintree", "~> 4.9"
 gem "bugsnag", "~> 6.25"
