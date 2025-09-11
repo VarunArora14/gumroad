@@ -1,5 +1,6 @@
 import React from "react";
 import { type ActiveBankAccountProps } from "./PayoutInfo";
+import { NoIcon } from "$app/components/Icons";
 
 type HeaderProps = {
   active_bank_account: ActiveBankAccountProps | null;
@@ -13,7 +14,7 @@ const Header = ({ active_bank_account, payment_address }: HeaderProps) => {
   if (payment_address) {
     return <div>PayPal / {payment_address}</div>;
   }
-  return <div>No payout method</div>;
+  return <div><NoIcon /> This user has no payout method</div>;
 };
 
 export default Header;

@@ -450,6 +450,10 @@ class User < ApplicationRecord
     merchant_account(PaypalChargeProcessor.charge_processor_id)
   end
 
+  def stripe_account?
+    merchant_accounts.alive.charge_processor_alive.stripe.any?
+  end
+
   def stripe_account
     merchant_accounts.alive.charge_processor_alive.stripe.find { |ma| !ma.is_a_stripe_connect_account? }
   end

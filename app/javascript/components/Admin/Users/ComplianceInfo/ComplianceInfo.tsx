@@ -1,6 +1,7 @@
 import React from "react";
-import { Icon } from "$app/components/Icons";
 import { formatDate } from "$app/utils/date";
+
+import { YesIcon, NoIcon } from "$app/components/Icons";
 
 type ComplianceInfoComponentProps = {
   isLoading: boolean;
@@ -29,9 +30,6 @@ export type ComplianceInfoProps = {
   business_tax_id: string | null;
   created_at: string;
 }
-
-const YesIcon = () => <Icon name="solid-check-circle" aria-label="Yes" style={{ color: "rgb(var(--success))" }} />;
-const NoIcon = () => <Icon name="x-circle-fill" aria-label="No" style={{ color: "rgb(var(--danger))" }} />;
 
 const ComplianceInfo = ({
   complianceInfo,

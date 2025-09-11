@@ -12,6 +12,7 @@ import AdminUserMemberships from "$app/components/Admin/Users/Memberships";
 import AdminUserPermissionRisk from "$app/components/Admin/Users/PermissionRisk";
 import AdminUserComplianceInfo from "$app/components/Admin/Users/ComplianceInfo";
 import AdminUserPayoutInfo from "$app/components/Admin/Users/PayoutInfo";
+import AdminUserMerchantAccounts from "$app/components/Admin/Users/MerchantAccounts";
 
 export type Seller = {
   id: number;
@@ -128,6 +129,7 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserPermissionRisk user={user} />
       <AdminUserComplianceInfo user={user} />
       <AdminUserPayoutInfo user={user} />
+      <AdminUserMerchantAccounts user={user} />
     </div>
   );
 }
