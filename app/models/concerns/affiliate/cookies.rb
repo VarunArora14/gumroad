@@ -22,7 +22,7 @@ module Affiliate::Cookies
     end
 
     def extract_cookie_id_from_cookie_name(cookie_name)
-      CGI.unescape(cookie_name).delete_prefix(AFFILIATE_COOKIE_NAME_PREFIX)
+      CGI.unescape(cookie_name.delete_prefix(AFFILIATE_COOKIE_NAME_PREFIX))
     end
 
     # Decrypts cookie ID back to raw affiliate ID
@@ -33,7 +33,7 @@ module Affiliate::Cookies
   end
 
   def cookie_key
-    "#{AFFILIATE_COOKIE_NAME_PREFIX}#{cookie_id}"
+    "#{AFFILIATE_COOKIE_NAME_PREFIX}#{CGI.escape(cookie_id)}"
   end
 
   def cookie_id
