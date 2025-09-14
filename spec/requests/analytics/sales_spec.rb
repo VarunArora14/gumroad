@@ -67,13 +67,17 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
       chart.hover
       expect(chart).to have_tooltip(text: "3 views\n1 sale\n(33.3% conversion)\n$5\nSaturday, December 16")
 
-      select "Monthly", from: "Aggregate by"
+
+      find('[aria-label="Aggregate by"]').click
+      find('input[type="radio"][value="monthly"]').click
+
       expect(page).to have_css(".point", count: 1)
       expect(page).to have_css("path.bar", count: 2)
       chart.hover
       expect(chart).to have_tooltip(text: "6 views\n4 sales\n(66.7% conversion)\n$12\nDecember 2023")
 
-      select "Daily", from: "Aggregate by"
+      find('[aria-label="Aggregate by"]').click
+      find('input[type="radio"][value="daily"]').click
 
       select_disclosure "Select products..." do
         uncheck "Product 1"
