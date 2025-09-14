@@ -69,7 +69,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
 
 
       find('[aria-label="Aggregate by"]').click
-      find('input[type="radio"][value="monthly"]').click
+      click_on "Monthly"
 
       expect(page).to have_css(".point", count: 1)
       expect(page).to have_css("path.bar", count: 2)
@@ -77,7 +77,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
       expect(chart).to have_tooltip(text: "6 views\n4 sales\n(66.7% conversion)\n$12\nDecember 2023")
 
       find('[aria-label="Aggregate by"]').click
-      find('input[type="radio"][value="daily"]').click
+      click_on "Daily"
 
       select_disclosure "Select products..." do
         uncheck "Product 1"
