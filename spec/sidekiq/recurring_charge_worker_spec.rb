@@ -304,13 +304,13 @@ describe RecurringChargeWorker, :vcr do
     end
 
     describe "integrations" do
-      it "enqueues UpdateIntegrationsOnTierChangeWorker if tier has changed" do
+      it "enqueues integrations update if tier has changed" do
         described_class.new.perform(@subscription.id)
 
         expect(UpdateIntegrationsOnTierChangeWorker).to have_enqueued_sidekiq_job(@subscription.id)
       end
 
-      it "does not enqueue UpdateIntegrationsOnTierChangeWorker if tier has not changed" do
+      it "does not enqueue integrations update if tier has not changed" do
         @plan_change.update!(tier: @original_tier)
 
         described_class.new.perform(@subscription.id)
