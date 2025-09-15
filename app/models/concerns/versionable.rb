@@ -16,7 +16,7 @@ module Versionable
   def versions_for(*fields)
     attributes = fields.map(&:to_s)
     versions
-      .reorder("id DESC")
+      .reorder(id: :desc)
       .limit(LIMIT)
       .map { |v| build_version_info(v, attributes) }
       .compact

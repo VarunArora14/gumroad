@@ -31,6 +31,7 @@ namespace :admin do
       resource :compliance_info, only: [:show]
       resource :payout_info, only: [:show]
       resources :merchant_accounts, only: [:index]
+      resources :email_changes, only: [:index]
     end
     resources :service_charges, only: :index
     member do
