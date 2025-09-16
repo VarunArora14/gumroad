@@ -71,17 +71,17 @@ const AdminAppWrapper = ({ children, global }: { children: React.ReactNode; glob
                 <FeatureFlagsProvider value={global.feature_flags}>
                   <Alert initial={global.flash} />
 
-                  <div id="inertia-shell" className="grid grid-cols-1 grid-rows-1 h-full">
+                  <div id="inertia-shell" className="flex h-screen flex-col lg:flex-row">
                     <AdminNav title={global.title} current_user={global.current_user} />
-                    <main>
-                      <header>
+                    <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+                      <header className="flex items-center justify-between border-b border-border p-4 md:p-8">
                         <h1>{global.title}</h1>
                         <div className="actions">
                           <AdminSearchPopover card_types={global.card_types} />
                         </div>
                       </header>
                       {isRouteLoading ? <LoadingSkeleton /> : null}
-                      <div className={isRouteLoading ? "hidden" : ""}>{children}</div>
+                      <div className={isRouteLoading ? "hidden" : "p-4 md:p-8"}>{children}</div>
                     </main>
                   </div>
                 </FeatureFlagsProvider>
