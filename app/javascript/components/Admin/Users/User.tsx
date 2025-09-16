@@ -16,6 +16,8 @@ import AdminUserMerchantAccounts from "$app/components/Admin/Users/MerchantAccou
 import AdminUserEmailChanges from "$app/components/Admin/Users/EmailChanges";
 import AdminUserChangeEmail from "$app/components/Admin/Users/ChangeEmail";
 import AdminUserCustomFee from "$app/components/Admin/Users/CustomFee";
+import AdminUserAddCredit from "$app/components/Admin/Users/AddCredit";
+
 
 export type Seller = {
   id: number;
@@ -136,6 +138,7 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserEmailChanges user={user} />
       <AdminUserChangeEmail user={user} />
       <AdminUserCustomFee user={user} />
+      <AdminUserAddCredit user={user} />
     </div>
   );
 }
