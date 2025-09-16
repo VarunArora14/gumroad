@@ -14,6 +14,8 @@ import AdminUserComplianceInfo from "$app/components/Admin/Users/ComplianceInfo"
 import AdminUserPayoutInfo from "$app/components/Admin/Users/PayoutInfo";
 import AdminUserMerchantAccounts from "$app/components/Admin/Users/MerchantAccounts";
 import AdminUserEmailChanges from "$app/components/Admin/Users/EmailChanges";
+import AdminUserChangeEmail from "$app/components/Admin/Users/ChangeEmail";
+import AdminUserCustomFee from "$app/components/Admin/Users/CustomFee";
 
 export type Seller = {
   id: number;
@@ -42,7 +44,7 @@ export type User = {
   form_email_domain: string;
   form_email_domain_blocked_at: string;
   subdomain_with_protocol: string;
-  custom_fee_per_thousand?: number;
+  custom_fee_percent: number | null;
   has_payments: boolean;
   impersonatable: boolean;
   verified: boolean;
@@ -104,10 +106,10 @@ const User = ({ user, is_affiliate_user }: Props) => {
                   </CopyToClipboard>
                 </li>
               )}
-              {user.custom_fee_per_thousand && (
+              {user.custom_fee_percent && (
                 <li>
                   <WithTooltip tip="Custom fee that will be charged on all their new direct (non-discover) sales" position="bottom">
-                    <span>Custom fee: {(user.custom_fee_per_thousand / 10.0).toFixed(1)}%</span>
+                    <span>Custom fee: {user.custom_fee_percent}%</span>
                   </WithTooltip>
                 </li>
               )}
@@ -132,6 +134,8 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserPayoutInfo user={user} />
       <AdminUserMerchantAccounts user={user} />
       <AdminUserEmailChanges user={user} />
+      <AdminUserChangeEmail user={user} />
+      <AdminUserCustomFee user={user} />
     </div>
   );
 }

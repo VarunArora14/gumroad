@@ -201,8 +201,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def set_custom_fee
-    custom_fee_per_thousand = params[:custom_fee_percent].present? ? (params[:custom_fee_percent].to_f * 10).round : nil
-    @user.update!(custom_fee_per_thousand:)
+    @user.update!(custom_fee_percent: params[:custom_fee_percent])
 
     render json: { success: true }
   rescue => e

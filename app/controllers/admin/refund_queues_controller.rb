@@ -23,7 +23,7 @@ class Admin::RefundQueuesController < Admin::BaseController
                     username
                     subdomain_with_protocol
                     support_email
-                    custom_fee_per_thousand
+                    custom_fee_percent
                     has_payments
                     verified
                     deleted

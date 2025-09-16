@@ -10,7 +10,7 @@ class User < ApplicationRecord
           DeviseInternal, PayoutInfo, PayoutSchedule, SocialFacebook, SocialTwitter, SocialGoogle, SocialApple, SocialGoogleMobile,
           StripeConnect, Stats, PaymentStats, FeatureStatus, Risk, Compliance, Validations, Taxation, PingNotification,
           AsyncDeviseNotification, Posts, AffiliatedProducts, Followers, LowBalanceFraudCheck, MailerLevel,
-          DirectAffiliates, AsJson, Tier, Recommendations, Team, AustralianBacktaxes, WithCdnUrl,
+          DirectAffiliates, AsJson, Tier, Recommendations, Team, AustralianBacktaxes, WithCdnUrl, CustomFee,
           TwoFactorAuthentication, Versionable, Comments, VipCreator, SignedUrlHelper, Purchases, SecureExternalId
 
   stripped_fields :name, :facebook_meta_tag, :google_analytics_id, :username, :email, :support_email
@@ -154,7 +154,6 @@ class User < ApplicationRecord
   attr_json_data_accessor :gumroad_day_timezone
   attr_json_data_accessor :payout_threshold_cents, default: -> { minimum_payout_threshold_cents }
   attr_json_data_accessor :payout_frequency, default: User::PayoutSchedule::WEEKLY
-  attr_json_data_accessor :custom_fee_per_thousand
   attr_json_data_accessor :payouts_paused_by
 
   attr_blockable :email
@@ -193,7 +192,6 @@ class User < ApplicationRecord
   validates :recommendation_type, inclusion: { in: User::RecommendationType::TYPES }
 
   validates :currency_type, inclusion: { in: CURRENCY_CHOICES.keys, message: "%{value} is not a supported currency." }
-  validates :custom_fee_per_thousand, allow_nil: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 1000 }
 
   validate :json_data, :json_data_must_be_hash
   validate :account_created_email_domain_is_not_blocked, on: :create
