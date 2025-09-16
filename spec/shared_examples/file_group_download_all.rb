@@ -104,7 +104,8 @@ RSpec.shared_examples_for "a product with 'Download all' buttons on file embed g
     expect_any_instance_of(SignedUrlHelper).to receive(:signed_download_url_for_s3_key_and_filename).with(@page2_folder_archive.s3_key, @page2_folder_archive.s3_filename).and_return("https://example.com/zip-archive.zip")
     within_file_group("Page 2 folder") do
       select_disclosure "Download all" do
-        expect(page).to have_button("Download as ZIP")
+        click_on "Download as ZIP"
+        expect(page).not_to have_button("Download as ZIP")
       end
     end
   end
