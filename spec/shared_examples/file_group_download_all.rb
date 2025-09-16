@@ -105,9 +105,9 @@ RSpec.shared_examples_for "a product with 'Download all' buttons on file embed g
     within_file_group("Page 2 folder") do
       select_disclosure "Download all" do
         click_on "Download as ZIP"
-        expect(page).not_to have_button("Download as ZIP")
       end
     end
+    expect(page).to have_current_path(/zip-archive.zip/, wait: 5)
   end
 
   it "downloads the individual file when pressing 'Download all' for a file embed group with only 1 downloadable file" do
