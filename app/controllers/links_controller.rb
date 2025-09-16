@@ -325,7 +325,6 @@ class LinksController < ApplicationController
     redirect_to bundle_path(@product.external_id) if @product.is_bundle?
 
     @title = @product.name
-    @body_class = "fixed-aside"
 
     @presenter = ProductPresenter.new(product: @product, pundit_user:)
   end
