@@ -326,7 +326,7 @@ export function createReducer(initial: {
           break;
         case "set-recaptcha-response":
           if (state.status.type !== "captcha") return;
-          const recaptchaData = action.recaptchaResponse ? { response: action.recaptchaResponse } : {};
+          const recaptchaData = action.recaptchaResponse ? { recaptchaResponse: action.recaptchaResponse } : {};
           state.status = { ...state.status, type: "finished", ...recaptchaData };
           break;
         case "set-payment-method": {
