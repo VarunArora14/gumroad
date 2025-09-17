@@ -382,7 +382,7 @@ export const CheckoutPage = ({
           url_parameters: window.location.search,
           locale: navigator.language,
         },
-        recaptchaResponse: state.status.recaptchaResponse,
+        recaptchaResponse: state.status.recaptchaResponse ?? null,
         lineItems: cart.items.map((item) => {
           const discounted = getDiscountedPrice(cart, item);
 

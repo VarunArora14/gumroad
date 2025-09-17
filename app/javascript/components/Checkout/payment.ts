@@ -81,7 +81,7 @@ export type State = {
     | { type: "captcha"; paymentMethod: PurchasePaymentMethod }
     | { type: "finished"; recaptchaResponse?: string; paymentMethod: PurchasePaymentMethod };
   payLabel?: string;
-  recaptchaKey: string;
+  recaptchaKey: string | null;
   paypalClientId?: string;
   tip: Tip;
   warning?: string | null;
@@ -234,7 +234,7 @@ export function createReducer(initial: {
   products: Product[];
   fullName?: string;
   payLabel?: string;
-  recaptchaKey: string;
+  recaptchaKey: string | null;
   paypalClientId: string;
   gift: Gift | null;
   requireEmailTypoAcknowledgment: boolean;
