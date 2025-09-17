@@ -1200,7 +1200,7 @@ export const PaymentForm = ({
     }
 
     if (state.status.type === "captcha") {
-      if (state.recaptchaKey === null && process.env.NODE_ENV !== "production") {
+      if ((process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") && state.recaptchaKey === null) {
         dispatch({ type: "set-recaptcha-response" });
       } else {
         recaptcha
