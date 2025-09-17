@@ -76,7 +76,7 @@ class OrdersController < ApplicationController
 
     def skip_recaptcha?
       site_key = GlobalConfig.get("RECAPTCHA_MONEY_SITE_KEY")
-      return true if Rails.env.development? && site_key.blank?
+      return true if (Rails.env.development? || Rails.env.test?) && site_key.blank?
       return true if action_name == "create" && all_free_products_without_captcha?
       return true if valid_wallet_payment?
 
