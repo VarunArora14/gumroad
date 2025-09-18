@@ -97,7 +97,7 @@ RSpec.configure do |config|
 
       allow(GeoIp).to receive(:lookup) do |ip|
         data = geoip_mock_data[ip]
-        return nil if data.nil?
+        next nil if data.nil?
 
         GeoIp::Result.new(
           country_name: data[:country],
