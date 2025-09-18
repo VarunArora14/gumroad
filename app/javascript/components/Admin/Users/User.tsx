@@ -1,12 +1,6 @@
 import React from "react";
-import { Link, usePage } from "@inertiajs/react";
-import { classNames } from "$app/utils/classNames";
-import { CopyToClipboard } from "$app/components/CopyToClipboard";
-import { WithTooltip } from "$app/components/WithTooltip";
-import { Icon } from "$app/components/Icons";
-import DateTimeWithRelativeTooltip from "$app/components/Admin/DateTimeWithRelativeTooltip";
-import BlockedUserTooltip from "$app/components/Admin/Users/BlockedUserTooltip";
-import AdminUserStats from "$app/components/Admin/Users/Stats";
+import { usePage } from "@inertiajs/react";
+import Header from "$app/components/Admin/Users/Header";
 import AdminUserActions from "$app/components/Admin/Users/Actions";
 import AdminUserMemberships from "$app/components/Admin/Users/Memberships";
 import AdminUserPermissionRisk from "$app/components/Admin/Users/PermissionRisk";
@@ -19,6 +13,7 @@ import AdminUserCustomFee from "$app/components/Admin/Users/CustomFee";
 import AdminUserAddCredit from "$app/components/Admin/Users/AddCredit";
 import AdminUserMassTransferPurchases from "$app/components/Admin/Users/MassTransferPurchases";
 import AdminUserComments from "$app/components/Admin/Users/Comments";
+import Footer from "$app/components/Admin/Users/Footer";
 
 export type Seller = {
   id: number;
@@ -63,6 +58,8 @@ export type User = {
   user_risk_state: string;
   bio: string;
   created_at: string;
+  updated_at: string;
+  deleted_at: string;
 };
 
 export type Props = {
@@ -73,60 +70,9 @@ export type Props = {
 const User = ({ user, is_affiliate_user }: Props) => {
   const { url } = usePage() as unknown as { url: string };
 
-  const displayName = user.name || `User ${user.username}`;
-  const adminUserUrl = is_affiliate_user ? Routes.admin_affiliate_url(user.id) : Routes.admin_user_url(user.id);
-
   return (
     <div className="card js-admin-user" data-user-id={user.id}>
-      <div className="paragraphs">
-        <div className="flex gap-4 items-center">
-          <img src={user.avatar_url} className="user-avatar" style={{ width: "var(--form-element-height)" }} alt={user.name} />
-          <div className="grid gap-2">
-            <h2>
-              <Link href={adminUserUrl} className={classNames({ "active": url === adminUserUrl })}>{displayName}</Link>
-            </h2>
-            <ul className="inline">
-            <li><DateTimeWithRelativeTooltip date={user.created_at} /></li>
-              {user.username && (
-                <li>
-                  <Link href={user.subdomain_with_protocol} target="_blank" rel="noopener noreferrer nofollow">{user.username}</Link>
-                </li>
-              )}
-              {user.form_email && (
-                <li className="space-x-1">
-                  <span>Email: {user.form_email}</span>
-                  <CopyToClipboard tooltipPosition="bottom" copyTooltip="Copy email" text={user.form_email}>
-                    <Icon name="outline-duplicate" />
-                  </CopyToClipboard>
-                  <BlockedUserTooltip user={user} position="bottom" />
-                </li>
-              )}
-              {user.support_email && (
-                <li className="space-x-1">
-                  <span>Support email: {user.support_email}</span>
-                  <CopyToClipboard tooltipPosition="bottom" copyTooltip="Copy support email" text={user.support_email}>
-                    <Icon name="outline-duplicate" />
-                  </CopyToClipboard>
-                </li>
-              )}
-              {user.custom_fee_percent && (
-                <li>
-                  <WithTooltip tip="Custom fee that will be charged on all their new direct (non-discover) sales" position="bottom">
-                    <span>Custom fee: {user.custom_fee_percent}%</span>
-                  </WithTooltip>
-                </li>
-              )}
-              {user.has_payments && (
-                <li>
-                  <Link href={Routes.admin_user_payouts_url(user)}>Payouts</Link>
-                </li>
-              )}
-            </ul>
-
-            <AdminUserStats user_id={user.id} />
-          </div>
-        </div>
-      </div>
+      <Header user={user} is_affiliate_user={is_affiliate_user} url={url} />
 
       <hr />
 
@@ -142,6 +88,10 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserAddCredit user={user} />
       <AdminUserMassTransferPurchases user={user} />
       <AdminUserComments user={user} />
+
+      <hr />
+
+      <Footer user={user} />
     </div>
   );
 }

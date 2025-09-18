@@ -25,8 +25,10 @@ class Admin::RefundQueuesController < Admin::BaseController
                     support_email
                     custom_fee_percent
                     has_payments
+                    updated_at
                     verified
                     deleted
+                    deleted_at
                     all_adult_products
                     unpaid_balance_cents
                   ],

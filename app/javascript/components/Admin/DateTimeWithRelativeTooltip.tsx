@@ -4,7 +4,7 @@ import { formatDate } from "$app/utils/date";
 
 type Props = {
   date: string;
-  placeholder?: string;
+  placeholder?: string | React.ReactNode;
 };
 
 const DateTimeWithRelativeTooltip = ({ date, placeholder }: Props) => {
