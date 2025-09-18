@@ -11,9 +11,11 @@ WebMock.stub_request(:any, /api\.braintreegateway\.com/).to_return do |request|
 end
 
 # Mock Braintree configuration
-Braintree.configure do |config|
-  config.environment = :sandbox
-  config.merchant_id = 'test_merchant_id'
-  config.public_key = 'test_public_key'
-  config.private_key = 'test_private_key'
-end if defined?(Braintree)
+if defined?(Braintree) && Braintree.respond_to?(:configure)
+  Braintree.configure do |config|
+    config.environment = :sandbox
+    config.merchant_id = 'test_merchant_id'
+    config.public_key = 'test_public_key'
+    config.private_key = 'test_private_key'
+  end
+end

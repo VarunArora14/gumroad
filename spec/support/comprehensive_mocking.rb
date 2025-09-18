@@ -39,8 +39,6 @@ RSpec.configure do |config|
     Sidekiq::Worker.clear_all
     
     # Mock basic external services that are commonly called
-    WebMock.stub_request(:post, "https://notify.bugsnag.com/")
-    WebMock.stub_request(:post, "https://sessions.bugsnag.com/")
     
     # Mock password breach check API
     WebMock.stub_request(:get, /api\.pwnedpasswords\.com\/range\/.+/)

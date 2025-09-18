@@ -143,10 +143,7 @@ RSpec.configure do |config|
     WebMock.allow_net_connect!(net_http_connect_on_start: true)
     [
       Thread.new { prepare_mysql },
-      Thread.new { 
-        puts "Elasticsearch setup skipped for offline testing"
-        true
-      }
+      Thread.new { ElasticsearchSetup.prepare_test_environment }
     ].each(&:join)
   end
 
