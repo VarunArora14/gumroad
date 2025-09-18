@@ -10,6 +10,7 @@ export interface UseLazyFetchOptions<T> {
 export interface UseLazyFetchResult<T> {
   data: T;
   isLoading: boolean;
+  setData: (data: T) => void;
   fetchData: () => Promise<void>;
 }
 
@@ -45,6 +46,7 @@ export const useLazyFetch = <T>(
 
   return {
     data,
+    setData,
     isLoading,
     fetchData,
   };

@@ -17,7 +17,8 @@ import AdminUserEmailChanges from "$app/components/Admin/Users/EmailChanges";
 import AdminUserChangeEmail from "$app/components/Admin/Users/ChangeEmail";
 import AdminUserCustomFee from "$app/components/Admin/Users/CustomFee";
 import AdminUserAddCredit from "$app/components/Admin/Users/AddCredit";
-
+import AdminUserMassTransferPurchases from "$app/components/Admin/Users/MassTransferPurchases";
+import AdminUserComments from "$app/components/Admin/Users/Comments";
 
 export type Seller = {
   id: number;
@@ -139,6 +140,8 @@ const User = ({ user, is_affiliate_user }: Props) => {
       <AdminUserChangeEmail user={user} />
       <AdminUserCustomFee user={user} />
       <AdminUserAddCredit user={user} />
+      <AdminUserMassTransferPurchases user={user} />
+      <AdminUserComments user={user} />
     </div>
   );
 }

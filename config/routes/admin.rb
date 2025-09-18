@@ -32,6 +32,7 @@ namespace :admin do
       resource :payout_info, only: [:show]
       resources :merchant_accounts, only: [:index]
       resources :email_changes, only: [:index]
+      resources :comments, only: [:index, :create]
     end
     resources :service_charges, only: :index
     member do
