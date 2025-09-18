@@ -43,26 +43,6 @@ RSpec.configure do |config|
     # Mock password breach check API
     WebMock.stub_request(:get, /api\.pwnedpasswords\.com\/range\/.+/)
       .to_return(status: 200, body: "", headers: {})
-      
-    # CRITICAL: Block ALL Elasticsearch HTTP requests that bypass our mocks
-    WebMock.stub_request(:any, /localhost:9200/).to_return(
-      status: 200,
-      body: { 
-        "hits" => { "total" => { "value" => 0 }, "hits" => [] },
-        "acknowledged" => true 
-      }.to_json,
-      headers: { 'Content-Type' => 'application/json' }
-    )
-    
-    # Also catch any other Elasticsearch endpoints
-    WebMock.stub_request(:any, /elasticsearch/).to_return(
-      status: 200,
-      body: { 
-        "hits" => { "total" => { "value" => 0 }, "hits" => [] },
-        "acknowledged" => true 
-      }.to_json,
-      headers: { 'Content-Type' => 'application/json' }
-    )
   end
 end
 
