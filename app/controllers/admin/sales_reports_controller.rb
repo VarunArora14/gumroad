@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class Admin::SalesReportsController < Admin::BaseController
-  before_action :set_react_component_props, only: [:index]
-
   def index
     @title = "Sales reports"
+
+    render inertia: "Admin/SalesReports/Index", props: inertia_props(
+      title: "Sales reports",
+      countries: Compliance::Countries.for_select.map { |alpha2, name| [name, alpha2] },
+      job_history: fetch_job_history,
+      form_action: admin_sales_reports_path
+    )
   end
 
   def create
@@ -52,16 +57,6 @@ class Admin::SalesReportsController < Admin::BaseController
   end
 
   private
-    def set_react_component_props
-      @react_component_props = {
-        title: "Sales reports",
-        countries: Compliance::Countries.for_select.map { |alpha2, name| [name, alpha2] },
-        job_history: fetch_job_history,
-        form_action: admin_sales_reports_path,
-        authenticity_token: form_authenticity_token
-      }
-    end
-
     def fetch_job_history
       job_data = $redis.lrange(RedisKey.sales_report_jobs, 0, 19)
       job_data.map { |data| JSON.parse(data) }
