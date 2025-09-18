@@ -4,7 +4,6 @@ require("spec_helper")
 
 describe("Product checkout with tipping", type: :system, js: true) do
   let(:seller) { create(:named_seller, :eligible_for_service_products, tipping_enabled: true) }
-
   let(:product1) { create(:product, name: "Product 1", user: seller, price_cents: 1000, quantity_enabled: true) }
   let(:product2) { create(:product, name: "Product 2", user: seller, price_cents: 2000) }
 
@@ -125,9 +124,11 @@ describe("Product checkout with tipping", type: :system, js: true) do
     end
   end
 
-  context "when the cart is free" do
-    let(:free_product1) { create(:product, user: seller, price_cents: 0) }
-    let(:free_product2) { create(:product, user: seller, price_cents: 0) }
+  context "when the cart is free," do
+    let(:seller2) { create(:user, :eligible_for_service_products, tipping_enabled: true, name: "Seller 2", username: "seller2", email: "seller2@example.com", payment_address: "seller2@example.com") }
+    let(:free_product1) { create(:product, name: "Free Product 1", user: seller, price_cents: 0) }
+    let(:free_product2) { create(:product, name: "Free Product 2", user: seller, price_cents: 0) }
+    let(:free_product3) { create(:product, name: "Free Product 3", user: seller2, price_cents: 0) }
 
     it "only allows the buyer to tip a fixed amount" do
       visit free_product1.long_url
@@ -156,14 +157,85 @@ describe("Product checkout with tipping", type: :system, js: true) do
       purchase1 = Purchase.last
       expect(purchase1).to be_successful
       expect(purchase1.link).to eq(free_product1)
-      expect(purchase1.price_cents).to eq(250)
-      expect(purchase1.tip.value_cents).to eq(250)
+      expect(purchase1.price_cents).to eq(500)
+      expect(purchase1.tip.value_cents).to eq(500)
 
       purchase2 = Purchase.second_to_last
       expect(purchase2).to be_successful
       expect(purchase2.link).to eq(free_product2)
-      expect(purchase2.price_cents).to eq(250)
-      expect(purchase2.tip.value_cents).to eq(250)
+      expect(purchase2.price_cents).to eq(0)
+      expect(purchase2.tip).to be_nil
+    end
+
+
+    context "for single creator" do
+      it "applies full tip to first product when tip meets minimum" do
+        visit free_product1.long_url
+        add_to_cart(free_product1, pwyw_price: 0)
+        visit free_product2.long_url
+        add_to_cart(free_product2, pwyw_price: 0)
+
+        fill_in "Tip", with: 0.99
+        fill_checkout_form(free_product2)
+        click_on "Pay"
+
+        expect(page).to have_alert(text: "Your purchase was successful!")
+
+        purchase1 = Purchase.where(link: free_product1).last
+        purchase2 = Purchase.where(link: free_product2).last
+
+        expect(purchase1.tip.value_cents).to eq(99)
+        expect(purchase1.price_cents).to eq(99)
+
+        expect(purchase2.tip).to be_nil
+        expect(purchase2.price_cents).to eq(0)
+      end
+
+      it "shows backend validation error when tip below minimum" do
+        visit free_product1.long_url
+        add_to_cart(free_product1, pwyw_price: 0)
+
+        fill_in "Tip", with: 0.5
+        fill_checkout_form(free_product1)
+        click_on "Pay"
+
+        expect(page).to have_text("The amount must be at least $0.99.")
+      end
+    end
+    context "for multiple creators" do
+      it "distributes tip per creator to first product from each when tip meets minimum" do
+        visit free_product1.long_url
+        add_to_cart(free_product1, pwyw_price: 0)
+        visit free_product3.long_url
+        add_to_cart(free_product3, pwyw_price: 0)
+
+        fill_in "Tip", with: 1.98
+        fill_checkout_form(free_product3)
+        click_on "Pay"
+
+        expect(page).to have_alert(text: "Your purchase was successful!")
+
+        purchase1 = Purchase.where(link: free_product1).last
+        purchase3 = Purchase.where(link: free_product3).last
+
+        expect(purchase1.tip.value_cents).to eq(99)
+        expect(purchase1.price_cents).to eq(99)
+        expect(purchase3.tip.value_cents).to eq(99)
+        expect(purchase3.price_cents).to eq(99)
+      end
+
+      it "shows backend validation error with per-creator minimum when tip below minimum" do
+        visit free_product1.long_url
+        add_to_cart(free_product1, pwyw_price: 0)
+        visit free_product3.long_url
+        add_to_cart(free_product3, pwyw_price: 0)
+
+        fill_in "Tip", with: 1.5
+        fill_checkout_form(free_product3)
+        click_on "Pay"
+
+        expect(page).to have_text("The amount must be at least $0.99.", count: 2)
+      end
     end
   end
 
