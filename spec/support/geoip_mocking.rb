@@ -92,7 +92,10 @@ RSpec.configure do |config|
         "2.132.97.1" => { country: "Kazakhstan", code: "KZ", region: "ALA", city: "Almaty", postal: "050000" },
         "91.196.77.77" => { country: "Uzbekistan", code: "UZ", region: "TK", city: "Tashkent", postal: "100000" },
         "41.208.70.70" => { country: "Libya", code: "LY", region: "TB", city: "Tripoli", postal: "00000" },
-        "109.110.31.255" => { country: "Latvia", code: "LV", region: "RIX", city: "Riga", postal: "LV-1000" }
+        "109.110.31.255" => { country: "Latvia", code: "LV", region: "RIX", city: "Riga", postal: "LV-1000" },
+
+        # IPv6 addresses
+        "2001:861:5bc0:cb60:500d:3535:e6a7:62a0" => { country: "France", code: "FR", region: "BFC", city: "Belfort", postal: "90000" }
       }
 
       allow(GeoIp).to receive(:lookup) do |ip|
