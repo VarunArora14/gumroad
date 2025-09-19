@@ -147,7 +147,7 @@ describe("Product Edit Scenario", type: :feature, js: true) do
     fill_in "Fixed amount", with: "1"
     click_on "Insert"
 
-    within_section "Sample product", section_element: :article do
+    within_section "Sample product", section_element: :article, match: :first do
       expect(page).to have_text("5.0 (1)", normalize_ws: true)
       expect(page).to have_text("$10 $9")
     end
@@ -229,7 +229,7 @@ describe("Product Edit Scenario", type: :feature, js: true) do
     fill_in "Fixed amount", with: "1"
     click_on "Insert"
 
-    within_section "Sample product", section_element: :article do
+    within_section "Sample product", section_element: :article, match: :first do
       expect(page).to have_selector("span", text: "(#{variant1.name})")
       expect(page).to have_text("5.0 (1)", normalize_ws: true)
       expect(page).to have_text("$10 $9")
@@ -284,7 +284,7 @@ describe("Product Edit Scenario", type: :feature, js: true) do
     fill_in "Fixed amount", with: "1"
     click_on "Insert"
 
-    within_section "Sample product", section_element: :article do
+    within_section "Sample product", section_element: :article, match: :first do
       expect(page).to have_text("5.0 (1)", normalize_ws: true)
       expect(page).to have_text("$10 $9")
     end
