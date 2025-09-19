@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe("Product Page - Shipping physical subscription", type: :feature, js: true, shipping: true) do
+describe("Product Page - Shipping physical subscription", type: :system, js: true, shipping: true) do
   before do
     @creator = create(:user_with_compliance_info)
     Feature.deactivate_user(:merchant_migration, @creator)
@@ -10,18 +10,15 @@ describe("Product Page - Shipping physical subscription", type: :feature, js: tr
   end
 
   it "charges the proper amount and stores shipping without taxes" do
-    previous_successful_purchase_count = Purchase.successful.count
     visit "/l/#{@sub_link.unique_permalink}"
 
     add_to_cart(@sub_link)
-    check_out(@sub_link) do
+    check_out(@sub_link, should_verify_address: true) do
       expect(page).to have_text("Shipping rate US$4", normalize_ws: true)
       expect(page).to have_text("Total US$20", normalize_ws: true)
     end
 
-    Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until Purchase.successful.count == (previous_successful_purchase_count + 1)
-    end
+    expect(page).to have_alert("Your purchase was successful!")
 
     purchase = Purchase.last
     subscription = Subscription.last
@@ -40,20 +37,16 @@ describe("Product Page - Shipping physical subscription", type: :feature, js: tr
   end
 
   it "charges the proper amount with taxes" do
-    previous_successful_purchase_count = Purchase.successful.count
-
     visit "/l/#{@sub_link.unique_permalink}"
     add_to_cart(@sub_link)
-    check_out(@sub_link, address: { street: "3029 W Sherman Rd", city: "San Tan Valley", state: "AZ", zip_code: "85144" }) do
+    check_out(@sub_link, address: { street: "3029 W Sherman Rd", city: "San Tan Valley", state: "AZ", zip_code: "85144" }, should_verify_address: true) do
       expect(page).to have_text("Subtotal US$16", normalize_ws: true)
       expect(page).to have_text("Sales tax US$1.07", normalize_ws: true)
       expect(page).to have_text("Shipping rate US$4", normalize_ws: true)
       expect(page).to have_text("Total US$21.07", normalize_ws: true)
     end
 
-    Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until Purchase.successful.count == (previous_successful_purchase_count + 1)
-    end
+    expect(page).to have_alert("Your purchase was successful!")
 
     purchase = Purchase.last
     subscription = Subscription.last
@@ -75,18 +68,15 @@ describe("Product Page - Shipping physical subscription", type: :feature, js: tr
   end
 
   it "charges the proper shipping amount for 2x quantity" do
-    previous_successful_purchase_count = Purchase.successful.count
     visit "/l/#{@sub_link.unique_permalink}"
 
     add_to_cart(@sub_link, quantity: 2)
-    check_out(@sub_link) do
+    check_out(@sub_link, should_verify_address: true) do
       expect(page).to have_text("Shipping rate US$5", normalize_ws: true)
       expect(page).to have_text("Total US$37", normalize_ws: true)
     end
 
-    Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until Purchase.successful.count == (previous_successful_purchase_count + 1)
-    end
+    expect(page).to have_alert("Your purchase was successful!")
 
     purchase = Purchase.last
 

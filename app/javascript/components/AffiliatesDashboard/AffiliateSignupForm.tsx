@@ -99,7 +99,7 @@ export const AffiliateSignupForm = () => {
       }
     >
       {products.length === 0 ? (
-        <section>
+        <section className="!p-4 md:!p-8">
           <div className="placeholder">
             <figure>
               <img src={placeholderImage} />
@@ -117,14 +117,16 @@ export const AffiliateSignupForm = () => {
         </section>
       ) : (
         <form>
-          <section>
+          <section className="!p-4 md:!p-8">
             <header>
               <h2>Affiliate link</h2>
               <div>
                 Anyone can request to become your affiliate by using your affiliate link. Affiliates will earn a
                 commission on each sale they refer.
               </div>
-              <a data-helper-prompt="How do affiliate links work?">Learn more</a>
+              <a href="/help/article/249-affiliate-faq" target="_blank" rel="noreferrer">
+                Learn more
+              </a>
             </header>
             <fieldset>
               <legend>
@@ -154,7 +156,7 @@ export const AffiliateSignupForm = () => {
               )}
             </fieldset>
           </section>
-          <section>
+          <section className="!p-4 md:!p-8">
             <header>
               <h2>Affiliate products</h2>
               <p>Enable specific products you want your affiliates to earn a commission with.</p>
@@ -181,14 +183,16 @@ export const AffiliateSignupForm = () => {
               </tbody>
             </table>
           </section>
-          <section>
+          <section className="!p-4 md:!p-8">
             <header>
               <h2>Gumroad Affiliate Program</h2>
               <div>
                 Being part of Gumroad Affiliate Program enables other creators to share your products in exchange for a{" "}
                 {data.global_affiliate_percentage}% commission.
               </div>
-              <a data-helper-prompt="How does the Gumroad Affiliate Program work?">Learn more</a>
+              <a href="/help/article/249-affiliate-faq" target="_blank" rel="noreferrer">
+                Learn more
+              </a>
             </header>
             <fieldset>
               <ToggleSettingRow

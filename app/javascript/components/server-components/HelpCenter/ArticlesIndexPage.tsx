@@ -45,9 +45,17 @@ const CategoryArticles = ({ category, searchTerm }: { category: Category; search
   return (
     <div className="w-full">
       <h2 className="mb-4 font-semibold">{category.title}</h2>
-      <div className="w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" style={{ display: "grid" }}>
+      <div
+        className="w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        style={{ display: "grid", gridAutoRows: "160px" }}
+      >
         {category.articles.map((article) => (
-          <NavigationButton key={article.url} href={article.url} color="filled" className="!p-12 text-center !text-xl">
+          <NavigationButton
+            key={article.url}
+            href={article.url}
+            color="filled"
+            className="!box-border !flex !h-full !w-full !items-center !justify-center !p-12 text-center !text-xl"
+          >
             {renderHighlightedText(article.title, searchTerm)}
           </NavigationButton>
         ))}
@@ -67,7 +75,7 @@ const ArticlesIndexPage = ({ categories }: ArticlesIndexPageProps) => {
     : categories;
 
   return (
-    <div>
+    <>
       <input
         type="text"
         autoFocus
@@ -81,7 +89,7 @@ const ArticlesIndexPage = ({ categories }: ArticlesIndexPageProps) => {
           <CategoryArticles key={category.url} category={category} searchTerm={searchTerm} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

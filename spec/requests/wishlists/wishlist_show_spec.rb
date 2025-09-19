@@ -3,7 +3,7 @@
 require "spec_helper"
 require "shared_examples/discover_layout"
 
-describe "Wishlist show page", :js, type: :feature do
+describe "Wishlist show page", :js, type: :system do
   include Rails.application.routes.url_helpers
 
   let(:physical_product) { create(:product, :recommendable, name: "Quantity Product", price_cents: 1000, quantity_enabled: true) }
@@ -183,8 +183,7 @@ describe "Wishlist show page", :js, type: :feature do
     expect(page).to have_text("Wishlist User's email has been hidden for privacy purposes.")
     fill_in "Message", with: "Happy birthday!"
 
-    check_out(membership_product)
-    expect(page).to have_text("You bought this for Wishlist User.")
+    check_out(membership_product, gift: { name: "Wishlist User" })
     expect(Purchase.last).to have_attributes(
       link: membership_product,
       recommended_by: RecommendationType::WISHLIST_RECOMMENDATION,

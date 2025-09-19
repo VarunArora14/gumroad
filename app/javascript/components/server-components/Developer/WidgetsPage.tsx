@@ -48,12 +48,15 @@ export const WidgetsPage = ({ display_product_select, products, affiliated_produ
   return (
     <Layout currentPage="widgets">
       <form>
-        <section>
+        <section className="!p-4 md:!p-8">
           <header>
             <h3>Share your product</h3>
             <p>
               You can easily bring the Gumroad purchase page right into your site, without directing your buyers
-              elsewhere. <a data-helper-prompt="How can I build Gumroad into my website?">Learn more</a>
+              elsewhere.{" "}
+              <a href="/help/article/44-build-gumroad-into-your-website" target="_blank" rel="noreferrer">
+                Learn more
+              </a>
             </p>
           </header>
           <div>
@@ -66,12 +69,14 @@ export const WidgetsPage = ({ display_product_select, products, affiliated_produ
           </div>
         </section>
         {currentSeller ? (
-          <section>
+          <section className="!p-4 md:!p-8">
             <header>
               <h3>Subscribe form</h3>
               <p>
                 Share your subscribe form on any website or blog using an embed or URL.{" "}
-                <a data-helper-prompt="How can I share my subscribe form?">Learn more</a>
+                <a href="/help/article/170-audience" target="_blank" rel="noreferrer">
+                  Learn more
+                </a>
               </p>
             </header>
             <fieldset>

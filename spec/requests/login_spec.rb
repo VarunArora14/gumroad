@@ -2,14 +2,14 @@
 
 require "spec_helper"
 
-describe "Login Feature Scenario", js: true, type: :feature do
+describe "Login Feature Scenario", js: true, type: :system do
   let(:user) { create(:user) }
 
   before do
     ignore_js_error(/Error retrieving login status, fetch cancelled./)
   end
 
-  describe "login", type: :feature do
+  describe "login", type: :system do
     it "logs in a user" do
       visit login_path
       expect(page).to_not have_alert
@@ -21,7 +21,7 @@ describe "Login Feature Scenario", js: true, type: :feature do
       click_on "Login"
       expect(page).to have_selector("iframe[title*=recaptcha]", visible: false)
       wait_for_ajax
-      expect(page).to have_content("Welcome to Gumroad.")
+      expect(page).to have_content("Dashboard")
     end
 
     it "shows an error when login fails" do
@@ -38,7 +38,7 @@ describe "Login Feature Scenario", js: true, type: :feature do
     end
   end
 
-  describe "OAuth login", type: :feature do
+  describe "OAuth login", type: :system do
     before do
       @oauth_application = create(:oauth_application)
       @oauth_authorize_url = oauth_authorization_path(client_id: @oauth_application.uid, redirect_uri: @oauth_application.redirect_uri, scope: "edit_products")

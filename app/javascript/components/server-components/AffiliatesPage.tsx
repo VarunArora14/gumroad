@@ -52,6 +52,8 @@ import { Pagination } from "$app/components/Pagination";
 import { Popover } from "$app/components/Popover";
 import { Progress } from "$app/components/Progress";
 import { showAlert } from "$app/components/server-components/Alert";
+import { PageHeader } from "$app/components/ui/PageHeader";
+import { Tabs, Tab } from "$app/components/ui/Tabs";
 import { useDebouncedCallback } from "$app/components/useDebouncedCallback";
 import { useLocalPagination } from "$app/components/useLocalPagination";
 import { useUserAgentInfo } from "$app/components/UserAgent";
@@ -72,13 +74,13 @@ export const Layout = ({ title, hasStickyHeader, actions, navigation, children }
   hasStickyHeader ? (
     <>
       <Header title={title} actions={actions} navigation={navigation} sticky />
-      <main>{children}</main>
+      <div>{children}</div>
     </>
   ) : (
-    <main>
+    <div>
       <Header title={title} actions={actions} navigation={navigation} />
       {children}
-    </main>
+    </div>
   );
 
 const Header = ({
@@ -92,25 +94,23 @@ const Header = ({
   actions?: React.ReactNode;
   navigation?: React.ReactNode;
 }) => (
-  <header className={cx({ "sticky-top": sticky })}>
-    <h1>{title}</h1>
-    {actions ? <div className="actions">{actions}</div> : null}
+  <PageHeader className={cx({ "sticky-top": sticky })} title={title} actions={actions}>
     {navigation ?? null}
-  </header>
+  </PageHeader>
 );
 
 export const AffiliatesNavigation = () => {
   const { pathname } = useLocation();
 
   return (
-    <div role="tablist">
-      <Link to="/affiliates" role="tab" aria-selected={pathname === "/affiliates"}>
+    <Tabs>
+      <Tab href="/affiliates" isSelected={pathname === "/affiliates"}>
         Affiliates
-      </Link>
-      <Link to="/affiliates/onboarding" role="tab" aria-selected={pathname === "/affiliates/onboarding"}>
+      </Tab>
+      <Tab href="/affiliates/onboarding" isSelected={pathname === "/affiliates/onboarding"}>
         Affiliate Signup Form
-      </Link>
-    </div>
+      </Tab>
+    </Tabs>
   );
 };
 
@@ -460,7 +460,7 @@ const AffiliatesTab = () => {
       }
       navigation={<AffiliatesNavigation />}
     >
-      <div style={{ display: "grid", gap: "var(--spacer-7)" }}>
+      <div className="p-4 lg:p-8" style={{ display: "grid", gap: "var(--spacer-7)" }}>
         {navigation.state === "loading" && affiliates.length === 0 ? (
           <div style={{ justifySelf: "center" }}>
             <Progress width="5rem" />
@@ -760,7 +760,7 @@ const Form = ({ title, headerLabel, submitLabel }: FormProps) => {
       hasStickyHeader
     >
       <form>
-        <section>
+        <section className="!p-4 md:!p-8">
           <header dangerouslySetInnerHTML={{ __html: headerLabel }} />
           <fieldset className={cx({ danger: errors.has("email") })}>
             <legend>
@@ -783,7 +783,7 @@ const Form = ({ title, headerLabel, submitLabel }: FormProps) => {
                 <th>Product</th>
                 <th>Commission</th>
                 <th>
-                  <a data-helper-prompt="Explain what a custom destination URL is and why it's beneficial to add for affiliates.">
+                  <a href="/help/article/333-affiliates-on-gumroad" target="_blank" rel="noreferrer">
                     Destination URL (optional)
                   </a>
                 </th>
@@ -905,7 +905,7 @@ const routes: RouteObject[] = [
     element: (
       <Form
         title="New Affiliate"
-        headerLabel="Add a new affiliate below and we'll send them a unique link to share with their audience. Your affiliate will then earn a commission on each sale they refer. <a data-helper-prompt='How do affiliates work?'>Learn more</a>"
+        headerLabel="Add a new affiliate below and we'll send them a unique link to share with their audience. Your affiliate will then earn a commission on each sale they refer. <a href='/help/article/333-affiliates-on-gumroad' target='_blank' rel='noreferrer'>Learn more</a>"
         submitLabel="Add affiliate"
       />
     ),
@@ -933,7 +933,7 @@ const routes: RouteObject[] = [
     element: (
       <Form
         title="Edit Affiliate"
-        headerLabel="The process of editing is almost identical to adding them. You can change their affiliate fee, the products they are assigned. Their affiliate link will not change. <a data-helper-prompt='How do I edit affiliates?'>Learn more</a>"
+        headerLabel="The process of editing is almost identical to adding them. You can change their affiliate fee, the products they are assigned. Their affiliate link will not change. <a href='/help/article/333-affiliates-on-gumroad' target='_blank' rel='noreferrer'>Learn more</a>"
         submitLabel="Save changes"
       />
     ),

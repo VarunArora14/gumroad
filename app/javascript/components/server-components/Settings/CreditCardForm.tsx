@@ -37,10 +37,10 @@ export const CreditCardForm = ({ card, can_remove, read_only }: Props) => {
   });
 
   return status === "removed" ? null : (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2>Saved credit card</h2>
-        <a href="#" data-helper-prompt="How can I delete my saved credit card?">
+        <a href="/help/article/216-delete-credit-card-information" target="_blank" rel="noreferrer">
           Learn more.
         </a>
       </header>

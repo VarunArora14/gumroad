@@ -82,9 +82,9 @@ export const ProductTab = () => {
 
   return (
     <Layout preview={<ProductPreview showRefundPolicyModal={showRefundPolicyPreview} />} isLoading={isUploading}>
-      <main className="squished">
+      <div className="squished">
         <form>
-          <section>
+          <section className="!p-4 md:!p-8">
             {showAiNotification ? (
               <div
                 role="status"
@@ -157,14 +157,14 @@ export const ProductTab = () => {
           </section>
           {isCoffee ? (
             <>
-              <section>
+              <section className="!p-4 md:!p-8">
                 <h2>Pricing</h2>
                 <SuggestedAmountsEditor
                   versions={product.variants}
                   onChange={(variants) => updateProduct({ variants })}
                 />
               </section>
-              <section>
+              <section className="!p-4 md:!p-8">
                 <h2>Settings</h2>
                 <CustomButtonTextOptionInput
                   value={product.custom_button_text_option}
@@ -187,7 +187,7 @@ export const ProductTab = () => {
                 permalink={uniquePermalink}
                 nativeType={product.native_type}
               />
-              <section>
+              <section className="!p-4 md:!p-8">
                 <h2>Product info</h2>
                 {product.native_type !== "membership" ? (
                   <CustomButtonTextOptionInput
@@ -207,7 +207,7 @@ export const ProductTab = () => {
                   setFileAttributes={(file_attributes) => updateProduct({ file_attributes })}
                 />
               </section>
-              <section>
+              <section className="!p-4 md:!p-8">
                 <h2>Integrations</h2>
                 <fieldset>
                   {product.community_chat_enabled === null ? null : (
@@ -217,7 +217,7 @@ export const ProductTab = () => {
                       onChange={(newValue) => updateProduct({ community_chat_enabled: newValue })}
                       help={{
                         label: "Learn more",
-                        dataHelperPrompt: "What is Gumroad community chat?",
+                        url: "/help/article/347-gumroad-community",
                       }}
                     />
                   )}
@@ -259,13 +259,13 @@ export const ProductTab = () => {
                 </fieldset>
               </section>
               {product.native_type === "membership" ? (
-                <section>
+                <section className="!p-4 md:!p-8">
                   <h2>Tiers</h2>
                   <TiersEditor tiers={product.variants} onChange={(variants) => updateProduct({ variants })} />
                 </section>
               ) : (
                 <>
-                  <section>
+                  <section className="!p-4 md:!p-8">
                     <h2>Pricing</h2>
                     <PriceEditor
                       priceCents={product.price_cents}
@@ -307,11 +307,11 @@ export const ProductTab = () => {
                   </section>
                   {product.native_type === "call" ? (
                     <>
-                      <section>
+                      <section className="!p-4 md:!p-8">
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                           <h2>Durations</h2>
                           <a
-                            href="https://gumroad.com/help/article/70-can-i-sell-services.html#call"
+                            href="https://gumroad.com/help/article/70-can-i-sell-services#call"
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -323,7 +323,7 @@ export const ProductTab = () => {
                           onChange={(variants) => updateProduct({ variants })}
                         />
                       </section>
-                      <section>
+                      <section className="!p-4 md:!p-8">
                         <h2>Available hours</h2>
                         <AvailabilityEditor
                           availabilities={product.availabilities}
@@ -331,7 +331,7 @@ export const ProductTab = () => {
                         />
                       </section>
                       {product.call_limitation_info ? (
-                        <section>
+                        <section className="!p-4 md:!p-8">
                           <h2>Call limitations</h2>
                           <CallLimitationsEditor
                             callLimitations={product.call_limitation_info}
@@ -341,15 +341,13 @@ export const ProductTab = () => {
                       ) : null}
                     </>
                   ) : (
-                    <section aria-label="Version editor">
+                    <section aria-label="Version editor" className="!p-4 md:!p-8">
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <h2>{product.native_type === "physical" ? "Variants" : "Versions"}</h2>
                         <a
-                          data-helper-prompt={
-                            product.native_type === "physical"
-                              ? "Can you tell me more about variants?"
-                              : "Can you tell me more about versions?"
-                          }
+                          href="/help/article/126-setting-up-versions-on-a-digital-product"
+                          target="_blank"
+                          rel="noreferrer"
                         >
                           Learn more
                         </a>
@@ -368,7 +366,7 @@ export const ProductTab = () => {
                   onChange={(shipping_destinations) => updateProduct({ shipping_destinations })}
                 />
               ) : null}
-              <section>
+              <section className="!p-4 md:!p-8">
                 <h2>Settings</h2>
                 <fieldset>
                   {product.native_type === "membership" ? (
@@ -434,7 +432,9 @@ export const ProductTab = () => {
                       onChange={(newValue) => updateProduct({ is_epublication: newValue })}
                     >
                       Mark product as e-publication for VAT purposes{" "}
-                      <a data-helper-prompt="Can you explain how VAT works for e-publications?">Learn more</a>
+                      <a href="/help/article/10-dealing-with-vat" target="_blank" rel="noreferrer">
+                        Learn more
+                      </a>
                     </Toggle>
                   ) : null}
                   {!seller_refund_policy_enabled ? (
@@ -482,7 +482,7 @@ export const ProductTab = () => {
             </>
           )}
         </form>
-      </main>
+      </div>
     </Layout>
   );
 };

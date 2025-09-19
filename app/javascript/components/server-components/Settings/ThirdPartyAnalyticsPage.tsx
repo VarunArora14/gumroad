@@ -68,13 +68,10 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
       canUpdate={loggedInUser?.policies.settings_third_party_analytics_user.update || false}
     >
       <form>
-        <section>
+        <section className="!p-4 md:!p-8">
           <header>
             <h2>Third-party analytics</h2>
-            <a
-              href="#"
-              data-helper-prompt="How can I setup third-party analytics services onmy personal site? What third-party analytics services can I use besides Google Analytics and Facebook? Can I use Google Tag Manager?"
-            >
+            <a href="/help/article/174-third-party-analytics" target="_blank" rel="noreferrer">
               Learn more
             </a>
             <div>
@@ -100,7 +97,7 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
               <fieldset>
                 <legend>
                   <label htmlFor={`${uid}googleAnalyticsId`}>Google Analytics Property ID</label>
-                  <a href="#" data-helper-prompt="How do I find my Google Analytics Property ID?">
+                  <a href="/help/article/174-third-party-analytics" target="_blank" rel="noreferrer">
                     Learn more
                   </a>
                 </legend>
@@ -115,7 +112,7 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
               <fieldset>
                 <legend>
                   <label htmlFor={`${uid}facebookPixel`}>Facebook Pixel</label>
-                  <a href="#" data-helper-prompt="How do I find my Facebook Pixel ID?">
+                  <a href="/help/article/174-third-party-analytics" target="_blank" rel="noreferrer">
                     Learn more
                   </a>
                 </legend>
@@ -138,7 +135,7 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
             </div>
           </Details>
         </section>
-        <section>
+        <section className="!p-4 md:!p-8">
           <header>
             <h2>Domain verification</h2>
           </header>
@@ -163,7 +160,7 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
               <fieldset>
                 <legend>
                   <label htmlFor={`${uid}facebookMetaTag`}>Facebook Business</label>
-                  <a href="#" data-helper-prompt="How do I verify my domain with Facebook Business?">
+                  <a href="/help/article/290-facebook-domain-verification" target="_blank" rel="noreferrer">
                     Learn more
                   </a>
                 </legend>
@@ -178,11 +175,11 @@ const ThirdPartyAnalyticsPage = ({ settings_pages, third_party_analytics, produc
             </div>
           </Details>
         </section>
-        <section>
+        <section className="!p-4 md:!p-8">
           <header>
             <h2>Snippets</h2>
             <div>Add custom JavaScript to pages in the checkout flow.</div>
-            <a href="#" data-helper-prompt="How do I add custom JavaScript snippets?">
+            <a href="/help/article/174-third-party-analytics" target="_blank" rel="noreferrer">
               Learn more
             </a>
           </header>

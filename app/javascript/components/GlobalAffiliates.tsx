@@ -25,11 +25,13 @@ const DiscoverLinkSection = ({
   const baseDiscoverUrl = useDiscoverUrl();
   const discoverUrl = `${baseDiscoverUrl}?${affiliateQueryParam}=${globalAffiliateId}`;
   return (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2>Affiliate link</h2>
         <p>Earn 10% for each referral sale made by your link.</p>
-        <a data-helper-prompt="How does the affiliate program work?">Learn more</a>
+        <a href="/help/article/333-affiliates-on-gumroad" target="_blank" rel="noreferrer">
+          Learn more
+        </a>
       </header>
       <fieldset>
         <legend>Your Discover affiliate link</legend>
@@ -39,13 +41,6 @@ const DiscoverLinkSection = ({
             <Button className="pill">Copy link</Button>
           </CopyToClipboard>
         </div>
-        <small>
-          By sharing an affiliate link, you agree to our{" "}
-          <a className="text-muted" target="_blank" href="https://gumroad.com/affiliates" rel="noreferrer">
-            Affiliate Terms
-          </a>
-          .
-        </small>
         <small>
           You will be attributed any sales you referred within {cookieExpiryDays} days, even if they're for different
           products you linked to.
@@ -71,7 +66,7 @@ const LinkGenerationSection = ({
   const [hasError, setHasError] = React.useState(false);
 
   return (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2>Affiliate link generator</h2>
         <p>
@@ -152,7 +147,7 @@ const ProductEligibilitySection = ({
   });
 
   return (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2>How to know if a product is eligible</h2>
         <p>

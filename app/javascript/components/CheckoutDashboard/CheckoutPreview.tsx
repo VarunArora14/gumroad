@@ -11,10 +11,12 @@ export const CheckoutPreview = ({
   children,
   cartItem,
   recommendedProduct,
+  className,
 }: {
   children?: React.ReactNode;
   cartItem: CartItem;
   recommendedProduct?: CardProduct | undefined;
+  className?: string;
 }) => {
   const paymentState = React.useMemo<ReturnType<typeof createReducer>>(
     () => [
@@ -40,6 +42,9 @@ export const CheckoutPreview = ({
         savedCreditCard: null,
         availablePaymentMethods: [],
         tip: { type: "percentage", percentage: 0 },
+        emailTypoSuggestion: null,
+        acknowledgedEmails: new Set<string>(),
+        requireEmailTypoAcknowledgment: false,
         products: [
           {
             permalink: cartItem.product.permalink,
@@ -71,7 +76,7 @@ export const CheckoutPreview = ({
   );
 
   return (
-    <aside aria-label="Preview">
+    <aside aria-label="Preview" className={className}>
       <header>
         <h2>Preview</h2>
       </header>

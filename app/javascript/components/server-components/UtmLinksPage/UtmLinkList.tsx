@@ -153,7 +153,7 @@ const UtmLinkList = () => {
           <Progress width="5rem" />
         </div>
       ) : utmLinks.length > 0 ? (
-        <section className="paragraphs">
+        <section className="p-4 md:p-8">
           <table>
             <thead>
               <tr>
@@ -302,7 +302,7 @@ const UtmLinkList = () => {
           ) : null}
         </section>
       ) : query ? (
-        <div>
+        <div className="p-4 md:p-8">
           <div className="placeholder">
             <figure>
               <img src={noLinksFoundPlaceholder} />
@@ -311,7 +311,7 @@ const UtmLinkList = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="p-4 md:p-8">
           <div className="placeholder">
             <figure>
               <img src={noLinksYetPlaceholder} />
@@ -319,7 +319,9 @@ const UtmLinkList = () => {
             <h2>No links yet</h2>
             <h4>Use UTM links to track which sources are driving the most conversions and revenue</h4>
 
-            <a data-helper-prompt="How can I use UTM link tracking in Gumroad?">Learn more about UTM tracking</a>
+            <a href="/help/article/74-the-analytics-dashboard" target="_blank" rel="noreferrer">
+              Learn more about UTM tracking
+            </a>
           </div>
         </div>
       )}

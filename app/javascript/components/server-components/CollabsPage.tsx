@@ -42,7 +42,7 @@ const CollabsPage = ({
 
   return (
     <ProductsLayout selectedTab="collabs" title="Products" archivedTabVisible={archivedTabVisible}>
-      <section>
+      <section className="p-4 md:p-8">
         {memberships.length === 0 && products.length === 0 ? (
           <div className="placeholder">
             <figure>
@@ -60,7 +60,10 @@ const CollabsPage = ({
               </NavigationButton>
             </WithTooltip>
             <p>
-              or <a data-helper-prompt="How can I get started with collaborations?">learn more to get started</a>
+              or{" "}
+              <a href="/help/article/341-collaborations" target="_blank" rel="noreferrer">
+                learn more to get started
+              </a>
             </p>
           </div>
         ) : (

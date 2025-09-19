@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe("Discover", js: true, type: :feature) do
+describe("Discover", js: true, type: :system) do
   include StripeMerchantAccountHelper
 
   let(:discover_host) { UrlService.discover_domain_with_protocol }
@@ -625,7 +625,7 @@ describe("Discover", js: true, type: :feature) do
 
   it "shows the correct header CTAs when the user is logged out vs in" do
     visit discover_url(host: discover_host)
-    header = find("main > header")
+    header = first("header")
     expect(header).to_not have_link "Dashboard"
     expect(header).to have_link "Start selling", href: signup_url(host: UrlService.domain_with_protocol)
     expect(header).to have_link "Log in", href: login_url(host: UrlService.domain_with_protocol)
@@ -633,7 +633,7 @@ describe("Discover", js: true, type: :feature) do
 
     login_as create(:buyer_user)
     visit discover_url(host: discover_host)
-    header = find("main > header")
+    header = first("header")
     expect(header).to have_link "Dashboard", href: dashboard_url(host: UrlService.domain_with_protocol)
     expect(header).to_not have_link "Log in"
     expect(header).to have_link "Start selling", href: products_url(host: UrlService.domain_with_protocol)
@@ -641,7 +641,7 @@ describe("Discover", js: true, type: :feature) do
 
     login_as create(:compliant_user)
     visit discover_url(host: discover_host)
-    header = find("main > header")
+    header = first("header")
     expect(header).to_not have_link "Log in"
     expect(header).to have_link "Start selling", href: products_url(host: UrlService.domain_with_protocol)
     expect(header).to have_link "Library", href: library_url(host: UrlService.domain_with_protocol)

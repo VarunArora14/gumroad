@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Signup Feature Scenario", js: true, type: :feature do
+describe "Signup Feature Scenario", js: true, type: :system do
   let(:user) { create(:user) }
 
   it "supports signing up with password" do
@@ -17,7 +17,7 @@ describe "Signup Feature Scenario", js: true, type: :feature do
       click_on "Create account"
       expect(page).to have_selector("iframe[title*=recaptcha]", visible: false)
       wait_for_ajax
-      expect(page).to have_content("Welcome to Gumroad.")
+      expect(page).to have_content("Dashboard")
     end.to change(User, :count).by(1)
   end
 
@@ -31,7 +31,7 @@ describe "Signup Feature Scenario", js: true, type: :feature do
     expect do
       click_on "Create account"
       wait_for_ajax
-      expect(page).to have_content("Welcome to Gumroad.")
+      expect(page).to have_content("Dashboard")
     end.not_to change(User, :count)
   end
 
@@ -59,7 +59,7 @@ describe "Signup Feature Scenario", js: true, type: :feature do
     expect do
       click_on "Create account"
       wait_for_ajax
-      expect(page).to have_content("Welcome to Gumroad.")
+      expect(page).to have_content("Dashboard")
     end.to change(User, :count).by(1)
 
     expect(Invite.last).to have_attributes(sender_id: referrer.id, receiver_email: User.last.email, invite_state: "signed_up")

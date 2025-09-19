@@ -96,11 +96,13 @@ const AddTeamMembersSection = ({
   });
 
   return (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2>Add team members</h2>
         <div>Invite as many team members as you need to help run this account.</div>
-        <a data-helper-prompt="How do teams and roles work?">Learn more</a>
+        <a href="/help/article/326-teams-and-roles" target="_blank" rel="noreferrer">
+          Learn more
+        </a>
       </header>
       <div
         style={{
@@ -218,7 +220,7 @@ const TeamMembersSection = ({
   };
 
   return (
-    <section>
+    <section className="!p-4 md:!p-8">
       <header>
         <h2 ref={ref}>Team members</h2>
       </header>

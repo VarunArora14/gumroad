@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "RecommendationsScenario", type: :feature, js: true do
+describe "RecommendationsScenario", type: :system, js: true do
   before do
     @original_product = create(:product)
     @recommended_product = create(:product,
@@ -20,7 +20,9 @@ describe "RecommendationsScenario", type: :feature, js: true do
     visit "/l/#{@recommended_product.unique_permalink}?recommended_by=discover"
 
     Timeout.timeout(Capybara.default_max_wait_time) do
-      loop until EsClient.count(index: ProductPageView.index_name)["count"] == 1
+      until EsClient.count(index: ProductPageView.index_name)["count"] == 1
+        sleep 0.5
+      end
     end
 
     page_view = EsClient.search(index: ProductPageView.index_name, size: 1)["hits"]["hits"][0]["_source"]
@@ -113,7 +115,7 @@ describe "RecommendationsScenario", type: :feature, js: true do
   describe "more like this" do
     let(:seller1) { create(:recommendable_user) }
     let(:seller2) { create(:named_user, recommendation_type: User::RecommendationType::NO_RECOMMENDATIONS) }
-    let(:buyer) { create(:buyer_user) }
+    let(:buyer) { create(:user) }
 
     let(:seller1_products) do
       build_list :product, 5, user: seller1 do |product, i|

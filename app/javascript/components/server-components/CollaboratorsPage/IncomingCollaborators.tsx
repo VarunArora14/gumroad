@@ -151,15 +151,7 @@ const IncomingCollaboratorsTableRow = ({
       {formatCommission(incomingCollaborator)}
     </td>
     <td data-label="Status" className="whitespace-nowrap">
-      {incomingCollaborator.invitation_accepted ? (
-        <>
-          <Icon name="circle-fill" className="mr-1" /> Accepted
-        </>
-      ) : (
-        <>
-          <Icon name="circle" className="mr-1" /> Pending
-        </>
-      )}
+      {incomingCollaborator.invitation_accepted ? <>Accepted</> : <>Pending</>}
     </td>
     <td>
       {incomingCollaborator.invitation_accepted ? null : (
@@ -187,14 +179,14 @@ const TableRowLoadingSpinner = () => (
 );
 
 const EmptyState = () => (
-  <section>
+  <section className="p-4 md:p-8">
     <div className="placeholder">
       <figure>
         <img src={placeholder} />
       </figure>
       <h2>No collaborations yet</h2>
       <h4>Creators who have invited you to collaborate on their products will appear here.</h4>
-      <a data-helper-prompt="How can others invite me to collaborate on their products?">
+      <a href="/help/article/341-collaborations" target="_blank" rel="noreferrer">
         Learn more about collaborations
       </a>
     </div>
@@ -222,7 +214,7 @@ const IncomingCollaboratorsTable = ({
   onReject: (collaborator: IncomingCollaborator) => void;
   onRemove: (collaborator: IncomingCollaborator) => void;
 }) => (
-  <section className="paragraphs">
+  <section className="p-4 md:p-8">
     <table aria-busy={loading || disabled}>
       <thead>
         <tr>

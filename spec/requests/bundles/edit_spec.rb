@@ -4,7 +4,7 @@ require "spec_helper"
 require "shared_examples/authorize_called"
 require "shared_examples/creator_dashboard_page"
 
-describe("Bundle edit page", type: :feature, js: true) do
+describe("Bundle edit page", type: :system, js: true) do
   let(:seller) { create(:named_seller) }
   let(:bundle) { create(:product, :bundle, user: seller, price_cents: 200) }
   let!(:asset_preview1) { create(:asset_preview, link: bundle) }
@@ -177,6 +177,7 @@ describe("Bundle edit page", type: :feature, js: true) do
             click_on "Upload"
           end
           wait_for_ajax
+          all("img[src*='gumroad-specs.s3.amazonaws.com']").last.hover
           click_on "Show next cover"
           expect(page).to have_selector("iframe[src*='youtube.com']")
           expect(bundle.reload.display_asset_previews.alive.second.url).to match("youtube.com")

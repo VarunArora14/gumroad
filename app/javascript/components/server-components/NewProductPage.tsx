@@ -21,6 +21,7 @@ import { Icon } from "$app/components/Icons";
 import { Popover } from "$app/components/Popover";
 import { showAlert } from "$app/components/server-components/Alert";
 import { TypeSafeOptionSelect } from "$app/components/TypeSafeOptionSelect";
+import { PageHeader } from "$app/components/ui/PageHeader";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 const nativeTypeIcons = require.context("$assets/images/native_types/");
@@ -215,74 +216,79 @@ const NewProductPage = ({
 
   return (
     <>
-      <header className="sticky-top">
-        <h1>{show_orientation_text ? "Publish your first product" : "What are you creating?"}</h1>
-        <div className="actions">
-          <NavigationButton href={Routes.products_path()}>
-            <Icon name="x-square" />
-            <span>Cancel</span>
-          </NavigationButton>
-          {ai_generation_enabled ? (
-            <Popover
-              open={aiPopoverOpen}
-              onToggle={setAiPopoverOpen}
-              trigger={
-                <Button color="primary" outline aria-label="Create a product with AI">
-                  <Icon name="sparkle" />
-                </Button>
-              }
-            >
-              <div className="w-96 max-w-full">
-                <fieldset>
-                  <legend>
-                    <label htmlFor={`ai-prompt-${formUID}`}>Create a product with AI</label>
-                  </legend>
-                  <p>
-                    Got an idea? Give clear instructions, and let AI create your product—quick and easy! Customize it to
-                    make it yours.
-                  </p>
-                  <textarea
-                    id={`ai-prompt-${formUID}`}
-                    placeholder="e.g., a 'Coding with AI using Cursor for Designers' ebook with 5 chapters for $35'."
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    rows={4}
-                    maxLength={500}
-                    className="w-full resize-y"
-                    autoFocus
-                  />
-                </fieldset>
-                <div className="mt-3 flex justify-end gap-2">
-                  <Button onClick={() => setAiPopoverOpen(false)} disabled={isGeneratingUsingAi}>
-                    Cancel
+      <PageHeader
+        className="sticky-top"
+        title={show_orientation_text ? "Publish your first product" : "What are you creating?"}
+        actions={
+          <>
+            <NavigationButton href={Routes.products_path()}>
+              <Icon name="x-square" />
+              <span>Cancel</span>
+            </NavigationButton>
+            {ai_generation_enabled ? (
+              <Popover
+                open={aiPopoverOpen}
+                onToggle={setAiPopoverOpen}
+                trigger={
+                  <Button color="primary" outline aria-label="Create a product with AI">
+                    <Icon name="sparkle" />
                   </Button>
-                  <Button
-                    color="primary"
-                    onClick={() => void generateWithAi()}
-                    disabled={isGeneratingUsingAi || !aiPrompt.trim()}
-                  >
-                    {isGeneratingUsingAi ? "Generating..." : "Generate"}
-                  </Button>
+                }
+              >
+                <div className="w-96 max-w-full">
+                  <fieldset>
+                    <legend>
+                      <label htmlFor={`ai-prompt-${formUID}`}>Create a product with AI</label>
+                    </legend>
+                    <p>
+                      Got an idea? Give clear instructions, and let AI create your product—quick and easy! Customize it
+                      to make it yours.
+                    </p>
+                    <textarea
+                      id={`ai-prompt-${formUID}`}
+                      placeholder="e.g., a 'Coding with AI using Cursor for Designers' ebook with 5 chapters for $35'."
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      rows={4}
+                      maxLength={500}
+                      className="w-full resize-y"
+                      autoFocus
+                    />
+                  </fieldset>
+                  <div className="mt-3 flex justify-end gap-2">
+                    <Button onClick={() => setAiPopoverOpen(false)} disabled={isGeneratingUsingAi}>
+                      Cancel
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => void generateWithAi()}
+                      disabled={isGeneratingUsingAi || !aiPrompt.trim()}
+                    >
+                      {isGeneratingUsingAi ? "Generating..." : "Generate"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </Popover>
-          ) : null}
-          <Button color="accent" type="submit" form={`new-product-form-${formUID}`} disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Next: Customize"}
-          </Button>
-        </div>
-      </header>
-      <main>
+              </Popover>
+            ) : null}
+            <Button color="accent" type="submit" form={`new-product-form-${formUID}`} disabled={isSubmitting}>
+              {isSubmitting ? "Adding..." : "Next: Customize"}
+            </Button>
+          </>
+        }
+      />
+      <div>
         <div>
           <form id={`new-product-form-${formUID}`} className="row" onSubmit={(e) => void submit(e)}>
-            <section>
+            <section className="!p-4 md:!p-8">
               <header>
                 <p>
                   Turn your idea into a live product in minutes. No fuss, just a few quick selections and you're ready
                   to start selling. Whether it's digital downloads, online courses, or memberships — see what sticks.
                   <br />
                   <br />
-                  <a data-helper-prompt="What kind of products can I sell on Gumroad?">Need help adding a product?</a>
+                  <a href="/help/article/64-is-gumroad-for-me" target="_blank" rel="noreferrer">
+                    Need help adding a product?
+                  </a>
                 </p>
               </header>
 
@@ -296,7 +302,9 @@ const NewProductPage = ({
                     <strong>New.</strong> You can create your product using AI now. Click the sparks button in the
                     header to get started.
                     <br />
-                    <a data-helper-prompt="How do I create a product using AI?">Learn more</a>
+                    <a href="/help/article/149-adding-a-product" target="_blank" rel="noreferrer">
+                      Learn more
+                    </a>
                   </div>
                   <button className="link !col-start-3 self-center" onClick={() => void dismissAiPromo()}>
                     close
@@ -403,7 +411,7 @@ const NewProductPage = ({
             </section>
           </form>
         </div>
-      </main>
+      </div>
     </>
   );
 };
@@ -470,11 +478,7 @@ const ProductTypeSelector = ({
   onChange: (type: ProductNativeType) => void;
   disabled?: boolean;
 }) => (
-  <div
-    className="radio-buttons"
-    role="radiogroup"
-    style={{ gridTemplateColumns: "repeat(auto-fit, minmax(13rem, 1fr)" }}
-  >
+  <div className="radio-buttons !grid-cols-1 sm:!grid-cols-2 md:!grid-cols-3 2xl:!grid-cols-5" role="radiogroup">
     {types.map((type) => {
       const typeButton = (
         <Button

@@ -13,6 +13,7 @@ const PayPalEmailSection = ({
   feeInfoText,
   updatePayoutMethod,
   errorFieldNames,
+  user,
 }: {
   countrySupportsNativePayouts: boolean;
   showPayPalPayoutsFeeNote: boolean;
@@ -23,6 +24,7 @@ const PayPalEmailSection = ({
   feeInfoText: string;
   updatePayoutMethod: (payoutMethod: PayoutMethod) => void;
   errorFieldNames: Set<FormFieldName>;
+  user: { country_code: string | null };
 }) => {
   const uid = React.useId();
   return (
@@ -32,7 +34,7 @@ const PayPalEmailSection = ({
           PayPal payouts are subject to a 2% processing fee.
         </div>
       ) : null}
-      <div>{feeInfoText}</div>
+      <div className="whitespace-pre-line">{feeInfoText}</div>
       <div>
         {countrySupportsNativePayouts && !isFormDisabled ? (
           <button className="link" onClick={() => updatePayoutMethod("bank")}>
@@ -59,6 +61,15 @@ const PayPalEmailSection = ({
           </div>
         ) : null}
       </div>
+      {user.country_code === "UA" ? (
+        <div role="alert" className="warning">
+          <div>
+            PayPal blocks commercial payments to Ukraine, which will prevent payouts to your PayPal account until
+            further notice. Your balance will remain in your Gumroad account until this restriction is lifted or payouts
+            are directed to a PayPal account outside of Ukraine.
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 };

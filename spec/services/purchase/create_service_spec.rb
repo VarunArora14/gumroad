@@ -146,6 +146,7 @@ describe Purchase::CreateService, :vcr do
           buyer:
         ).perform
 
+        expect(purchase.purchase_refund_policy.max_refund_period_in_days).to eq(30)
         expect(purchase.purchase_refund_policy.title).to eq("30-day money back guarantee")
         expect(purchase.purchase_refund_policy.fine_print).to eq("This is a product-level refund policy")
       end
@@ -199,6 +200,7 @@ describe Purchase::CreateService, :vcr do
           buyer:
         ).perform
 
+        expect(purchase.purchase_refund_policy.max_refund_period_in_days).to eq(30)
         expect(purchase.purchase_refund_policy.title).to eq("30-day money back guarantee")
         expect(purchase.purchase_refund_policy.fine_print).to eq(nil)
       end
@@ -351,6 +353,29 @@ describe Purchase::CreateService, :vcr do
           expect(purchase.purchase_offer_code_discount.pre_discount_minimum_price_cents).to eq(100)
           expect(error).to be_nil
         end
+      end
+    end
+
+    context "when the purchase already has an offer code" do
+      let(:existing_offer_code) { create(:offer_code, user:, products: [product], amount_cents: 200, code: "existing789") }
+
+      before do
+        params[:purchase][:offer_code] = existing_offer_code
+      end
+
+      it "retains the existing offer code instead of using the upsell offer code" do
+        purchase, error = Purchase::CreateService.new(
+          product:,
+          params:,
+          buyer:
+        ).perform
+
+        expect(purchase.upsell_purchase.upsell).to eq(cross_sell)
+        expect(purchase.upsell_purchase.selected_product).to eq(selected_product)
+        expect(purchase.offer_code).to eq(existing_offer_code)
+        expect(purchase.purchase_offer_code_discount.offer_code).to eq(existing_offer_code)
+        expect(purchase.purchase_offer_code_discount.offer_code_amount).to eq(200)
+        expect(error).to be_nil
       end
     end
   end
@@ -2973,9 +2998,6 @@ describe Purchase::CreateService, :vcr do
   describe "inventory protection" do
     let(:price) { 0 }
     let(:max_purchase_count) { 1 }
-    after do
-      DatabaseCleaner[:active_record].clean_with(:truncation)
-    end
 
     it "prevents several parallel purchases to take more than the available inventory" do
       purchase_1, error_1, purchase_2, error_2 = Array.new(4)

@@ -513,6 +513,11 @@ class ContactingCreatorMailer < ApplicationMailer
     @subject = "Important: Upcoming refund policy changes effective January 1, 2025"
   end
 
+  def paypal_suspension_notification(user_id)
+    @seller = User.find(user_id)
+    @subject = "Important: Update Your Payout Method on Gumroad"
+  end
+
   def ping_endpoint_failure(user_id, ping_url, response_code)
     @seller = User.find(user_id)
     @ping_url = redact_ping_url(ping_url)
@@ -531,7 +536,6 @@ class ContactingCreatorMailer < ApplicationMailer
       if @purchase.price_cents == 0
         @seller.enable_free_downloads_email?
       elsif @purchase.is_recurring_subscription_charge && !@purchase.is_upgrade_purchase?
-        return false if @purchase.subscription&.recurrence == BasePrice::Recurrence::MONTHLY
         @seller.enable_recurring_subscription_charge_email?
       else
         @seller.enable_payment_email?
@@ -555,7 +559,7 @@ class ContactingCreatorMailer < ApplicationMailer
 
       recipient = @recipient || @seller
       email = recipient.form_email
-      return unless email.present? && email.match(User::EMAIL_REGEX)
+      return unless EmailFormatValidator.valid?(email)
 
       mailer_args = { to: email, subject: @subject }
       mailer_args[:reply_to] = @reply_to if @reply_to.present?
