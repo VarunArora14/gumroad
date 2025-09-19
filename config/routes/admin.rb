@@ -33,6 +33,7 @@ namespace :admin do
       resources :merchant_accounts, only: [:index]
       resources :email_changes, only: [:index]
       resources :comments, only: [:index, :create]
+      resources :products, only: [:index]
     end
     resources :service_charges, only: :index
     member do
@@ -92,6 +93,11 @@ namespace :admin do
       post :restore
     end
     resource :staff_picked, only: [:create], controller: "products/staff_picked"
+
+    scope module: :products do
+      resource :details, controller: "details", only: [:show]
+      resource :info, only: [:show]
+    end
   end
 
   resources :payouts, only: [:index]

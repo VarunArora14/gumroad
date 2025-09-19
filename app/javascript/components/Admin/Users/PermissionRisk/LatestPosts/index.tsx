@@ -7,13 +7,14 @@ import { cast } from "ts-safe-cast";
 import { useLazyFetch } from "$app/hooks/useLazyFetch";
 
 import Post, { type PostProps } from "$app/components/Admin/Users/PermissionRisk/LatestPosts/Post";
+import Loading from "$app/components/Admin/Loading";
 
 type LatestPostsProps = {
   user: User;
 };
 
 const LatestPostsContent = ({ posts, isLoading }: { posts: PostProps[], isLoading: boolean }) => {
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
+  if (isLoading) return <Loading />
   if (posts.length > 0) return (
     <div className="stack">
       {posts.map(({ id, name, created_at }) => (

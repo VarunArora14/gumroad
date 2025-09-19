@@ -71,7 +71,7 @@
     <dd><%= product.recommendable? ? icon_yes : icon_no %></dd>
 
     <dt>Staff-picked</dt>
-    <dd><%= product.staff_picked_product&.not_deleted? ? icon_yes : icon_no %></dd>
+    <dd><%= product.staff_picked? ? icon_yes : icon_no %></dd>
 
     <dt>Preorder</dt>
     <dd><%= product.is_in_preorder_state? ? icon_yes : icon_no %></dd>

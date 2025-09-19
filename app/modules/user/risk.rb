@@ -131,6 +131,7 @@ module User::Risk
   def suspended?
     suspended_for_tos_violation? || suspended_for_fraud?
   end
+  alias_method :suspended, :suspended?
 
   def flagged?
     flagged_for_tos_violation? || flagged_for_fraud?

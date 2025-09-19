@@ -2,6 +2,7 @@ import React from "react";
 import Header from "$app/components/Admin/Users/PayoutInfo/Header";
 import AdminTogglePayoutsForm from "$app/components/Admin/Users/PayoutInfo/TogglePayoutsForm";
 import AdminManualPayoutForm from "$app/components/Admin/Users/PayoutInfo/ManualPayoutForm";
+import Loading from "$app/components/Admin/Loading";
 
 export type ActiveBankAccountProps = {
   type: string;
@@ -43,7 +44,7 @@ type PayoutInfoComponentProps = {
 };
 
 const PayoutInfo = ({ user_id, payoutInfo, isLoading }: PayoutInfoComponentProps) => {
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
+  if (isLoading) return <Loading />
   if (!payoutInfo) return <div>No payout info found.</div>;
 
   const { active_bank_account, payment_address, payouts_paused_by_source, payouts_paused_for_reason, manual_payout_info } = payoutInfo;

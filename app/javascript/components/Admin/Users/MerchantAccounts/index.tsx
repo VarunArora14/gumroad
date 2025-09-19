@@ -7,6 +7,7 @@ import { cast } from "ts-safe-cast";
 
 import MerchantAccount, { type MerchantAccountProps } from "$app/components/Admin/Users/MerchantAccounts/MerchantAccount";
 import AdminActionButton from "$app/components/Admin/ActionButton";
+import Loading from "$app/components/Admin/Loading";
 
 type AdminUserMerchantAccountsProps = {
   user: User;
@@ -31,7 +32,7 @@ const MerchantAccountsContent = ({
   isLoading
 }: MerchantAccountsContentProps) => {
   if (isLoading) {
-    return <div role="progressbar" className="inline-block !w-3" />;
+    return <Loading />;
   }
 
   return (

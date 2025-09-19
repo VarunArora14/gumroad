@@ -3,6 +3,8 @@ import { formatDate } from "$app/utils/date";
 
 import { YesIcon, NoIcon } from "$app/components/Icons";
 
+import Loading from "$app/components/Admin/Loading";
+
 type ComplianceInfoComponentProps = {
   isLoading: boolean;
   complianceInfo: ComplianceInfoProps | null;
@@ -36,7 +38,7 @@ const ComplianceInfo = ({
   isLoading,
 }: ComplianceInfoComponentProps) => {
 
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
+  if (isLoading) return <Loading />
 
   if (!complianceInfo) return <div>No compliance info found.</div>;
 

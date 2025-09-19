@@ -304,6 +304,8 @@ class Link < ApplicationRecord
   after_create :initialize_call_limitation_info_if_needed!
   after_create :initialize_duration_variant_category_for_calls!
 
+  delegate :all_adult_products?, :all_adult_products, to: :user, prefix: true
+
   def set_default_discover_fee_per_thousand
     self.discover_fee_per_thousand = DEFAULT_BOOSTED_DISCOVER_FEE_PER_THOUSAND if user.discover_boost_enabled?
   end
@@ -356,6 +358,7 @@ class Link < ApplicationRecord
   def alive?
     purchase_disabled_at.nil? && banned_at.nil? && deleted_at.nil?
   end
+  alias_method :alive, :alive?
 
   def published?
     deleted_at.nil? && purchase_disabled_at.nil? && !draft
@@ -369,8 +372,9 @@ class Link < ApplicationRecord
   end
 
   def admins_can_generate_url_redirects?
-    product_files.alive.exists?
+    alive_product_files.any?
   end
+  alias_method :admins_can_generate_url_redirects, :admins_can_generate_url_redirects?
 
   def rentable?
     rent_only? || buy_and_rent?
@@ -436,10 +440,12 @@ class Link < ApplicationRecord
   def has_stampable_pdfs?
     alive_product_files.any?(&:must_be_pdf_stamped?)
   end
+  alias_method :has_stampable_pdfs, :has_stampable_pdfs?
 
   def streamable?
     has_filegroup?("video")
   end
+  alias_method :streamable, :streamable?
 
   def require_captcha?
     user.created_at > REQUIRE_CAPTCHA_FOR_SELLERS_YOUNGER_THAN.ago
@@ -526,6 +532,10 @@ class Link < ApplicationRecord
     escaped_description
   end
 
+  def stripped_html_safe_description
+    description.presence && strip_tags(html_safe_description)
+  end
+
   def html_safe_description
     return unless description.present?
 
@@ -561,6 +571,8 @@ class Link < ApplicationRecord
   end
 
   def as_json(options = {})
+    return super(options) if options.delete(:original)
+
     if options[:api_scopes].present?
       as_json_for_api(options)
     elsif options[:mobile].present?
@@ -985,6 +997,7 @@ class Link < ApplicationRecord
       AdultKeywordDetector.adult?(text)
     end
   end
+  alias_method :has_adult_keywords, :has_adult_keywords?
 
   # Public: Check if a zip archive should ever be generated for this product
   # This is for a product in general, not a specific purchase of a product.

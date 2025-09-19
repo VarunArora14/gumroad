@@ -26,6 +26,49 @@ module User::AsJson
     result.with_indifferent_access
   end
 
+  def as_json_for_admin(impersonatable: false)
+    as_json(
+      internal_use: true,
+      methods: %i[
+        id
+        form_email
+        form_email_blocked_at
+        form_email_domain
+        form_email_domain_blocked_at
+        avatar_url
+        username
+        subdomain_with_protocol
+        support_email
+        custom_fee_percent
+        has_payments
+        updated_at
+        verified
+        deleted
+        deleted_at
+        all_adult_products
+        unpaid_balance_cents
+        compliant
+        suspended
+        flagged_for_fraud
+        on_probation
+        disable_paypal_sales
+      ],
+      include: {
+        admin_manageable_user_memberships: {
+          include: {
+            seller: {
+              only: %i[id],
+              methods: %i[avatar_url display_name_or_email]
+            }
+          }
+        }
+      }
+    ).merge(
+      impersonatable:,
+      user_risk_state: user_risk_state.humanize
+    )
+  end
+
   private
     def view_profile_scope?(options)
       api_scopes_options(options).include?("view_profile")

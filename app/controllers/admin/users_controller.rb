@@ -2,24 +2,26 @@
 
 class Admin::UsersController < Admin::BaseController
   include Admin::FetchUser
-  include Pagy::Backend
   include MassTransferPurchases
 
   skip_before_action :require_admin!, if: :request_from_iffy?, only: %i[suspend_for_fraud_from_iffy mark_compliant_from_iffy flag_for_explicit_nsfw_tos_violation_from_iffy]
 
   before_action :fetch_user, except: %i[refund_queue block_ip_address]
 
-  helper Pagy::UrlHelpers
-
   PRODUCTS_ORDER = "ISNULL(COALESCE(purchase_disabled_at, banned_at, links.deleted_at)) DESC, created_at DESC"
   PRODUCTS_PER_PAGE = 10
 
+  layout "admin_inertia", only: :show
+
   def show
-    @title = "#{@user.display_name} on Gumroad"
-    @pagy, @products = pagy(@user.links.order(Arel.sql(PRODUCTS_ORDER)), limit: PRODUCTS_PER_PAGE)
-    respond_to do |format|
-      format.html
-      format.json { render json: @user }
+    if request.format.json?
+      render json: @user
+    else
+      render inertia: "Admin/Users/Show",
+             props: inertia_props(
+               title: "#{@user.display_name} on Gumroad",
+               user: @user.as_json_for_admin(impersonatable: policy([:admin, :impersonators, @user]).create?),
+             )
     end
   end
 

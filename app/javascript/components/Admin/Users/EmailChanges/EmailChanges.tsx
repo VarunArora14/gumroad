@@ -3,6 +3,7 @@ import { formatDate } from "$app/utils/date";
 import { WithTooltip } from "$app/components/WithTooltip";
 import { formatDistanceToNow } from 'date-fns';
 
+import Loading from "$app/components/Admin/Loading";
 
 export type EmailChangesProps = {
   created_at: string;
@@ -22,7 +23,7 @@ type EmailChangesComponentProps = {
 };
 
 const EmailChanges = ({ fields, emailChanges, isLoading }: EmailChangesComponentProps) => {
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />;
+  if (isLoading) return <Loading />;
 
   if (!emailChanges) return <div>No email changes found.</div>;
 

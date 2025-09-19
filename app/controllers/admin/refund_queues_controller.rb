@@ -11,49 +11,11 @@ class Admin::RefundQueuesController < Admin::BaseController
             props: inertia_props(
               title: "Refund queue",
               users: @users.map do |user|
-                user.as_json(
-                  internal_use: true,
-                  methods: %i[
-                    id
-                    form_email
-                    form_email_blocked_at
-                    form_email_domain
-                    form_email_domain_blocked_at
-                    avatar_url
-                    username
-                    subdomain_with_protocol
-                    support_email
-                    custom_fee_percent
-                    has_payments
-                    updated_at
-                    verified
-                    deleted
-                    deleted_at
-                    all_adult_products
-                    unpaid_balance_cents
-                  ],
-                  include: {
-                    admin_manageable_user_memberships: {
-                      include: {
-                        seller: {
-                          only: %i[id],
-                          methods: %i[avatar_url display_name_or_email]
-                        }
-                      }
-                    }
-                  }
-                ).merge(
-                  impersonatable: policy([:admin, :impersonators, user]).create?,
-                  compliant: user.compliant?,
-                  suspended: user.suspended?,
-                  unpaid_balance_cents: user.unpaid_balance_cents,
-                  disable_paypal_sales: user.disable_paypal_sales?,
-                  flagged_for_fraud: user.flagged_for_fraud?,
-                  on_probation: user.on_probation?,
-                  user_risk_state: user.user_risk_state.humanize
+                user.as_json_for_admin(
+                  impersonatable: policy([:admin, :impersonators, user]).create?
                 )
-             end
-           )
+              end
+            )
   end
 
   private

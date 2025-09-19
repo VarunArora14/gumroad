@@ -4,11 +4,12 @@ import { cast } from "ts-safe-cast";
 import { useLazyFetch } from "$app/hooks/useLazyFetch";
 
 import Guid from "$app/components/Admin/Users/PermissionRisk/Guids/Guid";
+import Loading from "$app/components/Admin/Loading";
 
 type UserGuids = { guid: string; user_ids: number[] }[];
 
 const UserGuidsContent = ({ userGuids, isLoading }: { userGuids: UserGuids, isLoading: boolean }) => {
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
+  if (isLoading) return <Loading />
   if (userGuids.length > 0) return (
     <div className="stack">
       {userGuids.map(({ guid, user_ids }) => (

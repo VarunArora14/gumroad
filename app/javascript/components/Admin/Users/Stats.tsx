@@ -5,6 +5,8 @@ import { request, assertResponseError } from "$app/utils/request";
 import { showAlert } from "$app/components/server-components/Alert";
 import { useRunOnce } from "$app/components/useRunOnce";
 
+import Loading from "$app/components/Admin/Loading";
+
 type UserStatsProps = {
   total: string;
   balance: string;
@@ -43,7 +45,7 @@ const AdminUserStats = ({ user_id }: { user_id: number }) => {
       <li>{userStats.chargeback_count} count CB</li>
     </ul>
   ) : (
-    <div role="progressbar" className="inline-block !w-3" />
+    <Loading />
   );
 };
 

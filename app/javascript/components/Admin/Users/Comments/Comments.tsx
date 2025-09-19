@@ -1,6 +1,7 @@
 import React from "react";
 
 import Comment, { type CommentProps } from "$app/components/Admin/Users/Comments/Comment";
+import Loading from "$app/components/Admin/Loading";
 
 type AdminUserCommentsCommentsProps = {
   comments: CommentProps[];
@@ -11,7 +12,7 @@ const AdminUserCommentsComments = ({
   comments,
   isLoading,
 }: AdminUserCommentsCommentsProps) => {
-  if (isLoading) return <div role="progressbar" className="inline-block !w-3" />
+  if (isLoading) return <Loading />
 
   if (comments.length === 0) return <div className="info" role="status">No comments created.</div>
 

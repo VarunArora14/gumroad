@@ -18,6 +18,8 @@ import { RemoveButton } from "$app/components/RemoveButton";
 import { showAlert } from "$app/components/server-components/Alert";
 import { useIsAboveBreakpoint } from "$app/components/useIsAboveBreakpoint";
 import { WithTooltip } from "$app/components/WithTooltip";
+import TabList from "$app/components/Tabs/TabList";
+import Tab from "$app/components/Tabs/Tab";
 
 const MAX_PREVIEW_COUNT = 8;
 
@@ -153,9 +155,9 @@ const CoverUploader = ({
     isUploading ? (
       <Progress />
     ) : (
-      <div style={{ width: "100%" }}>
-        <div className="tab-buttons small" role="tablist">
-          <label className="button" role="tab">
+      <div className="w-full">
+        <TabList>
+          <Tab nodeName="label" className="flex items-center justify-center p-2">
             <input
               type="file"
               multiple
@@ -185,19 +187,20 @@ const CoverUploader = ({
             />
             <Icon name="upload-fill" />
             Computer files
-          </label>
-          <Button
-            role="tab"
+          </Tab>
+
+          <Tab
+            className="flex items-center justify-center p-2"
+            isSelected={uploader?.type === "url"}
+            ariaControls={`${uid}-url`}
             onClick={() =>
               setUploader((prevUploader) => (prevUploader?.type === "url" ? null : { type: "url", value: "" }))
             }
-            aria-selected={uploader?.type === "url"}
-            aria-controls={`${uid}-url`}
           >
             <Icon name="link" />
-            External link
-          </Button>
-        </div>
+            <span className="ml-2">External link</span>
+          </Tab>
+        </TabList>
         <fieldset role="tabpanel" id={`${uid}-url`} hidden={uploader?.type !== "url"}>
           {uploader?.type === "url" ? (
             <div className="input-with-button">
