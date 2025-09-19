@@ -87,7 +87,7 @@ const AdminProductInfoContent = ({ info, isLoading }: { info: InfoProps; isLoadi
         <dt>Has adult keywords</dt>
         <dd><BooleanIcon value={info.has_adult_keywords} /></dd>
 
-        <dt>Taxonomy</dt>
+        <dt>Category</dt>
         <dd>{info.taxonomy?.ancestry_path?.join(" > ")}</dd>
 
         <dt>Tags</dt>
