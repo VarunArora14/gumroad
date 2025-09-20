@@ -176,7 +176,7 @@ export function computeTipForPrice(state: State, price: number, permalink: strin
   if (state.tip.type === "fixed") {
     const totalPrice = getTotalPriceFromProducts(state);
     if (totalPrice === 0) {
-      return computeTipForFreeCart(state, price, permalink);
+      return computeTipForFreeCart(state, permalink);
     }
 
     return Math.round((state.tip.amount ?? 0) * (price / totalPrice));
@@ -185,7 +185,7 @@ export function computeTipForPrice(state: State, price: number, permalink: strin
   return Math.round((state.tip.percentage / 100) * price);
 }
 
-function computeTipForFreeCart(state: State, productPrice: number, permalink?: string): number {
+function computeTipForFreeCart(state: State, permalink?: string): number {
   if (state.tip.type !== "fixed" || !state.tip.amount) return 0;
 
   const creatorGroups = new Map<string, Product[]>();
@@ -200,17 +200,9 @@ function computeTipForFreeCart(state: State, productPrice: number, permalink?: s
     }
   }
 
-  const tipPerCreator = state.tip.amount / creatorGroups.size;
-
   for (const [_creatorId, products] of creatorGroups) {
-    const tipRecipient = products[0];
-
-    if (tipRecipient) {
-      const isCurrentProduct = permalink ? tipRecipient.permalink === permalink : tipRecipient.price === productPrice;
-
-      if (isCurrentProduct) {
-        return Math.round(tipPerCreator);
-      }
+    if (products[0]?.permalink === permalink) {
+      return Math.round(state.tip.amount / creatorGroups.size);
     }
   }
 
