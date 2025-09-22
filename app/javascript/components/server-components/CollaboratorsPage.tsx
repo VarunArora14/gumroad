@@ -132,7 +132,6 @@ const CollaboratorDetails = ({
 
       <section className="mt-auto flex gap-4">
         <Link
-          style={{ flex: 1 }}
           to={`/collaborators/${selectedCollaborator.id}/edit`}
           className="button"
           aria-label="Edit"
@@ -141,7 +140,6 @@ const CollaboratorDetails = ({
           Edit
         </Link>
         <Button
-          style={{ flex: 1 }}
           color="danger"
           aria-label="Delete"
           onClick={() => onRemove(selectedCollaborator.id)}
@@ -219,7 +217,7 @@ const Collaborators = () => {
                     onClick={() => setSelectedCollaborator(collaborator)}
                   >
                     <td data-label="Name">
-                      <div style={{ display: "flex", alignItems: "center", gap: "var(--spacer-4)" }}>
+                      <div className="flex items-center gap-3">
                         <img
                           className="user-avatar"
                           src={collaborator.avatar_url}
@@ -670,7 +668,7 @@ const CollaboratorForm = () => {
           title="Remove affiliates?"
           onClose={() => setIsConfirmationModalOpen(false)}
         >
-          <h4 style={{ marginBottom: "var(--spacer-3)" }}>
+          <h4 className="mb-3">
             Affiliates will be removed from the following products:
             <ul>
               {productsWithAffiliates.slice(0, listedProductsWithAffiliatesCount).map((product) => (
@@ -681,13 +679,10 @@ const CollaboratorForm = () => {
               <span>{`and ${productsWithAffiliates.length - listedProductsWithAffiliatesCount} others.`}</span>
             ) : null}
           </h4>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "var(--spacer-3)" }}>
-            <Button style={{ flexGrow: 1 }} onClick={() => setIsConfirmationModalOpen(false)}>
-              No, cancel
-            </Button>
+          <div className="flex justify-between gap-3">
+            <Button onClick={() => setIsConfirmationModalOpen(false)}>No, cancel</Button>
             <Button
               color="primary"
-              style={{ flexGrow: 1 }}
               onClick={() => {
                 setIsConfirmationModalOpen(false);
                 setIsConfirmed(true);
