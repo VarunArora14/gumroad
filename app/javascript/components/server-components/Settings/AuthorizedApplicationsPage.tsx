@@ -29,6 +29,7 @@ type Scope =
   | "edit_products"
   | "ifttt"
   | "mark_sales_as_shipped"
+  | "refund_sales"
   | "edit_sales"
   | "unfurl"
   | "view_profile"
@@ -43,6 +44,7 @@ const SCOPE_DESCRIPTIONS: Record<Scope, string> = {
   edit_products: "Create new products and edit your existing products.",
   ifttt: "See your sales data.",
   mark_sales_as_shipped: "Mark your sales as shipped.",
+  refund_sales: "Refund your sales.",
   edit_sales: "Refund your sales and resend purchase receipts to customers.",
   unfurl: "Fetch public information of any product to preview it in Notion.",
   view_profile: "See your profile data.",
