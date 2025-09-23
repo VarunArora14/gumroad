@@ -575,6 +575,38 @@ describe Api::V2::SalesController do
       end
     end
 
+    describe "when logged in with refund_sales scope" do
+      before do
+        @token = create("doorkeeper/access_token", application: @app,
+                                                   resource_owner_id: @seller.id,
+                                                   scopes: "refund_sales")
+        @params.merge!(access_token: @token.token)
+      end
+
+      context "when request for a full refund" do
+        it "refunds a sale fully" do
+          expect(@purchase.price_cents).to eq 100_00
+          expect(@purchase.refunded?).to be_falsey
+
+          put :refund, params: @params
+
+          @purchase.reload
+          expect(@purchase.refunded?).to be_truthy
+          expect(@purchase.refunds.last.refunding_user_id).to eq @product.user.id
+
+
+          expect(response.parsed_body["sale"]["refunded"]).to eq true
+          expect(response.parsed_body["sale"]["partially_refunded"]).to eq false
+          expect(response.parsed_body["sale"]["amount_refundable_in_currency"]).to eq "0"
+
+          expect(response.parsed_body).to eq({
+            success: true,
+            sale: @purchase.as_json(version: 2)
+          }.as_json)
+        end
+      end
+    end
+
     describe "when logged in with view_sales scope" do
       before do
         @token = create("doorkeeper/access_token", application: @app,
