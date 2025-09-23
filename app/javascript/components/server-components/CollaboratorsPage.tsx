@@ -217,7 +217,7 @@ const Collaborators = () => {
                     onClick={() => setSelectedCollaborator(collaborator)}
                   >
                     <td data-label="Name">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <img
                           className="user-avatar"
                           src={collaborator.avatar_url}
@@ -680,9 +680,12 @@ const CollaboratorForm = () => {
             ) : null}
           </h4>
           <div className="flex justify-between gap-3">
-            <Button onClick={() => setIsConfirmationModalOpen(false)}>No, cancel</Button>
+            <Button className="flex-grow" onClick={() => setIsConfirmationModalOpen(false)}>
+              No, cancel
+            </Button>
             <Button
               color="primary"
+              className="flex-grow"
               onClick={() => {
                 setIsConfirmationModalOpen(false);
                 setIsConfirmed(true);
