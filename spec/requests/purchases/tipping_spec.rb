@@ -154,13 +154,13 @@ describe("Product checkout with tipping", type: :system, js: true) do
 
       expect(page).to have_alert(text: "Your purchase was successful! We sent a receipt to test@gumroad.com.")
 
-      purchase_free_product2 = Purchase.last
+      purchase_free_product2 = Purchase.second_to_last
       expect(purchase_free_product2).to be_successful
       expect(purchase_free_product2.link).to eq(free_product2)
       expect(purchase_free_product2.price_cents).to eq(0)
       expect(purchase_free_product2.tip).to be_nil
 
-      purchase_free_product1 = Purchase.second_to_last
+      purchase_free_product1 = Purchase.last
       expect(purchase_free_product1).to be_successful
       expect(purchase_free_product1.link).to eq(free_product1)
       expect(purchase_free_product1.price_cents).to eq(500)
@@ -170,10 +170,11 @@ describe("Product checkout with tipping", type: :system, js: true) do
 
     context "for single creator" do
       it "applies full tip to first product when tip meets minimum" do
-        visit free_product1.long_url
-        add_to_cart(free_product1, pwyw_price: 0)
         visit free_product2.long_url
         add_to_cart(free_product2, pwyw_price: 0)
+        visit free_product1.long_url
+        add_to_cart(free_product1, pwyw_price: 0)
+        wait_for_ajax
 
         fill_in "Tip", with: 0.99
         fill_checkout_form(free_product2)
@@ -194,6 +195,7 @@ describe("Product checkout with tipping", type: :system, js: true) do
       it "shows backend validation error when tip below minimum" do
         visit free_product1.long_url
         add_to_cart(free_product1, pwyw_price: 0)
+        wait_for_ajax
 
         fill_in "Tip", with: 0.5
         fill_checkout_form(free_product1)
@@ -202,12 +204,14 @@ describe("Product checkout with tipping", type: :system, js: true) do
         expect(page).to have_text("The amount must be at least $0.99.")
       end
     end
+
     context "for multiple creators" do
       it "distributes tip per creator to first product from each when tip meets minimum" do
         visit free_product1.long_url
         add_to_cart(free_product1, pwyw_price: 0)
         visit free_product3.long_url
         add_to_cart(free_product3, pwyw_price: 0)
+        wait_for_ajax
 
         fill_in "Tip", with: 1.98
         fill_checkout_form(free_product3)
@@ -229,6 +233,7 @@ describe("Product checkout with tipping", type: :system, js: true) do
         add_to_cart(free_product1, pwyw_price: 0)
         visit free_product3.long_url
         add_to_cart(free_product3, pwyw_price: 0)
+        wait_for_ajax
 
         fill_in "Tip", with: 1.5
         fill_checkout_form(free_product3)
