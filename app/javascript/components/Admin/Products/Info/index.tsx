@@ -30,7 +30,6 @@ const AdminProductInfo = ({ product }: Props) => {
   };
 
   return (
-    console.log(info),
     <>
       <hr />
       <details open={open} onToggle={onToggle}>

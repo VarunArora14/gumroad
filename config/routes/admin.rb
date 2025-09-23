@@ -33,7 +33,11 @@ namespace :admin do
       resources :merchant_accounts, only: [:index]
       resources :email_changes, only: [:index]
       resources :comments, only: [:index, :create]
-      resources :products, only: [:index]
+      resources :products, only: [:index] do
+        scope module: :products do
+          resources :tos_violation_flags, only: [:index, :create]
+        end
+      end
     end
     resources :service_charges, only: :index
     member do
@@ -74,7 +78,6 @@ namespace :admin do
   resources :links, only: [:show], defaults: { format: "html" } do
     member do
       get :access_product_file
-      post :flag_seller_for_tos_violation
       get :generate_url_redirect
       post :is_adult
       post :publish

@@ -1,15 +1,24 @@
 import { usePage } from "@inertiajs/react";
 import React from "react";
 
+import { type User } from "$app/components/Admin/Users/User";
+import { type Compliance } from "$app/components/Admin/Products/FlagForTosViolations";
+
 import AdminProductHeader from "$app/components/Admin/Products/Header";
 import AdminProductDescription from "$app/components/Admin/Products/Description";
 import AdminProductDetails from "$app/components/Admin/Products/Details";
 import AdminProductInfo from "$app/components/Admin/Products/Info";
+import AdminProductActions from "$app/components/Admin/Products/Actions";
+import AdminFlagForTosViolations from "$app/components/Admin/Products/FlagForTosViolations";
 
 type ProductFile = {
   id: number;
   external_id: string;
   s3_filename: string;
+};
+
+export type ActiveIntegration = {
+  type: string;
 };
 
 export type Product = {
@@ -27,10 +36,18 @@ export type Product = {
   admins_can_generate_url_redirects: boolean;
   alive_product_files: ProductFile[];
   stripped_html_safe_description: string;
+  alive: boolean;
+  deleted_at: string;
+  is_adult: boolean;
+  active_integrations: ActiveIntegration[];
+  admins_can_mark_as_staff_picked: boolean;
+  admins_can_unmark_as_staff_picked: boolean;
+  is_tiered_membership: boolean;
 };
 
 const AdminUsersProductsProduct = ({ product }: { product: Product }) => {
-  const { url } = usePage();
+  const { url, props } = usePage();
+  const { user, compliance } = props as unknown as { user: User; compliance: Compliance };
   const isCurrentUrl = url === Routes.admin_link_url(product.id);
 
   return (
@@ -39,6 +56,8 @@ const AdminUsersProductsProduct = ({ product }: { product: Product }) => {
       <AdminProductDescription product={product} />
       <AdminProductDetails product={product} />
       <AdminProductInfo product={product} />
+      <AdminProductActions product={product} />
+      <AdminFlagForTosViolations user={user} product={product} compliance={compliance} />
     </article>
   );
 };

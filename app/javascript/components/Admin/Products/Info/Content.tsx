@@ -1,6 +1,7 @@
 import React from "react";
 import Loading from "$app/components/Admin/Loading";
 import { BooleanIcon } from "$app/components/Icons";
+import { type ActiveIntegration } from "$app/components/Admin/Products/Product";
 
 export type InfoProps = {
   purchase_type: string;
@@ -22,9 +23,7 @@ export type InfoProps = {
   tags: {
     humanized_name: string;
   }[];
-  active_integrations: {
-    type: string;
-  }[];
+  active_integrations: ActiveIntegration[];
   type: string;
   formatted_rental_price_cents: string;
 };

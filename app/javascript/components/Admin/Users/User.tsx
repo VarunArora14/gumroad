@@ -54,6 +54,7 @@ export type User = {
   unpaid_balance_cents: number;
   disable_paypal_sales: boolean;
   flagged_for_fraud: boolean;
+  flagged_for_tos_violation: boolean;
   on_probation: boolean;
   user_risk_state: string;
   bio: string;

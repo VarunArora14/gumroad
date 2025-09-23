@@ -31,6 +31,7 @@ module User::AsJson
       internal_use: true,
       methods: %i[
         id
+        display_name
         form_email
         form_email_blocked_at
         form_email_domain
@@ -50,6 +51,7 @@ module User::AsJson
         compliant
         suspended
         flagged_for_fraud
+        flagged_for_tos_violation
         on_probation
         disable_paypal_sales
       ],

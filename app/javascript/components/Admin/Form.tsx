@@ -44,8 +44,9 @@ export const Form = ({
       });
 
       if (!response.ok) {
-        const { message } = cast<{ message?: string }>(await response.json());
-        throw new ResponseError(message ?? "Something went wrong.");
+        const { message, error_message } = cast<{ message?: string, error_message?: string }>(await response.json());
+        const errorMessage = error_message ?? message ?? "Something went wrong.";
+        throw new ResponseError(errorMessage);
       }
 
       form.reset();

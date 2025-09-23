@@ -2,7 +2,6 @@
 
 class Admin::LinksController < Admin::BaseController
   before_action :fetch_product_by_general_permalink, except: %i[purchases
-                                                                flag_seller_for_tos_violation
                                                                 views_count sales_stats
                                                                 join_discord
                                                                 join_discord_redirect]
@@ -86,25 +85,6 @@ class Admin::LinksController < Admin::BaseController
     end
   end
 
-  def flag_seller_for_tos_violation
-    product = Link.find_by(id: params[:id])
-    user = product.user
-    suspend_tos_reason = params.try(:[], :suspend_tos).try(:[], :reason) || params[:reason]
-    raise "Invalid request" if user.nil? || !suspend_tos_reason
-    raise "Cannot flag for TOS violation" if !user.can_flag_for_tos_violation?
-
-    ActiveRecord::Base.transaction do
-      user.update!(tos_violation_reason: suspend_tos_reason)
-      comment_content = "Flagged for a policy violation on #{Time.current.to_fs(:formatted_date_full_month)} for a product named '#{product.name}' (#{suspend_tos_reason})"
-      user.flag_for_tos_violation!(author_id: current_user.id, product_id: product.id, content: comment_content)
-      unpublish_or_delete_product!(product)
-    end
-
-    render json: { success: true }
-  rescue => e
-    render json: { success: false, error_message: e.message }
-  end
-
   def views_count
     render layout: false
   end
@@ -174,10 +154,6 @@ class Admin::LinksController < Admin::BaseController
     def fetch_product
       @product = Link.where(id: params[:id]).or(Link.where(unique_permalink: params[:id])).first
       @product || e404
-    end
-
-    def unpublish_or_delete_product!(product)
-      product.is_tiered_membership? ? product.unpublish! : product.delete!
     end
 
     def fetch_discord_redirect_uri(product)

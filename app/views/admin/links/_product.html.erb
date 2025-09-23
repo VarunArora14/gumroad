@@ -171,7 +171,7 @@
 
       <% suspend_tos_success_message = "User was flagged for TOS violation and product #{product.is_tiered_membership? ? "unpublished" : "deleted"}." %>
       <% suspend_tos_confirm_message = "Are you sure you want to flag the user and #{product.is_tiered_membership? ? "unpublish" : "delete"} the product?" %>
-      <%= react_component "AdminSuspendForTosForm", props: { product_id: product.id, success_message: suspend_tos_success_message, confirm_message: suspend_tos_confirm_message, reasons: Compliance::TOS_VIOLATION_REASONS, default_reason: Compliance::DEFAULT_TOS_VIOLATION_REASON }, prerender: true %>
+      <%= react_component "AdminSuspendForTosForm", props: { user_id: product.user_id, product_id: product.id, success_message: suspend_tos_success_message, confirm_message: suspend_tos_confirm_message, reasons: Compliance::TOS_VIOLATION_REASONS, default_reason: Compliance::DEFAULT_TOS_VIOLATION_REASON }, prerender: true %>
     </details>
   <% end %>
 
