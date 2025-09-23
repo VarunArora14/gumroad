@@ -1,4 +1,5 @@
 import { enableMapSet, produce } from "immer";
+import groupBy from "lodash/groupBy";
 import * as React from "react";
 
 import { getSurcharges, SurchargesResponse } from "$app/data/customer_surcharge";
@@ -187,25 +188,12 @@ export function computeTipForPrice(state: State, price: number, permalink: strin
 
 function computeTipForFreeCart(state: State, permalink?: string): number {
   if (state.tip.type !== "fixed" || !state.tip.amount) return 0;
-
-  const creatorGroups = new Map<string, Product[]>();
-  for (const product of state.products) {
-    const creatorId = product.creator.id;
-    if (!creatorGroups.has(creatorId)) {
-      creatorGroups.set(creatorId, []);
-    }
-    const group = creatorGroups.get(creatorId);
-    if (group) {
-      group.push(product);
-    }
+  // TODO (techdebt): Replace lodash `groupBy` with https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy
+  // when project upgrades to https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-7.html#support-for---target-es2024-and---lib-es2024
+  const creatorGroups = groupBy(state.products, (product) => product.creator.id);
+  if (Object.values(creatorGroups).some((products) => products[0]?.permalink === permalink)) {
+    return Math.round(state.tip.amount / Object.keys(creatorGroups).length);
   }
-
-  for (const [_creatorId, products] of creatorGroups) {
-    if (products[0]?.permalink === permalink) {
-      return Math.round(state.tip.amount / creatorGroups.size);
-    }
-  }
-
   return 0;
 }
 
