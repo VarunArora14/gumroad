@@ -174,9 +174,10 @@ describe("Product checkout with tipping", type: :system, js: true) do
         add_to_cart(free_product2, pwyw_price: 0)
         visit free_product1.long_url
         add_to_cart(free_product1, pwyw_price: 0)
-        wait_for_ajax
+        expect(page).not_to have_radio_button("Other", wait: 5)
 
         fill_in "Tip", with: 0.99
+        wait_for_ajax
         fill_checkout_form(free_product2)
         click_on "Pay"
 
@@ -195,9 +196,10 @@ describe("Product checkout with tipping", type: :system, js: true) do
       it "shows backend validation error when tip below minimum" do
         visit free_product1.long_url
         add_to_cart(free_product1, pwyw_price: 0)
-        wait_for_ajax
+        expect(page).not_to have_radio_button("Other", wait: 5)
 
         fill_in "Tip", with: 0.5
+        wait_for_ajax
         fill_checkout_form(free_product1)
         click_on "Pay"
 
@@ -211,9 +213,10 @@ describe("Product checkout with tipping", type: :system, js: true) do
         add_to_cart(free_product1, pwyw_price: 0)
         visit free_product3.long_url
         add_to_cart(free_product3, pwyw_price: 0)
-        wait_for_ajax
+        expect(page).not_to have_radio_button("Other", wait: 5)
 
         fill_in "Tip", with: 1.98
+        wait_for_ajax
         fill_checkout_form(free_product3)
         click_on "Pay"
 
@@ -233,9 +236,10 @@ describe("Product checkout with tipping", type: :system, js: true) do
         add_to_cart(free_product1, pwyw_price: 0)
         visit free_product3.long_url
         add_to_cart(free_product3, pwyw_price: 0)
-        wait_for_ajax
+        expect(page).not_to have_radio_button("Other", wait: 5)
 
         fill_in "Tip", with: 1.5
+        wait_for_ajax
         fill_checkout_form(free_product3)
         click_on "Pay"
 
