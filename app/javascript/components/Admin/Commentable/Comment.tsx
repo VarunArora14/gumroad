@@ -19,7 +19,7 @@ export type CommentProps = {
   author: AuthorProps | null;
 };
 
-const AdminUserCommentsComment = ({ comment }: { comment: CommentProps }) => (
+const AdminCommentableComment = ({ comment }: { comment: CommentProps }) => (
   <div role="listitem">
     <div className="content">
       <div>
@@ -44,4 +44,4 @@ const AdminUserCommentsComment = ({ comment }: { comment: CommentProps }) => (
   </div>
 );
 
-export default AdminUserCommentsComment;
+export default AdminCommentableComment;

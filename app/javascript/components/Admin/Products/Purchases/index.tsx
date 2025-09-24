@@ -31,6 +31,9 @@ const AdminProductPurchases = ({
     hasMore,
     pagination,
     setData: setPurchases,
+    setHasMore,
+    setHasLoaded,
+    setIsLoading,
   } = useLazyPaginatedFetch<ProductPurchase[]>(
     [],
     {
@@ -46,12 +49,19 @@ const AdminProductPurchases = ({
     }
   };
 
+  const resetPurchases = () => {
+    setPurchases([]);
+    setHasLoaded(false);
+    setHasMore(true);
+    setIsLoading(true);
+  }
+
   const onToggle = (e: React.MouseEvent<HTMLDetailsElement>) => {
     setOpen(e.currentTarget.open);
     if (e.currentTarget.open) {
       void fetchPurchases();
     } else {
-      setPurchases([]);
+      resetPurchases();
     }
   };
 

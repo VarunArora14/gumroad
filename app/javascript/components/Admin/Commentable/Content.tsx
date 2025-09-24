@@ -1,9 +1,9 @@
 import React from "react";
 
-import Comment, { type CommentProps } from "$app/components/Admin/Users/Comments/Comment";
+import Comment, { type CommentProps } from "$app/components/Admin/Commentable/Comment";
 import Loading from "$app/components/Admin/Loading";
 
-type AdminUserCommentsCommentsProps = {
+type AdminCommentableCommentsProps = {
   count: number;
   comments: CommentProps[];
   isLoading: boolean;
@@ -11,13 +11,13 @@ type AdminUserCommentsCommentsProps = {
   onLoadMore: () => void;
 };
 
-const AdminUserCommentsComments = ({
+const AdminCommentableComments = ({
   count,
   comments,
   isLoading,
   hasMore,
   onLoadMore,
-}: AdminUserCommentsCommentsProps) => {
+}: AdminCommentableCommentsProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     hasMore && onLoadMore();
@@ -48,4 +48,4 @@ const AdminUserCommentsComments = ({
   )
 };
 
-export default AdminUserCommentsComments;
+export default AdminCommentableComments;

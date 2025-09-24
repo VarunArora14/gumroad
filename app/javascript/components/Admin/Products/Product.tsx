@@ -11,6 +11,7 @@ import AdminProductInfo from "$app/components/Admin/Products/Info";
 import AdminProductActions from "$app/components/Admin/Products/Actions";
 import AdminFlagForTosViolations from "$app/components/Admin/Products/FlagForTosViolations";
 import AdminProductPurchases from "$app/components/Admin/Products/Purchases";
+import AdminProductComments from "$app/components/Admin/Products/Comments";
 
 type ProductFile = {
   id: number;
@@ -65,6 +66,7 @@ const AdminUsersProductsProduct = ({ product, is_affiliate_user }: AdminUsersPro
       <AdminProductActions product={product} />
       <AdminFlagForTosViolations user={user} product={product} compliance={compliance} />
       <AdminProductPurchases product_id={product.id} is_affiliate_user={is_affiliate_user} user_id={user.id} />
+      <AdminProductComments product={product} />
     </article>
   );
 };

@@ -11,6 +11,7 @@ interface UseLazyFetchOptions<T> {
 interface UseLazyFetchResult<T> {
   data: T;
   isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
   setData: (data: T) => void;
   fetchData: (queryParams?: QueryParams) => Promise<void>;
   hasLoaded: boolean;
@@ -71,6 +72,7 @@ const useLazyFetchCore = <T>(
     data,
     setData,
     isLoading,
+    setIsLoading,
     fetchData,
     hasLoaded,
     setHasLoaded,
@@ -86,6 +88,7 @@ export const useLazyFetch = <T>(
 
 type UseLazyPaginatedFetchResult<T> = UseLazyFetchResult<T> & {
   hasMore: boolean;
+  setHasMore: (hasMore: boolean) => void;
   pagination: Pagination;
 };
 
@@ -145,6 +148,7 @@ export const useLazyPaginatedFetch = <T>(
     data: currentData,
     setData: setCurrentData,
     hasMore,
+    setHasMore,
     pagination,
     fetchData,
   };

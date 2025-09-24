@@ -3,17 +3,17 @@ import { useForm } from "@inertiajs/react";
 import { request } from "$app/utils/request";
 import { showAlert } from "$app/components/server-components/Alert";
 import { cast } from "ts-safe-cast";
-import type { CommentProps } from "$app/components/Admin/Users/Comments/Comment";
+import type { CommentProps } from "$app/components/Admin/Commentable/Comment";
 
-type AdminUserCommentFormProps = {
-  commentable_id: number;
+type AdminCommentableFormProps = {
+  endpoint: string;
   onCommentAdded: (comment: CommentProps) => void;
 };
 
-const AdminUserCommentForm = ({
-  commentable_id,
+const AdminCommentableForm = ({
+  endpoint,
   onCommentAdded,
-}: AdminUserCommentFormProps) => {
+}: AdminCommentableFormProps) => {
 
   const {
     data: { comment: { content } },
@@ -34,7 +34,7 @@ const AdminUserCommentForm = ({
       formData.append("comment[content]", content);
       const response = await request({
         method: "POST",
-        url: Routes.admin_user_comments_path(commentable_id, { format: "json" }),
+        url: endpoint,
         data: formData,
         accept: "json",
       })
@@ -63,4 +63,4 @@ const AdminUserCommentForm = ({
   );
 };
 
-export default AdminUserCommentForm;
+export default AdminCommentableForm;

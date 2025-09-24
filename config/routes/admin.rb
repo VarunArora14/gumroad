@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+concern :commentable do
+  resources :comments, only: [:index, :create]
+end
+
 namespace :admin do
   get "/", to: "base#index"
   get :impersonate, to: "base#impersonate"
@@ -12,6 +16,8 @@ namespace :admin do
 
   resources :users, only: [:show, :destroy], defaults: { format: "html" } do
     scope module: :users do
+      concerns :commentable
+
       resource :impersonator, only: [:create, :destroy]
       resources :payouts, only: [:index, :show], shallow: true do
         collection do
@@ -32,7 +38,6 @@ namespace :admin do
       resource :payout_info, only: [:show]
       resources :merchant_accounts, only: [:index]
       resources :email_changes, only: [:index]
-      resources :comments, only: [:index, :create]
       resources :products, only: [:index] do
         scope module: :products do
           resources :tos_violation_flags, only: [:index, :create]
@@ -98,6 +103,8 @@ namespace :admin do
     resource :staff_picked, only: [:create], controller: "products/staff_picked"
 
     scope module: :products do
+      concerns :commentable
+
       resource :details, controller: "details", only: [:show]
       resource :info, only: [:show]
       resource :staff_picked, controller: "staff_picked", only: [:create]
