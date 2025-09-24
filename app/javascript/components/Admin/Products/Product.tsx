@@ -12,6 +12,7 @@ import AdminProductActions from "$app/components/Admin/Products/Actions";
 import AdminFlagForTosViolations from "$app/components/Admin/Products/FlagForTosViolations";
 import AdminProductPurchases from "$app/components/Admin/Products/Purchases";
 import AdminProductComments from "$app/components/Admin/Products/Comments";
+import AdminProductFooter from "$app/components/Admin/Products/Footer";
 
 type ProductFile = {
   id: number;
@@ -39,12 +40,13 @@ export type Product = {
   alive_product_files: ProductFile[];
   stripped_html_safe_description: string;
   alive: boolean;
-  deleted_at: string;
   is_adult: boolean;
   active_integrations: ActiveIntegration[];
   admins_can_mark_as_staff_picked: boolean;
   admins_can_unmark_as_staff_picked: boolean;
   is_tiered_membership: boolean;
+  updated_at: string;
+  deleted_at: string;
 };
 
 type AdminUsersProductsProductProps = {
@@ -67,6 +69,7 @@ const AdminUsersProductsProduct = ({ product, is_affiliate_user }: AdminUsersPro
       <AdminFlagForTosViolations user={user} product={product} compliance={compliance} />
       <AdminProductPurchases product_id={product.id} is_affiliate_user={is_affiliate_user} user_id={user.id} />
       <AdminProductComments product={product} />
+      <AdminProductFooter product={product} />
     </article>
   );
 };

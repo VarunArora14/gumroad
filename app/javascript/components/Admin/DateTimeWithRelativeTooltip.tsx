@@ -1,4 +1,5 @@
 import React from "react";
+import { WithTooltip } from "$app/components/WithTooltip";
 import { formatDistanceToNow } from 'date-fns';
 import { formatDate } from "$app/utils/date";
 
@@ -13,7 +14,7 @@ const DateTimeWithRelativeTooltip = ({ date, placeholder }: Props) => {
   const relativeTime = formatDistanceToNow(new Date(date), { addSuffix: true });
   const formattedDate = formatDate(new Date(date));
 
-  return <span title={relativeTime}>{formattedDate}</span>;
+  return <WithTooltip tip={relativeTime}>{formattedDate}</WithTooltip>;
 };
 
 export default DateTimeWithRelativeTooltip;
