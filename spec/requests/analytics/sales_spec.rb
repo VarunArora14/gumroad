@@ -69,7 +69,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
 
 
       find('[aria-label="Aggregate by"]').click
-      click_on "Monthly"
+      choose "Monthly"
 
       expect(page).to have_css(".point", count: 1)
       expect(page).to have_css("path.bar", count: 2)
@@ -77,7 +77,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
       expect(chart).to have_tooltip(text: "6 views\n4 sales\n(66.7% conversion)\n$12\nDecember 2023")
 
       find('[aria-label="Aggregate by"]').click
-      click_on "Daily"
+      choose "Daily"
 
       select_disclosure "Select products..." do
         uncheck "Product 1"
@@ -155,7 +155,8 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
         expect(page).to have_table_row({ "Country" => "🇺🇸 United States", "Views" => "3", "Sales" => "1", "Total" => "$5" })
       end
 
-      select "United States", from: "Locations"
+      find('[aria-label="Locations"]').click
+      choose "United States"
       within_table("Locations") do
         expect(page).to have_table_rows_in_order(
           [
