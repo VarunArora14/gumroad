@@ -31,10 +31,10 @@ describe "Dropbox uploads", type: :system, js: true do
     expect(product.reload.alive_product_files.count).to eq 2
     expect(product.alive_product_files.first.display_name).to eq("Download-Card")
     expect(product.alive_product_files.last.display_name).to eq("SmallTestFile")
-    expected_file_embeds = product.alive_product_files.map do |file|
+    expected_content = product.alive_product_files.map do |file|
       { "type" => "fileEmbed", "attrs" => { "id" => file.external_id, "uid" => anything, "collapsed" => false } }
     end
-    expected_content = expected_file_embeds + [{ "type" => "paragraph" }]
+    expected_content << { "type" => "paragraph" }
     expect(product.alive_rich_contents.sole.description).to match_array(expected_content)
   end
 
