@@ -488,9 +488,11 @@ const LibraryPage = ({ results, creators, bundles, reviews_page_enabled, followi
                           />
                         </label>
                       ))}
-                      <div className="centered" style={{ alignSelf: "center" }}>
+                      <div>
                         {creators.length > 5 && !showingAllCreators ? (
-                          <Button onClick={() => setShowingAllCreators(true)}>Load more...</Button>
+                          <button className="link" onClick={() => setShowingAllCreators(true)}>
+                            Show more
+                          </button>
                         ) : null}
                       </div>
                     </fieldset>
@@ -544,11 +546,6 @@ const LibraryPage = ({ results, creators, bundles, reviews_page_enabled, followi
             setDeleting(null);
           }}
         />
-        <div style={{ marginTop: "20px", textAlign: "center" }}>
-          <a href="/help/article/198-your-gumroad-library" target="_blank" rel="noreferrer">
-            Need help with your Library?
-          </a>
-        </div>
       </section>
     </Layout>
   );
