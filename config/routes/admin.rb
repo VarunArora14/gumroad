@@ -36,6 +36,7 @@ namespace :admin do
       resources :products, only: [:index] do
         scope module: :products do
           resources :tos_violation_flags, only: [:index, :create]
+          resources :purchases, only: [:index]
         end
       end
     end
@@ -90,7 +91,6 @@ namespace :admin do
   resources :products, controller: "links", only: [:show, :destroy] do
     member do
       get "/file/:product_file_id/access", to: "links#access_product_file", as: :admin_access_product_file
-      get :purchases
       get :views_count
       get :sales_stats
       post :restore
@@ -100,6 +100,8 @@ namespace :admin do
     scope module: :products do
       resource :details, controller: "details", only: [:show]
       resource :info, only: [:show]
+      resource :staff_picked, controller: "staff_picked", only: [:create]
+      resources :purchases, only: [:index]
     end
   end
 

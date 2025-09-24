@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 class Admin::Users::CommentsController < Admin::Users::BaseController
+  include Pagy::Backend
   before_action :fetch_user
 
   def index
+    pagy, comments = pagy(
+      @user.comments.order(created_at: :desc).includes(:author),
+      limit: params[:per_page],
+      page: params[:page]
+    )
+
     render json: {
-      comments: json_payload(@user.comments.includes(:author))
+      comments: json_payload(comments),
+      pagination: pagy
     }
   end
 

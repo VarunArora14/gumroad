@@ -10,12 +10,24 @@ type PaginationProps = {
   total_count: number;
 };
 
-const AdminUsersProductsContent = ({ products }: { products: ProductType[] }) => {
+type AdminUsersProductsContentProps = {
+  products: ProductType[];
+  is_affiliate_user: boolean;
+}
+
+const AdminUsersProductsContent = ({
+  products,
+  is_affiliate_user
+}: AdminUsersProductsContentProps) => {
   if (products.length > 0) {
     return (
       <div>
         {products.map((product) => (
-          <AdminUsersProductsProduct key={product.id} product={product} />
+          <AdminUsersProductsProduct
+            key={product.id}
+            product={product}
+            is_affiliate_user={is_affiliate_user}
+          />
         ))}
       </div>
     )
@@ -26,14 +38,26 @@ const AdminUsersProductsContent = ({ products }: { products: ProductType[] }) =>
   }
 }
 
+type AdminUsersProductsProps = {
+  user: UserType;
+  products: ProductType[];
+  is_affiliate_user: boolean;
+  pagy: PaginationProps;
+}
+
 const AdminUsersProducts = () => {
-  const { user, products, pagy } = usePage().props as unknown as { user: UserType; is_affiliate_user: boolean; products: ProductType[]; pagy: PaginationProps };
+  const {
+    user,
+    products,
+    pagy,
+    is_affiliate_user
+  } = usePage().props as unknown as AdminUsersProductsProps;
 
   console.log(user, products, pagy);
   return (
     <div className="paragraphs">
       <AdminUserAndProductsTabs selectedTab="products" user={user} />
-      <AdminUsersProductsContent products={products} />
+      <AdminUsersProductsContent products={products} is_affiliate_user={is_affiliate_user} />
     </div>
   )
 };

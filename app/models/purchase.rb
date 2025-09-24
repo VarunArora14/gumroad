@@ -84,6 +84,7 @@ class Purchase < ApplicationRecord
   belongs_to :price, optional: true
   has_many :events
   has_many :refunds
+  has_many :refunding_users, through: :refunds, source: :user
   has_many :disputes
   belongs_to :offer_code, optional: true
   belongs_to :preorder, optional: true
@@ -572,6 +573,14 @@ class Purchase < ApplicationRecord
       .not_chargedback_or_chargedback_reversed
       .where(purchaser_id:)
   }
+
+  scope :for_admin_listing, -> {
+    where(purchase_state: %w[preorder_authorization_successful preorder_concluded_unsuccessfully successful failed not_charged ])
+      .exclude_not_charged_except_free_trial
+      .order(created_at: :desc, id: :desc)
+  }
+
+  scope :for_affiliate_user, ->(user) { where(affiliate: user.direct_affiliate_accounts) }
 
   scope :stripe, -> { where(charge_processor_id: StripeChargeProcessor.charge_processor_id) }
 

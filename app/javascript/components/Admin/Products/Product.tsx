@@ -10,6 +10,7 @@ import AdminProductDetails from "$app/components/Admin/Products/Details";
 import AdminProductInfo from "$app/components/Admin/Products/Info";
 import AdminProductActions from "$app/components/Admin/Products/Actions";
 import AdminFlagForTosViolations from "$app/components/Admin/Products/FlagForTosViolations";
+import AdminProductPurchases from "$app/components/Admin/Products/Purchases";
 
 type ProductFile = {
   id: number;
@@ -45,7 +46,12 @@ export type Product = {
   is_tiered_membership: boolean;
 };
 
-const AdminUsersProductsProduct = ({ product }: { product: Product }) => {
+type AdminUsersProductsProductProps = {
+  product: Product;
+  is_affiliate_user: boolean;
+}
+
+const AdminUsersProductsProduct = ({ product, is_affiliate_user }: AdminUsersProductsProductProps) => {
   const { url, props } = usePage();
   const { user, compliance } = props as unknown as { user: User; compliance: Compliance };
   const isCurrentUrl = url === Routes.admin_link_url(product.id);
@@ -58,6 +64,7 @@ const AdminUsersProductsProduct = ({ product }: { product: Product }) => {
       <AdminProductInfo product={product} />
       <AdminProductActions product={product} />
       <AdminFlagForTosViolations user={user} product={product} compliance={compliance} />
+      <AdminProductPurchases product_id={product.id} is_affiliate_user={is_affiliate_user} user_id={user.id} />
     </article>
   );
 };

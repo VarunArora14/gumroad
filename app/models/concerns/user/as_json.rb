@@ -4,6 +4,8 @@ module User::AsJson
   extend ActiveSupport::Concern
 
   def as_json(options = {})
+    return super(options) if options.delete(:original)
+
     result =
       if options[:internal_use] || valid_api_scope?(options)
         super(only: %i[name bio twitter_handle currency_type], methods: options[:methods], include: options[:include])
