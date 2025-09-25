@@ -146,7 +146,7 @@ type Props = {
   formatted_balance_to_forfeit_on_country_change: string | null;
   formatted_balance_to_forfeit_on_payout_method_change: string | null;
   payouts_paused_internally: boolean;
-  payouts_paused_by: string | null;
+  payouts_paused_by_processor: boolean;
   payouts_paused_by_user: boolean;
   payout_threshold_cents: number;
   minimum_payout_threshold_cents: number;
@@ -984,13 +984,9 @@ const PaymentsPage = (props: Props) => {
             {props.payouts_paused_internally ? (
               <WithTooltip
                 tip={
-                  props.payouts_paused_by === "stripe"
+                  props.payouts_paused_by_processor
                     ? "Your payouts are currently paused by our payment processor. Please check for any pending verification requirements above."
-                    : props.payouts_paused_by === "admin"
-                      ? `Your payouts have been paused by Gumroad admin.${props.payouts_paused_for_reason && ` Reason for pause: ${props.payouts_paused_for_reason}`}`
-                      : props.payouts_paused_by === "system"
-                        ? "Your payouts have been automatically paused for a security review and will be resumed once the review completes."
-                        : null
+                    : "Your payouts have been automatically paused for a security review and will be resumed once the review completes."
                 }
               >
                 {payoutsPausedToggle}

@@ -248,7 +248,12 @@ export type BalancePageProps = {
     | CurrentPayoutsDataAndPaymentMethodWithUserPayable
     | null;
   processing_payout_periods_data: PayoutPeriodData[];
-  payouts_status: "paused" | "payable";
+  payouts_paused: boolean;
+  payouts_paused_by_processor: boolean;
+  payouts_paused_by_admin: boolean;
+  payouts_paused_by_system: boolean;
+  payouts_paused_by_user: boolean;
+  payouts_paused_for_reason: string | null;
   past_payout_period_data: PayoutPeriodData[];
   instant_payout: {
     payable_amount_cents: number;
@@ -638,8 +643,11 @@ const PeriodNoAccount = () => <h4>Will be sent to:</h4>;
 const BalancePage = ({
   next_payout_period_data,
   processing_payout_periods_data,
-  payouts_status,
-  payouts_paused_by,
+  payouts_paused,
+  payouts_paused_by_processor,
+  payouts_paused_by_admin,
+  payouts_paused_by_system,
+  payouts_paused_by_user,
   payouts_paused_for_reason,
   past_payout_period_data,
   instant_payout,
@@ -867,20 +875,22 @@ const BalancePage = ({
             </Modal>
           </div>
         ) : null}
-        {payouts_status === "paused" ? (
+        {payouts_paused ? (
           <div className="warning" role="status">
             <p>
-              {payouts_paused_by === "stripe" ? (
+              {payouts_paused_by_processor ? (
                 <strong>
                   Your payouts are currently paused by our payment processor. Please check your{" "}
                   <a href="/settings/payments">Payment Settings</a> for any verification requirements.
                 </strong>
-              ) : payouts_paused_by === "admin" || payouts_paused_by === "system" ? (
+              ) : /* admin = one of us manually paused; system = code paused automatically */
+              payouts_paused_by_admin || payouts_paused_by_system ? (
                 <strong>
                   Your payouts have been automatically paused for a security review and will be resumed once the review
                   completes.
                 </strong>
               ) : (
+                /* payouts paused by user */
                 <strong>
                   You have paused your payouts. Please go to <a href="/settings/payments">Payment Settings</a> to resume
                   payouts.
