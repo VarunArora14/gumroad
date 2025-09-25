@@ -146,8 +146,7 @@ type Props = {
   formatted_balance_to_forfeit_on_country_change: string | null;
   formatted_balance_to_forfeit_on_payout_method_change: string | null;
   payouts_paused_internally: boolean;
-  payouts_paused_by: "stripe" | "admin" | "system" | "user" | null;
-  payouts_paused_for_reason: string | null;
+  payouts_paused_by: string | null;
   payouts_paused_by_user: boolean;
   payout_threshold_cents: number;
   minimum_payout_threshold_cents: number;
@@ -855,24 +854,11 @@ const PaymentsPage = (props: Props) => {
         />
       ) : null}
       <form ref={formRef}>
-        {props.payouts_paused_by !== null ? (
+        {props.payouts_paused_internally || props.payouts_paused_by_user ? (
           <div role="status" className="warning mx-8 mb-12">
             <p>
-              {props.payouts_paused_by === "stripe" ? (
-                <strong>
-                  Your payouts are currently paused by our payment processor. Please check for any pending verification
-                  requirements below.
-                </strong>
-              ) : props.payouts_paused_by === "admin" ? (
-                <strong>
-                  Your payouts have been paused by Gumroad admin.
-                  {props.payouts_paused_for_reason ? ` Reason for pause: ${props.payouts_paused_for_reason}` : null}
-                </strong>
-              ) : props.payouts_paused_by === "system" ? (
-                <strong>
-                  Your payouts have been automatically paused for a security review and will be resumed once the review
-                  completes.
-                </strong>
+              {props.payouts_paused_internally ? (
+                <strong>Your payouts have been paused by Gumroad.</strong>
               ) : (
                 <strong>You have paused your payouts.</strong>
               )}

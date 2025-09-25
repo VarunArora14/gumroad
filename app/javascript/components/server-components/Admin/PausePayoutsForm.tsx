@@ -8,14 +8,14 @@ import { showAlert } from "$app/components/server-components/Alert";
 
 export const AdminPausePayoutsForm = ({
   user_id,
-  payouts_paused_by,
-  reason,
+  payouts_paused_by_admin,
+  payouts_paused_by_user,
 }: {
   user_id: number;
-  payouts_paused_by: "stripe" | "admin" | "system" | "user" | null;
-  reason: string | null;
+  payouts_paused_by_admin: boolean;
+  payouts_paused_by_user: boolean;
 }) => {
-  const admin_can_resume_payouts = payouts_paused_by && ["admin", "system", "stripe"].includes(payouts_paused_by);
+  const admin_can_resume_payouts = payouts_paused_by_admin && !payouts_paused_by_user;
 
   return (
     <Form
@@ -31,15 +31,12 @@ export const AdminPausePayoutsForm = ({
       {(isLoading) => (
         <fieldset>
           <div className="input-with-button" style={{ alignItems: "end" }}>
-            {payouts_paused_by === "admin" ? (
-              <p>Payouts are currently paused by Gumroad admin. Reason: {reason}</p>
-            ) : payouts_paused_by === "system" ? (
-              <p>Payouts are currently automatically paused by the system. See comments below for details.</p>
-            ) : payouts_paused_by === "stripe" ? (
-              <p>Payouts are currently paused by Stripe because of pending verification requirements.</p>
+            {payouts_paused_by_admin ? (
+              <p>Payouts are currently paused by Gumroad.</p>
+            ) : payouts_paused_by_user ? (
+              <p>Payouts are currently paused by the creator.</p>
             ) : (
               <div style={{ display: "grid", gap: "var(--spacer-2)" }}>
-                {payouts_paused_by === "user" && <p>Payouts are currently paused by the creator.</p>}
                 <textarea
                   name="pause_payouts[reason]"
                   rows={2}

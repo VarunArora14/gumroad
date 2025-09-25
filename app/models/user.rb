@@ -889,22 +889,6 @@ class User < ApplicationRecord
     payouts_paused_internally? || payouts_paused_by_user?
   end
 
-  def payouts_paused_by_source
-    return nil unless payouts_paused?
-
-    if payouts_paused_internally?
-      [PAYOUT_PAUSE_SOURCE_STRIPE, PAYOUT_PAUSE_SOURCE_SYSTEM].include?(payouts_paused_by) ? payouts_paused_by : PAYOUT_PAUSE_SOURCE_ADMIN
-    elsif payouts_paused_by_user?
-      PAYOUT_PAUSE_SOURCE_USER
-    end
-  end
-
-  def payouts_paused_for_reason
-    return unless payouts_paused_by_source == PAYOUT_PAUSE_SOURCE_ADMIN
-
-    comments.order(created_at: :desc).find_by(author_id: payouts_paused_by)&.content
-  end
-
   def made_a_successful_sale_with_a_stripe_connect_or_paypal_connect_account?
     ids = merchant_accounts
       .stripe_connect

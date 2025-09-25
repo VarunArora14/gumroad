@@ -41,7 +41,7 @@ describe Api::Internal::Helper::PayoutsController do
 
       it "returns last 5 payouts and next payout information" do
         payout_note = "Payout paused due to verification"
-        user.add_payout_note(content: payout_note)
+        user.comments.create!(content: payout_note, author_id: GUMROAD_ADMIN_ID)
 
         get :index, params: { email: user.email }
 

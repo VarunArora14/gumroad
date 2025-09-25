@@ -333,7 +333,10 @@ describe "Balance Pages Scenario", js: true, type: :system do
               create(:purchase_with_balance, link: product)
             end
           end
-          seller.add_payout_note(content: "Payout on November 7, 2024 was skipped because a bank account wasn't added at the time.")
+          seller.comments.create!(
+            content: "Payout on November 7, 2024 was skipped because a bank account wasn't added at the time.",
+            author_id: GUMROAD_ADMIN_ID
+          )
         end
 
         context "when payouts status is payable" do

@@ -20,7 +20,7 @@ class StripePayoutProcessor
     # If a user's previous payment is still processing, don't allow for new payments.
     processing_payment_ids = user.payments.processing.ids
     if processing_payment_ids.any?
-      user.add_payout_note(content: "Payout on #{payout_date} was skipped because there was already a payout in processing.") if add_comment
+      user.comments.create!(content: "Payout on #{payout_date} was skipped because there was already a payout in processing.", author_id: GUMROAD_ADMIN_ID) if add_comment
       return false
     end
 
@@ -29,24 +29,24 @@ class StripePayoutProcessor
 
     # Don't payout users who don't have a bank account
     if user.active_bank_account.nil?
-      user.add_payout_note(content: "Payout on #{payout_date} was skipped because a bank account wasn't added at the time.") if add_comment
+      user.comments.create!(content: "Payout on #{payout_date} was skipped because a bank account wasn't added at the time.", author_id: GUMROAD_ADMIN_ID) if add_comment
       return false
     end
 
     # Don't payout users whose bank account is not linked to a bank account at Stripe
     if user.active_bank_account.stripe_bank_account_id.blank? || user.stripe_account.nil?
-      user.add_payout_note(content: "Payout on #{payout_date} was skipped because the payout bank account was not correctly set up.") if add_comment
+      user.comments.create!(content: "Payout on #{payout_date} was skipped because the payout bank account was not correctly set up.", author_id: GUMROAD_ADMIN_ID) if add_comment
       return false
     end
 
     if payout_type == Payouts::PAYOUT_TYPE_INSTANT
       if amount_payable_usd_cents < StripePayoutProcessor::MINIMUM_INSTANT_PAYOUT_AMOUNT_CENTS
-        user.add_payout_note(content: "Instant Payout on #{payout_date} was skipped because the account balance was less than the minimum instant payout amount of $10.") if add_comment
+        user.comments.create!(content: "Instant Payout on #{payout_date} was skipped because the account balance was less than the minimum instant payout amount of $10.", author_id: GUMROAD_ADMIN_ID) if add_comment
         return false
       end
 
       if amount_payable_usd_cents > StripePayoutProcessor::MAXIMUM_INSTANT_PAYOUT_AMOUNT_CENTS
-        user.add_payout_note(content: "Instant Payout on #{payout_date} was skipped because the account balance was greater than the maximum instant payout amount of $9999.") if add_comment
+        user.comments.create!(content: "Instant Payout on #{payout_date} was skipped because the account balance was greater than the maximum instant payout amount of $9999.", author_id: GUMROAD_ADMIN_ID) if add_comment
         return false
       end
     end

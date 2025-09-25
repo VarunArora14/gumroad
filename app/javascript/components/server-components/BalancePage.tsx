@@ -249,8 +249,6 @@ export type BalancePageProps = {
     | null;
   processing_payout_periods_data: PayoutPeriodData[];
   payouts_status: "paused" | "payable";
-  payouts_paused_by: "stripe" | "admin" | "system" | "user" | null;
-  payouts_paused_for_reason: string | null;
   past_payout_period_data: PayoutPeriodData[];
   instant_payout: {
     payable_amount_cents: number;

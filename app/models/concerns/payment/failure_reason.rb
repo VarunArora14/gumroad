@@ -150,6 +150,6 @@ module Payment::FailureReason
       return unless solution.present?
 
       content = "Payout via #{processor.capitalize} on #{created_at} failed because #{solution[:reason]}. Solution: #{solution[:solution]}."
-      user.add_payout_note(content:)
+      user.comments.create!(content:, author_id: GUMROAD_ADMIN_ID)
     end
 end

@@ -22,7 +22,7 @@
       <% end %>
     </div>
     <hr>
-    <%= react_component "AdminPausePayoutsForm", props: { user_id: user.id, payouts_paused_by: user.payouts_paused_by_source, reason: user.comments.with_type_payouts_paused.last&.content }, prerender: true %>
+    <%= react_component "AdminPausePayoutsForm", props: { user_id: user.id, payouts_paused_by_admin: user.payouts_paused_internally?, payouts_paused_by_user: user.payouts_paused_by_user? }, prerender: true %>
 
     <% last_payout_to_user = user.payments.last %>
     <% if last_payout_to_user.nil? || %w(completed failed returned reversed cancelled).include?(last_payout_to_user.state) %>
