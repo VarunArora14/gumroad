@@ -725,6 +725,7 @@ module StripeMerchantAccountManager
 
     is_charges_disabled = !stripe_account["charges_enabled"]
     charges_newly_disabled = stripe_account["charges_enabled"] == false && stripe_previous_attributes["charges_enabled"] == true
+    payouts_newly_disabled = stripe_account["payouts_enabled"] == false && stripe_previous_attributes["payouts_enabled"] == true
 
     if user.active_bank_account.is_a?(CardBankAccount)
       card_account_needs_syncing = user.active_bank_account.stripe_connect_account_id.blank?
@@ -746,13 +747,10 @@ module StripeMerchantAccountManager
       MerchantRegistrationMailer.stripe_charges_disabled(user.id).deliver_later(queue: "critical")
     end
 
-    if stripe_account["payouts_enabled"] && user.payouts_paused_by_source == User::PAYOUT_PAUSE_SOURCE_STRIPE
-      user.update!(payouts_paused_internally: false, payouts_paused_by: nil)
-    elsif stripe_account["payouts_enabled"] == false && !user.payouts_paused_internally?
-      user.update!(payouts_paused_internally: true, payouts_paused_by: User::PAYOUT_PAUSE_SOURCE_STRIPE)
-      if stripe_fields_needed.present? && requirements["disabled_reason"].in?(%w(action_required.requested_capabilities requirements.past_due))
-        MerchantRegistrationMailer.stripe_payouts_disabled(user.id).deliver_later
-      end
+    if payouts_newly_disabled &&
+      stripe_fields_needed.present? &&
+      requirements["disabled_reason"].in?(%w(action_required.requested_capabilities requirements.past_due))
+      MerchantRegistrationMailer.stripe_payouts_disabled(user.id).deliver_later(queue: "critical")
     end
 
     last_outstanding_request_at = user.user_compliance_info_requests.requested.last&.created_at
