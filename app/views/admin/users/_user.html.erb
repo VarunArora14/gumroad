@@ -1,9 +1,4 @@
 <div class="card js-admin-user" data-user-id="<%= user.id %>">
-  <% if user.deleted? %>
-    <div role="alert" className="danger">
-      <strong>Account Deleted:</strong> This user account was deleted on <%= format_datetime_with_relative_tooltip(user.deleted_at) %>.
-    </div>
-  <% end %>
   <div class="paragraphs">
     <div style="display: flex; gap: var(--spacer-4); align-items: center">
       <%= image_tag(user.avatar_url, class: "user-avatar", style: "width: var(--form-element-height)", alt: user.name) %>
