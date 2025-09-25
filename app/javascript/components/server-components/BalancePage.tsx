@@ -647,8 +647,6 @@ const BalancePage = ({
   payouts_paused_by_processor,
   payouts_paused_by_admin,
   payouts_paused_by_system,
-  payouts_paused_by_user,
-  payouts_paused_for_reason,
   past_payout_period_data,
   instant_payout,
   show_instant_payouts_notice,
