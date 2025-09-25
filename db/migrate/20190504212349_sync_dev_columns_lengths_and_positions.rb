@@ -126,7 +126,6 @@ class SyncDevColumnsLengthsAndPositions < ActiveRecord::Migration
     comments: [
       :commentable_type,
       :author_name,
-      :comment_type,
     ],
     consumption_events: [
       :event_type,

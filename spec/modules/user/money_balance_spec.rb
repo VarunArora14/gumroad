@@ -243,7 +243,6 @@ describe User::MoneyBalance do
         expect(balance1.reload.state).to eq("forfeited")
         expect(balance2.reload.state).to eq("forfeited")
         expect(balance3.reload.state).to eq("unpaid")
-        expect(@user.comments.last.comment_type).to eq(Comment::COMMENT_TYPE_BALANCE_FORFEITED)
         expect(@user.comments.last.content).to eq("Balance of $30 has been forfeited. Reason: Country changed. Balance IDs: #{balance1.id}, #{balance2.id}")
       end
     end
@@ -277,7 +276,6 @@ describe User::MoneyBalance do
 
           expect(balance1.reload.state).to eq("forfeited")
           expect(balance2.reload.state).to eq("forfeited")
-          expect(@user.comments.last.comment_type).to eq(Comment::COMMENT_TYPE_BALANCE_FORFEITED)
           expect(@user.comments.last.content).to eq("Balance of $8.90 has been forfeited. Reason: Account closed. Balance IDs: #{balance1.id}, #{balance2.id}")
         end
       end

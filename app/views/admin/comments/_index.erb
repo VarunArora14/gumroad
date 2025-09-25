@@ -3,7 +3,7 @@
   <details>
     <summary>
       <h4>
-        <%= pluralize(comments.count, "comment") %>
+        <%= pluralize(comments.count, local_assigns[:item_label] || "activity") %>
       </h4>
     </summary>
 
@@ -14,5 +14,5 @@
     </div>
   </details>
 <% else %>
-  <div class="info" role="status">No comments created.</div>
+  <div class="info" role="status"><%= local_assigns[:empty_text] || "No activity yet." %></div>
 <% end %>

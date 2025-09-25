@@ -174,8 +174,8 @@ describe Purchase::Blockable do
 
           expect do
             purchase.block_buyer!(blocking_user_id: admin_user.id, comment_content:)
-          end.to change { purchase.comments.where(content: comment_content, comment_type: "note", author_id: admin_user.id).count }.by(1)
-             .and change { purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: admin_user.id, purchase:).count }.by(1)
+          end.to change { purchase.comments.where(content: comment_content, author_id: admin_user.id).count }.by(1)
+             .and change { purchase.purchaser.comments.where(content: comment_content, author_id: admin_user.id, purchase:).count }.by(1)
         end
       end
 
@@ -186,8 +186,8 @@ describe Purchase::Blockable do
 
             expect do
               purchase.block_buyer!(blocking_user_id: admin_user.id)
-            end.to change { purchase.comments.where(content: comment_content, comment_type: "note", author_id: admin_user.id).count }.by(1)
-               .and change { purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: admin_user.id, purchase:).count }.by(1)
+            end.to change { purchase.comments.where(content: comment_content, author_id: admin_user.id).count }.by(1)
+               .and change { purchase.purchaser.comments.where(content: comment_content, author_id: admin_user.id, purchase:).count }.by(1)
           end
         end
 
@@ -198,8 +198,8 @@ describe Purchase::Blockable do
 
             expect do
               purchase.block_buyer!(blocking_user_id: user.id)
-            end.to change { purchase.comments.where(content: comment_content, comment_type: "note", author_id: user.id).count }.by(1)
-               .and change { purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: user.id, purchase:).count }.by(1)
+            end.to change { purchase.comments.where(content: comment_content, author_id: user.id).count }.by(1)
+               .and change { purchase.purchaser.comments.where(content: comment_content, author_id: user.id, purchase:).count }.by(1)
           end
         end
 
@@ -209,8 +209,8 @@ describe Purchase::Blockable do
 
             expect do
               purchase.block_buyer!
-            end.to change { purchase.comments.where(content: comment_content, comment_type: "note", author_id: GUMROAD_ADMIN_ID).count }.by(1)
-               .and change { purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: GUMROAD_ADMIN_ID, purchase:).count }.by(1)
+            end.to change { purchase.comments.where(content: comment_content, author_id: GUMROAD_ADMIN_ID).count }.by(1)
+               .and change { purchase.purchaser.comments.where(content: comment_content, author_id: GUMROAD_ADMIN_ID, purchase:).count }.by(1)
           end
         end
       end
@@ -666,7 +666,6 @@ describe Purchase::Blockable do
 
           comment = seller.comments.last
           expect(comment.content).to eq("Payouts paused due to high volume of failed purchases ($13.50 USD in 60 minutes).")
-          expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_ON_PROBATION)
           expect(comment.author_name).to eq("pause_payouts_for_seller_based_on_recent_failures")
         end
 
@@ -930,7 +929,6 @@ describe Purchase::Blockable do
 
         comment = seller.comments.last
         expect(comment.content).to eq("Payouts automatically paused due to chargeback rate (4.2%) exceeding 3.0% volume.")
-        expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_ON_PROBATION)
         expect(comment.author_name).to eq("pause_payouts_for_seller_based_on_chargeback_rate")
       end
     end
@@ -952,7 +950,6 @@ describe Purchase::Blockable do
 
         comment = seller.comments.last
         expect(comment.content).to eq("Payouts automatically paused due to chargeback rate (15.7%) exceeding 3.0% volume.")
-        expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_ON_PROBATION)
         expect(comment.author_name).to eq("pause_payouts_for_seller_based_on_chargeback_rate")
       end
     end
@@ -974,7 +971,6 @@ describe Purchase::Blockable do
 
         comment = seller.comments.last
         expect(comment.content).to eq("Payouts automatically paused due to chargeback rate (3.1%) exceeding 3.0% volume.")
-        expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_ON_PROBATION)
         expect(comment.author_name).to eq("pause_payouts_for_seller_based_on_chargeback_rate")
       end
     end

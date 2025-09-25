@@ -71,8 +71,8 @@ describe Admin::PurchasesController, :vcr do
         expect(@purchase.buyer_blocked?).to eq(true)
         expect(response).to be_successful
         expect(response.parsed_body["success"]).to be(true)
-      end.to change { @purchase.comments.where(content: comment_content, comment_type: "note", author_id: @admin_user.id).count }.by(1)
-       .and change { @purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: @admin_user.id, purchase: @purchase).count }.by(1)
+      end.to change { @purchase.comments.where(content: comment_content, author_id: @admin_user.id).count }.by(1)
+       .and change { @purchase.purchaser.comments.where(content: comment_content, author_id: @admin_user.id, purchase: @purchase).count }.by(1)
     end
   end
 
@@ -136,8 +136,8 @@ describe Admin::PurchasesController, :vcr do
         expect(@purchase.reload.is_deleted_by_buyer).to be(false)
         expect(response).to be_successful
         expect(response.parsed_body["success"]).to be(true)
-      end.to change { @purchase.comments.where(content: comment_content, comment_type: "note", author_id: @admin_user.id).count }.by(1)
-       .and change { @purchase.purchaser.comments.where(content: comment_content, comment_type: "note", author_id: @admin_user.id, purchase: @purchase).count }.by(1)
+      end.to change { @purchase.comments.where(content: comment_content, author_id: @admin_user.id).count }.by(1)
+       .and change { @purchase.purchaser.comments.where(content: comment_content, author_id: @admin_user.id, purchase: @purchase).count }.by(1)
     end
 
     it "handles purchase that is already undeleted" do
@@ -162,7 +162,7 @@ describe Admin::PurchasesController, :vcr do
         expect(@purchase.reload.is_deleted_by_buyer).to be(false)
         expect(response).to be_successful
         expect(response.parsed_body["success"]).to be(true)
-      end.to change { @purchase.comments.where(content: comment_content, comment_type: "note", author_id: @admin_user.id).count }.by(1)
+      end.to change { @purchase.comments.where(content: comment_content, author_id: @admin_user.id).count }.by(1)
     end
 
     it "raises error when purchase is not found" do

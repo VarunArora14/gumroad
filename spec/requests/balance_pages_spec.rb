@@ -405,8 +405,7 @@ describe "Balance Pages Scenario", js: true, type: :system do
           it "includes the reason provided by admin in the notice" do
             seller.comments.create!(
               author_id: User.last.id,
-              content: "Chargeback rate is too high.",
-              comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+              content: "Chargeback rate is too high."
             )
 
             travel_to(Date.parse("2013-08-14")) do

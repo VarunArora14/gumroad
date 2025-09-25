@@ -101,7 +101,7 @@ describe ForfeitBalanceService do
           @service.process
 
           comment = user.reload.comments.last
-          expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_BALANCE_FORFEITED)
+          expect(comment.content).to include("Account closed")
           expect(comment.content).to eq("Balance of $8.76 has been forfeited. Reason: Account closed. Balance IDs: #{Balance.last.id}")
         end
 

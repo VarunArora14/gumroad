@@ -486,7 +486,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_21_014630) do
     t.bigint "author_id"
     t.string "author_name"
     t.text "content", size: :medium
-    t.string "comment_type"
     t.text "json_data", size: :medium
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false

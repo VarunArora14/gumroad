@@ -859,8 +859,7 @@ describe SettingsPresenter do
         seller.update!(payouts_paused_internally: true, payouts_paused_by: User.last.id)
         seller.comments.create!(
           author_id: User.last.id,
-          content: "Chargeback rate too high.",
-          comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+          content: "Chargeback rate too high."
         )
         expect(presenter.payments_props[:payouts_paused_internally]).to be(true)
         expect(presenter.payments_props[:payouts_paused_by_user]).to be(false)

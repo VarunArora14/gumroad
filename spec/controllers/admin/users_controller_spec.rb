@@ -207,7 +207,6 @@ describe Admin::UsersController do
 
         comment = user.comments.last
         expect(comment).to have_attributes(
-          comment_type: Comment::COMMENT_TYPE_COMPLIANT,
           content: "Marked compliant by #{@admin_user.username} on #{Time.current.strftime('%B %-d, %Y')}",
           author: @admin_user
         )

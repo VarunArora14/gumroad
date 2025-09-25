@@ -1,1 +1,1 @@
-<%= react_component "AdminAddCommentForm", props: { commentable_id: commentable.id, commentable_type: commentable.class.to_s }, prerender: true %>
+<%= react_component "AdminAddCommentForm", props: { commentable_id: commentable.id, commentable_type: commentable.class.to_s, title: local_assigns[:title] || "Activity log" }, prerender: true %>

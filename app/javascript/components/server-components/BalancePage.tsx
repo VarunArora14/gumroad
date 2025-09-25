@@ -320,7 +320,7 @@ const Period = ({ payoutPeriodData }: { payoutPeriodData: PayoutPeriodData }) =>
     }
   }
 
-const heading = currentPayoutHeading(payoutPeriodData.status, payoutPeriodData.payout_date_formatted);
+  const heading = currentPayoutHeading(payoutPeriodData.status, payoutPeriodData.payout_date_formatted);
 
   return (
     <section aria-label="Payout period">
@@ -877,12 +877,7 @@ const BalancePage = ({
                   Your payouts are currently paused by our payment processor. Please check your{" "}
                   <a href="/settings/payments">Payment Settings</a> for any verification requirements.
                 </strong>
-              ) : payouts_paused_by === "admin" ? (
-                <strong>
-                  Your payouts have been paused by Gumroad admin.
-                  {payouts_paused_for_reason ? ` Reason for pause: ${payouts_paused_for_reason}` : null}
-                </strong>
-              ) : payouts_paused_by === "system" ? (
+              ) : payouts_paused_by === "admin" || payouts_paused_by === "system" ? (
                 <strong>
                   Your payouts have been automatically paused for a security review and will be resumed once the review
                   completes.

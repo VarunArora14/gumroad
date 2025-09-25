@@ -9,7 +9,7 @@ describe Admin::CommentsController do
   describe "POST create" do
     let(:user) { create(:user) }
     let(:comment_attrs) do
-      { content: "comment content", comment_type: "comment", commentable_type: "User", commentable_id: user.id }
+      { content: "comment content", commentable_type: "User", commentable_id: user.id }
     end
 
     describe "with a signed in admin user" do

@@ -763,7 +763,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
       click_on "Switch to direct deposit"
       expect(page).to_not have_field("PayPal Email")
     end
-
     it "keeps the creator on PayPal payouts if the bank account info is not entered" do
       @user.update!(payment_address: "paypal-gr-integspecs@gumroad.com")
 
@@ -1556,7 +1555,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.send(:account_number_decrypted)).to eq("HU42117730161111101800000000")
       end
     end
-
     describe "KR creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -2351,7 +2349,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.send(:account_number_decrypted)).to eq("LI0508800636123378777")
       end
     end
-
     describe "ID creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -3140,7 +3137,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.routing_number).to eq("AAAANANXXYZ")
       end
     end
-
     describe "Albanian creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -3899,7 +3895,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.send(:account_number_decrypted)).to eq("TN5904018104004942712345")
       end
     end
-
     describe "Dominican Republic creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -4658,7 +4653,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.routing_number).to eq("AAAALALAXXX")
       end
     end
-
     describe "Mozambique creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -5457,7 +5451,6 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.routing_number).to eq("AAAAKHKHXXX")
       end
     end
-
     describe "Mongolia creator" do
       before do
         old_user_compliance_info = @user.alive_user_compliance_info
@@ -5890,8 +5883,7 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         user.update!(payouts_paused_internally: true, payouts_paused_by: User.last.id)
         user.comments.create!(
           author_id: User.last.id,
-          content: "Chargeback rate is too high.",
-          comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+          content: "Chargeback rate is too high."
         )
 
         visit settings_payments_path
@@ -5959,8 +5951,7 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         user.update!(payouts_paused_internally: true, payouts_paused_by: User.last.id)
         user.comments.create!(
           author_id: User.last.id,
-          content: "Chargeback rate is too high.",
-          comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+          content: "Chargeback rate is too high."
         )
 
         visit settings_payments_path

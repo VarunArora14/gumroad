@@ -113,7 +113,7 @@ describe Api::Internal::Helper::UsersController do
 
     context "when user is suspended locally" do
       let(:suspended_user) { create(:tos_user) }
-      let(:suspension_comment) { create(:comment, commentable: suspended_user, comment_type: Comment::COMMENT_TYPE_SUSPENDED, created_at: 2.days.ago) }
+      let(:suspension_comment) { create(:comment, commentable: suspended_user, created_at: 2.days.ago) }
 
       before do
         suspension_comment

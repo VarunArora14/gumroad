@@ -3239,12 +3239,11 @@ describe User, :vcr do
       expect(seller.payouts_paused_for_reason).to be nil
     end
 
-    it "returns the content of the last comment of payouts_paused type if payouts are paused by admin" do
+    it "returns the content of the last comment when payouts are paused by admin" do
       seller.update!(payouts_paused_internally: true, payouts_paused_by: User.last.id)
       seller.comments.create!(
         author_id: User.last.id,
-        content: "Chargeback rate too high.",
-        comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+        content: "Chargeback rate too high."
       )
       expect(seller.reload.payouts_paused_by_source).to eq(User::PAYOUT_PAUSE_SOURCE_ADMIN)
       expect(seller.payouts_paused_for_reason).to eq("Chargeback rate too high.")
@@ -3253,8 +3252,7 @@ describe User, :vcr do
     it "returns nil if payouts are not paused by admin" do
       seller.comments.create!(
         author_id: User.last.id,
-        content: "Chargeback rate too high.",
-        comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+        content: "Chargeback rate too high."
       )
 
       seller.update!(payouts_paused_internally: true, payouts_paused_by: User::PAYOUT_PAUSE_SOURCE_STRIPE)

@@ -51,7 +51,6 @@ describe UpdateUserCountry do
       UpdateUserCountry.new(new_country_code: "GB", user: @user).process
 
       comment = @user.reload.comments.last
-      expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_COUNTRY_CHANGED)
       expect(comment.content).to eq("Country changed from US to GB")
     end
 
@@ -84,7 +83,6 @@ describe UpdateUserCountry do
         UpdateUserCountry.new(new_country_code: "GB", user: @user).process
 
         comment = @user.reload.comments.last
-        expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_BALANCE_FORFEITED)
         expect(comment.content).to eq("Balance of $10 has been forfeited. Reason: Country changed. Balance IDs: #{Balance.last.id}")
       end
     end

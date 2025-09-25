@@ -105,8 +105,8 @@
   </details>
 
   <hr>
-  <%= render("admin/comments/form", commentable: user) %>
-  <%= render("admin/comments/index", commentable: user) %>
+  <%= render("admin/comments/form", commentable: user, title: "Activity log") %>
+  <%= render("admin/comments/index", commentable: user, empty_text: "No activity yet.", item_label: "activity") %>
 
   <hr>
   <dl>

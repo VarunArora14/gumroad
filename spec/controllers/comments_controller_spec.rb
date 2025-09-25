@@ -223,7 +223,6 @@ describe CommentsController do
         comment = product_post.comments.first
         expect(comment.content).to eq("Good article!")
         expect(comment.commentable).to eq(product_post)
-        expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_USER_SUBMITTED)
         expect(comment.author_id).to eq(author.id)
         expect(comment.purchase).to be_nil
       end

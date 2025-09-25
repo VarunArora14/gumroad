@@ -107,21 +107,9 @@ describe Comment do
       describe "#notify_seller_of_new_comment" do
         let(:seller) { create(:named_seller) }
         let(:commentable) { create(:published_installment, seller:) }
-        let(:comment) { build(:comment, commentable:, comment_type: Comment::COMMENT_TYPE_USER_SUBMITTED) }
+        let(:comment) { build(:comment, commentable:) }
 
         context "when a new comment is added" do
-          context "when it is not a user submitted comment" do
-            before do
-              comment.comment_type = :flagged
-            end
-
-            it "does not send a notification to the seller" do
-              expect do
-                comment.save!
-              end.to_not have_enqueued_mail(CommentMailer, :notify_seller_of_new_comment)
-            end
-          end
-
           context "when it is not a root comment" do
             before do
               comment.parent = create(:comment, commentable:)
@@ -158,10 +146,12 @@ describe Comment do
             end
           end
 
-          it "emails the seller" do
-            expect do
-              comment.save!
-            end.to have_enqueued_mail(CommentMailer, :notify_seller_of_new_comment)
+          context "when it is a root comment from someone else" do
+            it "sends a notification to the seller" do
+              expect do
+                comment.save!
+              end.to have_enqueued_mail(CommentMailer, :notify_seller_of_new_comment)
+            end
           end
         end
 

@@ -240,8 +240,7 @@ describe PayoutsPresenter do
         user.update!(payouts_paused_internally: true, payouts_paused_by: User.last.id)
         user.comments.create!(
           author_id: User.last.id,
-          content: "Chargeback rate too high.",
-          comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+          content: "Chargeback rate too high."
         )
         expect(instance.props[:payouts_paused_by]).to eq(User::PAYOUT_PAUSE_SOURCE_ADMIN)
         expect(instance.props[:payouts_paused_for_reason]).to eq("Chargeback rate too high.")

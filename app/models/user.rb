@@ -900,7 +900,9 @@ class User < ApplicationRecord
   end
 
   def payouts_paused_for_reason
-    payouts_paused_by_source == PAYOUT_PAUSE_SOURCE_ADMIN ? comments.with_type_payouts_paused.last&.content : nil
+    return unless payouts_paused_by_source == PAYOUT_PAUSE_SOURCE_ADMIN
+
+    comments.order(created_at: :desc).find_by(author_id: payouts_paused_by)&.content
   end
 
   def made_a_successful_sale_with_a_stripe_connect_or_paypal_connect_account?
