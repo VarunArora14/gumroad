@@ -7,40 +7,18 @@ class Payouts
   PAYOUT_TYPE_STANDARD = "standard"
   PAYOUT_TYPE_INSTANT = "instant"
 
-  def self.is_user_payable(user, date, processor_type: nil, add_comment: false, from_admin: false, payout_type: Payouts::PAYOUT_TYPE_STANDARD)
+  def self.is_user_payable(user, date, processor_type: nil, from_admin: false, payout_type: Payouts::PAYOUT_TYPE_STANDARD)
+    return false if !user.compliant?
+    return false if user.payouts_paused?
+
     payout_date = Time.current.to_fs(:formatted_date_full_month)
-
-    if !user.compliant?
-      user.comments.create!(content: "Payout on #{payout_date} was skipped because the account was not marked as compliant.", author_id: GUMROAD_ADMIN_ID) if add_comment
-      return false
-    end
-
-    if user.payouts_paused?
-      paused_by = if user.payouts_paused_by_user?
-        "seller"
-      elsif user.payouts_paused_by == User::PAYOUT_PAUSE_SOURCE_STRIPE
-        "payout processor"
-      elsif user.payouts_paused_by == User::PAYOUT_PAUSE_SOURCE_SYSTEM
-        "system"
-      else
-        "admin"
-      end
-      user.comments.create!(content: "Payout on #{payout_date} was skipped because payouts on the account were paused by the #{paused_by}.", author_id: GUMROAD_ADMIN_ID) if add_comment
-      return false
-    end
 
     amount_payable = user.unpaid_balance_cents_up_to_date(date)
 
     account_balance = amount_payable + user.paid_payments_cents_for_date(date)
-    if account_balance < user.minimum_payout_amount_cents
-      if add_comment && account_balance > 0
-        current_balance = user.formatted_dollar_amount(account_balance, with_currency: true)
-        minimum_balance = user.formatted_dollar_amount(user.minimum_payout_amount_cents, with_currency: true)
-        user.comments.create!(content: "Payout on #{payout_date} was skipped because the account balance #{current_balance} was less than the minimum payout amount of #{minimum_balance}.", author_id: GUMROAD_ADMIN_ID)
-      end
-      is_payable_from_admin = from_admin && account_balance > 0 && user.unpaid_balance_cents_up_to_date_held_by_gumroad(date) == account_balance
-      return false unless is_payable_from_admin
-    end
+
+    return false if account_balance < user.minimum_payout_amount_cents
+    return false if from_admin && account_balance > 0 && user.unpaid_balance_cents_up_to_date_held_by_gumroad(date) == account_balance
 
     if payout_type == Payouts::PAYOUT_TYPE_INSTANT
       if !user.instant_payouts_supported?
