@@ -70,7 +70,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
 
       find('[aria-label="Aggregate by"]').click
       expect(page).to have_selector("input[type='radio'][value='monthly']", visible: :all)
-      choose "Monthly", allow_label_click: true
+      find("input[type='radio'][value='monthly']", visible: :all).set(true)
 
       expect(page).to have_css(".point", count: 1)
       expect(page).to have_css("path.bar", count: 2)
@@ -79,7 +79,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
 
       find('[aria-label="Aggregate by"]').click
       expect(page).to have_selector("input[type='radio'][value='daily']", visible: :all)
-      choose "Daily", allow_label_click: true
+      find("input[type='radio'][value='daily']", visible: :all).set(true)
 
       select_disclosure "Select products..." do
         uncheck "Product 1"
@@ -159,7 +159,7 @@ describe "Sales analytics", :js, :sidekiq_inline, :elasticsearch_wait_for_refres
 
       find('[aria-label="Locations"]').click
       expect(page).to have_selector("input[type='radio'][value='us']", visible: :all)
-      choose "United States", allow_label_click: true
+      find("input[type='radio'][value='us']", visible: :all).set(true)
       within_table("Locations") do
         expect(page).to have_table_rows_in_order(
           [
