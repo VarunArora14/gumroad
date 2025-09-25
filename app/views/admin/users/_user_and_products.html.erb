@@ -1,7 +1,7 @@
 <%= load_pack("admin_review") %>
 
 <% if user.deleted? %>
-  <div role="alert" className="danger">
+  <div role="alert" class="danger">
     <strong>Account Deleted:</strong> This user account was deleted on <%= format_datetime_with_relative_tooltip(user.deleted_at) %>.
   </div>
 <% end %>
