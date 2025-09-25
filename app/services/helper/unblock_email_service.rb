@@ -114,10 +114,9 @@ class Helper::UnblockEmailService
       purchase.unblock_buyer!
 
       comment_content = "Buyer unblocked by Helper webhook"
-      purchase.comments.create!(content: comment_content, comment_type: "note", author_id: GUMROAD_ADMIN_ID)
+      purchase.comments.create!(content: comment_content, author_id: GUMROAD_ADMIN_ID)
       if purchase.purchaser.present?
         purchase.purchaser.comments.create!(content: comment_content,
-                                            comment_type: "note",
                                             author_id: GUMROAD_ADMIN_ID,
                                             purchase:)
       end

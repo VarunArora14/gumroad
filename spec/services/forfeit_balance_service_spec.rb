@@ -36,7 +36,7 @@ describe ForfeitBalanceService do
           @service.process
 
           comment = user.reload.comments.last
-          expect(comment.comment_type).to eq(Comment::COMMENT_TYPE_BALANCE_FORFEITED)
+          expect(comment.content).to include("Country changed")
           expect(comment.content).to eq("Balance of $10.50 has been forfeited. Reason: Country changed. Balance IDs: #{Balance.last.id}")
         end
 

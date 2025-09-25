@@ -93,7 +93,7 @@ class Api::Internal::Helper::UsersController < Api::Internal::Helper::BaseContro
         render json: {
           success: true,
           status: "Suspended",
-          updated_at: user.comments.where(comment_type: [Comment::COMMENT_TYPE_SUSPENSION_NOTE, Comment::COMMENT_TYPE_SUSPENDED]).order(created_at: :desc).first&.created_at,
+          updated_at: user.comments.order(created_at: :desc).first&.created_at,
           appeal_url: nil
         }
         return

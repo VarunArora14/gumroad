@@ -83,16 +83,7 @@ class HelperUserInfoService
       comments = user.comments.order(:created_at)
 
       formatted_comments = comments.map do |comment|
-        case comment.comment_type
-        when Comment::COMMENT_TYPE_PAYOUT_NOTE
-          "Payout Note: #{comment.content}" if comment.author_id == GUMROAD_ADMIN_ID
-        when Comment::COMMENT_TYPE_SUSPENSION_NOTE
-          "Suspension Note: #{comment.content}" if user.suspended?
-        when *Comment::RISK_STATE_COMMENT_TYPES
-          "Risk Note: #{comment.content}"
-        else
-          "Comment: #{comment.content}"
-        end
+        "Comment: #{comment.content}"
       end
 
       { "Comments" => formatted_comments } if formatted_comments.present?

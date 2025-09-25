@@ -422,7 +422,6 @@ class Credit < ApplicationRecord
 
     comment_attrs = {
       content: "issued #{formatted_dollar_amount(amount_cents)} credit.",
-      comment_type: :credit
     }
     if crediting_user
       comment_attrs[:author_id] = crediting_user_id
@@ -434,7 +433,7 @@ class Credit < ApplicationRecord
     elsif refund
       comment_attrs[:author_name] = "AutoCredit PayPal Connect VAT refund (#{refund.purchase.id})"
     end
-    user.comments.create(comment_attrs)
+    user.comments.create!(comment_attrs)
   end
 
   private

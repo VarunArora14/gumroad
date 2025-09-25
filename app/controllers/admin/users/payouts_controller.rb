@@ -84,8 +84,7 @@ class Admin::Users::PayoutsController < Admin::BaseController
     @user.update!(payouts_paused_internally: true, payouts_paused_by: current_user.id)
     @user.comments.create!(
       author_id: current_user.id,
-      content: reason,
-      comment_type: Comment::COMMENT_TYPE_PAYOUTS_PAUSED
+      content: reason
     ) if reason.present?
 
     render json: { success: true, message: "User's payouts paused" }
@@ -97,8 +96,7 @@ class Admin::Users::PayoutsController < Admin::BaseController
     @user.update!(payouts_paused_internally: false, payouts_paused_by: nil)
     @user.comments.create!(
       author_id: current_user.id,
-      content: "Payouts resumed.",
-      comment_type: Comment::COMMENT_TYPE_PAYOUTS_RESUMED
+      content: "Payouts resumed."
     )
 
     render json: { success: true, message: "User's payouts resumed" }

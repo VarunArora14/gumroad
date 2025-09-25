@@ -12,7 +12,7 @@ class Admin::CommentsController < Admin::BaseController
   private
     def comment_params
       permitted_params = params.require(:comment).permit(:commentable_id, :commentable_type, :author_id,
-                                                         :author_name, :content, :comment_type)
+                                                         :author_name, :content)
       permitted_params[:author_id] = current_user.id unless request_from_iffy?
       permitted_params
     end

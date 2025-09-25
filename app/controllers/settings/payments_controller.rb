@@ -202,7 +202,6 @@ class Settings::PaymentsController < Sellers::BaseController
       else
         current_seller.comments.create!(
           author_id: GUMROAD_ADMIN_ID,
-          comment_type: :note,
           content: result[:error_message]
         )
         render json: { success: false, error_message: result[:error_message], error_code: result[:error_code] }

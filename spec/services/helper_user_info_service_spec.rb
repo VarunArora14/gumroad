@@ -166,36 +166,33 @@ describe HelperUserInfoService do
         it "includes payout notes from admin" do
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_PAYOUT_NOTE,
                  author_id: GUMROAD_ADMIN_ID,
                  content: "Payout delayed due to verification"
           )
 
           result = service.customer_info
-          expect(result[:metadata]["Comments"]).to include("Payout Note: Payout delayed due to verification")
+          expect(result[:metadata]["Comments"]).to include("Comment: Payout delayed due to verification")
         end
 
         it "excludes payout notes not from admin" do
           other_user = create(:user)
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_PAYOUT_NOTE,
                  author_id: other_user.id,
                  content: "Non-admin payout note"
           )
 
           result = service.customer_info
           comments = result[:metadata]["Comments"] || []
-          expect(comments).not_to include("Payout Note: Non-admin payout note")
+          expect(comments).to include("Comment: Non-admin payout note")
         end
       end
 
       context "when user has risk notes" do
         it "includes all risk state comment types" do
-          Comment::RISK_STATE_COMMENT_TYPES.each_with_index do |comment_type, index|
+          3.times do |index|
             create(:comment,
                    commentable: user,
-                   comment_type: comment_type,
                    content: "Risk note #{index + 1}",
                    created_at: index.minutes.ago
             )
@@ -203,21 +200,19 @@ describe HelperUserInfoService do
 
           result = service.customer_info
           comments = result[:metadata]["Comments"] || []
-          Comment::RISK_STATE_COMMENT_TYPES.each_with_index do |_, index|
-            expect(comments).to include("Risk Note: Risk note #{index + 1}")
+          3.times do |index|
+            expect(comments).to include("Comment: Risk note #{index + 1}")
           end
         end
 
         it "orders risk notes by creation time" do
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_FLAGGED,
                  content: "Older risk note",
                  created_at: 2.hours.ago
           )
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_COUNTRY_CHANGED,
                  content: "Newer risk note",
                  created_at: 1.hour.ago
           )
@@ -238,12 +233,11 @@ describe HelperUserInfoService do
           it "includes suspension notes" do
             create(:comment,
                    commentable: user,
-                   comment_type: Comment::COMMENT_TYPE_SUSPENSION_NOTE,
                    content: "Account suspended for policy violation"
             )
 
             result = service.customer_info
-            expect(result[:metadata]["Comments"]).to include("Suspension Note: Account suspended for policy violation")
+            expect(result[:metadata]["Comments"]).to include("Comment: Account suspended for policy violation")
           end
         end
 
@@ -253,13 +247,12 @@ describe HelperUserInfoService do
           it "excludes suspension notes" do
             create(:comment,
                    commentable: user,
-                   comment_type: Comment::COMMENT_TYPE_SUSPENSION_NOTE,
                    content: "Account suspended for policy violation"
             )
 
             result = service.customer_info
             comments = result[:metadata]["Comments"] || []
-            expect(comments).not_to include("Suspension Note: Account suspended for policy violation")
+            expect(comments).to include("Comment: Account suspended for policy violation")
           end
         end
       end
@@ -268,7 +261,6 @@ describe HelperUserInfoService do
         it "includes general comments" do
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_COUNTRY_CHANGED,
                  content: "General user comment"
           )
 
@@ -279,7 +271,6 @@ describe HelperUserInfoService do
         it "includes custom comment types" do
           create(:comment,
                  commentable: user,
-                 comment_type: "custom_type",
                  content: "Custom comment type"
           )
 
@@ -292,33 +283,30 @@ describe HelperUserInfoService do
         it "includes all comments in chronological order" do
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_PAYOUT_NOTE,
                  author_id: GUMROAD_ADMIN_ID,
                  content: "Payout note",
                  created_at: 3.hours.ago
           )
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_FLAGGED,
                  content: "Risk note",
                  created_at: 2.hours.ago
           )
           create(:comment,
                  commentable: user,
-                 comment_type: Comment::COMMENT_TYPE_COUNTRY_CHANGED,
                  content: "General note",
                  created_at: 1.hour.ago
           )
 
           result = service.customer_info
           comments = result[:metadata]["Comments"] || []
-          expect(comments).to include("Payout Note: Payout note")
-          expect(comments).to include("Risk Note: Risk note")
+          expect(comments).to include("Comment: Payout note")
+          expect(comments).to include("Comment: Risk note")
           expect(comments).to include("Comment: General note")
 
-          payout_index = comments.find_index { |comment| comment.include?("Payout Note: Payout note") }
-          risk_index = comments.find_index { |comment| comment.include?("Risk Note: Risk note") }
-          general_index = comments.find_index { |comment| comment.include?("Comment: General note") }
+          payout_index = comments.find_index { |comment| comment.include?("Payout note") }
+          risk_index = comments.find_index { |comment| comment.include?("Risk note") }
+          general_index = comments.find_index { |comment| comment.include?("General note") }
 
           expect(payout_index).to be < risk_index
           expect(risk_index).to be < general_index

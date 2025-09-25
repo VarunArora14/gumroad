@@ -18,7 +18,6 @@ class ForfeitBalanceService
     balance_ids = balances_to_forfeit.ids.join(", ")
     user.comments.create!(
       author_id: GUMROAD_ADMIN_ID,
-      comment_type: Comment::COMMENT_TYPE_BALANCE_FORFEITED,
       content: "Balance of #{balance_amount_formatted} has been forfeited. Reason: #{reason_comment}. Balance IDs: #{balance_ids}"
     )
   end

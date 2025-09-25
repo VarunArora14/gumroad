@@ -78,11 +78,10 @@ class Admin::PurchasesController < Admin::BaseController
       @purchase.unblock_buyer!
 
       comment_content = "Buyer unblocked by Admin (#{current_user.email})"
-      @purchase.comments.create!(content: comment_content, comment_type: "note", author_id: current_user.id)
+      @purchase.comments.create!(content: comment_content, author_id: current_user.id)
 
       if @purchase.purchaser.present?
         @purchase.purchaser.comments.create!(content: comment_content,
-                                             comment_type: "note",
                                              author: current_user,
                                              purchase: @purchase)
       end
@@ -101,11 +100,10 @@ class Admin::PurchasesController < Admin::BaseController
         @purchase.update!(is_deleted_by_buyer: false)
 
         comment_content = "Purchase undeleted by Admin (#{current_user.email})"
-        @purchase.comments.create!(content: comment_content, comment_type: "note", author_id: current_user.id)
+        @purchase.comments.create!(content: comment_content, author_id: current_user.id)
 
         if @purchase.purchaser.present?
           @purchase.purchaser.comments.create!(content: comment_content,
-                                               comment_type: "note",
                                                author: current_user,
                                                purchase: @purchase)
         end

@@ -74,7 +74,6 @@ module User::Risk
       end
       comments.create!(
         author_name: "stripe_risk",
-        comment_type: Comment::COMMENT_TYPE_SUSPENSION_NOTE,
         content: "Suspended because of high risk reported by Stripe"
       )
       ContactingCreatorMailer.suspended_due_to_stripe_risk(id).deliver_later
@@ -160,23 +159,10 @@ module User::Risk
               else
                 transition.to_name.to_s.humanize
     end
-    comment_type = case transition.to_name
-                   when :compliant
-                     Comment::COMMENT_TYPE_COMPLIANT
-                   when :on_probation
-                     Comment::COMMENT_TYPE_ON_PROBATION
-                   when :flagged_for_fraud, :flagged_for_tos_violation
-                     Comment::COMMENT_TYPE_FLAGGED
-                   when :suspended_for_fraud, :suspended_for_tos_violation
-                     Comment::COMMENT_TYPE_SUSPENDED
-                   else
-                     transition.to_name.slice(/[^_]*/)
-    end
     comments.create!(
       content: params[:content] || content,
       author_id: params[:author_id],
-      author_name: params[:author_name],
-      comment_type:
+      author_name: params[:author_name]
     )
   end
 
@@ -191,8 +177,7 @@ module User::Risk
     product.comments.create!(
       content: params[:content] || "#{action_taken} as #{action_reason}",
       author_id: params[:author_id],
-      author_name: params[:author_name],
-      comment_type: transition.to_name.slice(/[^_]*/)
+      author_name: params[:author_name]
     )
   end
 

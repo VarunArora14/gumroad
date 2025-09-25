@@ -15,7 +15,6 @@ class UpdateUserCountry
 
     @user.comments.create!(
       author_id: GUMROAD_ADMIN_ID,
-      comment_type: Comment::COMMENT_TYPE_COUNTRY_CHANGED,
       content: "Country changed from #{@old_country_code} to #{@new_country_code}"
     )
 

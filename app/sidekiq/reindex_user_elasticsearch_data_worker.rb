@@ -12,11 +12,10 @@ class ReindexUserElasticsearchDataWorker
 
     DevTools.reindex_all_for_user(user.id)
 
-    comment = user.comments.build
-    comment.author_id = admin.id
-    comment.author_name = admin.name
-    comment.comment_type = :note
-    comment.content = ADMIN_NOTE
-    comment.save!
+    user.comments.create!(
+      author_id: admin.id,
+      author_name: admin.name,
+      content: ADMIN_NOTE
+    )
   end
 end

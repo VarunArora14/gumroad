@@ -76,7 +76,6 @@ class CommentsController < ApplicationController
       # When 'author_id' is not available, we can fallback to associated
       # `purchase` to recognize the comment author
       @comment.purchase = @purchase
-      @comment.comment_type = Comment::COMMENT_TYPE_USER_SUBMITTED
     end
 
     def comment_json

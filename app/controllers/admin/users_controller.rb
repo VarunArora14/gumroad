@@ -134,7 +134,6 @@ class Admin::UsersController < Admin::BaseController
         @user.comments.create!(
           author_id: current_user.id,
           author_name: current_user.name,
-          comment_type: Comment::COMMENT_TYPE_SUSPENSION_NOTE,
           content: suspension_note
         )
       end
@@ -167,7 +166,6 @@ class Admin::UsersController < Admin::BaseController
         @user.comments.create!(
           author_id: current_user.id,
           author_name: current_user.name,
-          comment_type: Comment::COMMENT_TYPE_FLAG_NOTE,
           content: flag_note
         )
       end

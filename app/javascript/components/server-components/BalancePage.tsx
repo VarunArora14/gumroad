@@ -320,7 +320,7 @@ const Period = ({ payoutPeriodData }: { payoutPeriodData: PayoutPeriodData }) =>
     }
   }
 
-  const heading = currentPayoutHeading(payoutPeriodData.status, payoutPeriodData.payout_date_formatted);
+const heading = currentPayoutHeading(payoutPeriodData.status, payoutPeriodData.payout_date_formatted);
 
   return (
     <section aria-label="Payout period">

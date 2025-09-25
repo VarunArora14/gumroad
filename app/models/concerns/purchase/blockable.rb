@@ -107,9 +107,8 @@ module Purchase::Blockable
     return if volume_rate <= User::MAX_CHARGEBACK_RATE_ALLOWED_FOR_PAYOUTS
 
     seller.update!(payouts_paused_internally: true, payouts_paused_by: User::PAYOUT_PAUSE_SOURCE_SYSTEM)
-    seller.comments.create(
+    seller.comments.create!(
       content: "Payouts automatically paused due to chargeback rate (#{chargeback_volume_percentage}) exceeding #{User::MAX_CHARGEBACK_RATE_ALLOWED_FOR_PAYOUTS}% volume.",
-      comment_type: Comment::COMMENT_TYPE_ON_PROBATION,
       author_name: "pause_payouts_for_seller_based_on_chargeback_rate"
     )
   end
@@ -203,9 +202,8 @@ module Purchase::Blockable
         seller.update!(payouts_paused_internally: true, payouts_paused_by: User::PAYOUT_PAUSE_SOURCE_SYSTEM)
 
         failed_price_amount = MoneyFormatter.format(failed_price_cents, :usd, no_cents_if_whole: true, symbol: true)
-        seller.comments.create(
+        seller.comments.create!(
           content: "Payouts paused due to high volume of failed purchases (#{failed_price_amount} USD in #{failed_seller_purchases_watch_minutes} minutes).",
-          comment_type: Comment::COMMENT_TYPE_ON_PROBATION,
           author_name: "pause_payouts_for_seller_based_on_recent_failures"
         )
       end
@@ -317,7 +315,7 @@ module Purchase::Blockable
     end
 
     def create_blocked_buyer_comments!(blocking_user: nil, comment_content:)
-      comment_params = { content: comment_content, comment_type: "note", author_id: blocking_user&.id || GUMROAD_ADMIN_ID }
+      comment_params = { content: comment_content, author_id: blocking_user&.id || GUMROAD_ADMIN_ID }
 
       if comment_params[:content].blank?
         if blocking_user&.is_team_member?
