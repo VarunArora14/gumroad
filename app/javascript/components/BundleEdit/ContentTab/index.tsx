@@ -13,7 +13,6 @@ import { Icon } from "$app/components/Icons";
 import { Card } from "$app/components/Product/Card";
 import { Progress } from "$app/components/Progress";
 import { showAlert } from "$app/components/server-components/Alert";
-import { Card as UICard } from "$app/components/ui/Card";
 import { useDebouncedCallback } from "$app/components/useDebouncedCallback";
 import { useOnChange } from "$app/components/useOnChange";
 import { useOnScrollToBottom } from "$app/components/useOnScrollToBottom";
@@ -134,7 +133,7 @@ export const ContentTab = () => {
                   ))}
                 </div>
               ) : null}
-              <UICard aria-label="Product selector">
+              <div className="grid gap-4 rounded border border-border bg-background p-4" aria-label="Product selector">
                 <div className="input">
                   <Icon name="solid-search" />
                   <input
@@ -171,7 +170,7 @@ export const ContentTab = () => {
                 ) : (
                   <div style={{ justifySelf: "center" }}>No products found</div>
                 )}
-              </UICard>
+              </div>
             </>
           ) : (
             <section className="placeholder">
