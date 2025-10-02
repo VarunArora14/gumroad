@@ -346,12 +346,12 @@ export const DashboardPage = ({
                     toggleGettingStarted();
                   }}
                   aria-label={gettingStartedMinimized ? "Expand getting started" : "Minimize getting started"}
-                  style={{ display: "flex", alignItems: "center", gap: "var(--spacer-1)" }}
+                  className="flex items-center gap-1"
                 >
                   <span>{gettingStartedMinimized ? "Show more" : "Show less"}</span>
                   <Icon
                     name={gettingStartedMinimized ? "arrows-expand" : "arrows-collapse"}
-                    style={{ width: "20px", height: "20px" }}
+                    className="w-5 h-5"
                   />
                 </a>
               </div>
