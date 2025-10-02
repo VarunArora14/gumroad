@@ -351,7 +351,7 @@ export const DashboardPage = ({
                   <span>{gettingStartedMinimized ? "Show more" : "Show less"}</span>
                   <Icon
                     name={gettingStartedMinimized ? "arrows-expand" : "arrows-collapse"}
-                    className="w-5 h-5"
+                    className="!w-5 !h-5"
                   />
                 </a>
               </div>
