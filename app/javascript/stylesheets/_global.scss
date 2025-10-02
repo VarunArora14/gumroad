@@ -110,6 +110,25 @@ ul.inline {
   }
 }
 
+ul.inline {
+  @media (max-width: 639px) {
+    & > li.email-item {
+      display: block;
+      margin-bottom: spacer(2);
+      word-break: break-all;
+      overflow-wrap: anywhere;
+
+      &:not(:last-child)::after {
+        content: "";
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
 menu > li {
   list-style: none;
 }

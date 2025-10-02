@@ -16,14 +16,14 @@
             <li><%= link_to user.username, user.subdomain_with_protocol, target: "_blank" %></li>
           <% end %>
           <% if user.form_email.present? %>
-            <li>
+            <li class="email-item">
               Email:
               <%= copy_to_clipboard(user.form_email) %>
               <%= blocked_email_tooltip(user.form_email) %>
             </li>
           <% end %>
           <% if user.support_email.present? %>
-            <li>
+            <li class="email-item">
               Support email:
               <%= copy_to_clipboard(user.support_email) %>
             </li>
