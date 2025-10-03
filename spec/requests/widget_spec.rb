@@ -91,6 +91,9 @@ describe "Widget Page scenario", js: true, type: :system do
         expect(page).not_to have_content("Copy to Clipboard")
         expect(page).not_to have_content("Copied!")
 
+        # Wait for the tooltip state to fully reset before testing again
+        expect(copy_button).not_to have_tooltip(text: "Copied!")
+
         copy_button.hover
         expect(copy_button).to have_tooltip(text: "Copy to Clipboard")
       end
