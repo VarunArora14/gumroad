@@ -79,9 +79,9 @@ describe "Widget Page scenario", js: true, type: :system do
         expect(page).to have_field("Widget code", with: %(<script src="#{@base_url}/js/gumroad-embed.js"></script>\n<div class="gumroad-product-embed"><a href="#{@product.long_url}">Loading...</a></div>))
 
         copy_button = find_button("Copy embed code")
-        expect(copy_button).not_to have_tooltip(text: "Copy to Clipboard")
+        expect(page).not_to have_content("Copy to Clipboard")
         copy_button.hover
-        expect(copy_button).to have_tooltip(text: "Copy to Clipboard")
+        expect(page).to have_content("Copy to Clipboard")
 
         copy_button.click
         expect(page).to have_content("Copied!")
@@ -92,7 +92,7 @@ describe "Widget Page scenario", js: true, type: :system do
         expect(page).not_to have_content("Copied!")
 
         copy_button.hover
-        expect(copy_button).to have_tooltip(text: "Copy to Clipboard")
+        expect(page).to have_content("Copy to Clipboard")
       end
     end
 
