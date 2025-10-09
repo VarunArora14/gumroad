@@ -196,7 +196,11 @@ class Subscription < ApplicationRecord
 
   def current_subscription_price_cents
     if is_installment_plan
-      original_purchase.minimum_paid_price_cents
+      # For installment plans, calculate the next installment amount using the original purchase's locked installment plan
+      next_installment_number = purchases.successful.count
+      original_installment_plan = original_purchase.fetch_installment_plan
+      installment_payments = original_installment_plan.calculate_installment_payment_price_cents(original_purchase.original_purchase_price_cents)
+      installment_payments[next_installment_number] || installment_payments.last
     else
       discount_applies_to_next_charge? ?
         original_purchase.displayed_price_cents :

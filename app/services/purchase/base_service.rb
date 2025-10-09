@@ -52,6 +52,9 @@ class Purchase::BaseService
       )
       subscription.save!
       subscription.purchases << [purchase, giftee_purchase].compact
+
+      # Store original installment data for installment purchases
+      purchase.store_original_installment_data! if purchase.is_installment_payment?
     end
 
     def handle_purchase_failure

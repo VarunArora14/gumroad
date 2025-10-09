@@ -1277,7 +1277,14 @@ class Purchase < ApplicationRecord
   end
 
   def minimum_paid_price_cents_per_unit_before_discount
-    base_product_price_cents + variant_extra_cost
+    if is_installment_payment? && original_purchase_price_cents.present?
+      # Use original purchase price instead of current product price for installment purchases
+      return 0 if quantity.zero?
+      original_purchase_price_cents / quantity
+    else
+      # Existing logic for non-installment purchases
+      base_product_price_cents + variant_extra_cost
+    end
   end
 
   def payment_cents
@@ -2620,6 +2627,38 @@ class Purchase < ApplicationRecord
     end
   end
 
+  # Store original installment plan data at purchase time
+  def store_original_installment_data!(validate: true)
+    return unless is_installment_payment?
+
+    self.original_installment_plan_id = link.installment_plan.id
+    self.original_purchase_price_cents = displayed_price_cents
+    save!(validate: validate)
+  end
+
+  # Override fetch_installment_plan to use original plan
+  def fetch_installment_plan
+    if is_installment_payment? && original_installment_plan_id.present?
+      begin
+        ProductInstallmentPlan.find(original_installment_plan_id)
+      rescue ActiveRecord::RecordNotFound
+        # Fallback to current product's installment plan if original is not found
+        link.installment_plan
+      end
+    else
+      # Fallback to current product's installment plan
+      link.installment_plan
+    end
+  end
+
+  def calculate_installment_payment_price_cents(total_price_cents)
+    return unless is_installment_payment
+
+    nth_installment = subscription&.purchases&.successful&.count || 0
+    installment_payments = fetch_installment_plan.calculate_installment_payment_price_cents(total_price_cents)
+    installment_payments[nth_installment] || installment_payments.last
+  end
+
   private
     def offer_amount_off(purchase_min_price)
       # For commissions, apply deposit purchase's offer code to its completion
@@ -3384,14 +3423,6 @@ class Purchase < ApplicationRecord
       customizable_price? ? perceived_price_cents : nil
     end
 
-    def calculate_installment_payment_price_cents(total_price_cents)
-      return unless is_installment_payment
-
-      nth_installment = subscription&.purchases&.successful&.count || 0
-      installment_payments = fetch_installment_plan.calculate_installment_payment_price_cents(total_price_cents)
-      installment_payments[nth_installment] || installment_payments.last
-    end
-
     def calculate_price_range_cents
       return unless price_range
 
@@ -3821,7 +3852,4 @@ class Purchase < ApplicationRecord
       end
     end
 
-    def fetch_installment_plan
-      installment_plan || subscription&.last_payment_option&.installment_plan
-    end
 end
