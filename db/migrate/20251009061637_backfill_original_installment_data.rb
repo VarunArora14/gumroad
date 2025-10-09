@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BackfillOriginalInstallmentData < ActiveRecord::Migration[7.1]
   def up
     # Backfill installment purchase data

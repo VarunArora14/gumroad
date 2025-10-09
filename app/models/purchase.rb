@@ -1277,12 +1277,11 @@ class Purchase < ApplicationRecord
   end
 
   def minimum_paid_price_cents_per_unit_before_discount
+    # Use original purchase price for installment purchases to lock pricing
     if is_installment_payment? && original_purchase_price_cents.present?
-      # Use original purchase price instead of current product price for installment purchases
-      return 0 if quantity.zero?
+      # return 0 if quantity.zero?
       original_purchase_price_cents / quantity
     else
-      # Existing logic for non-installment purchases
       base_product_price_cents + variant_extra_cost
     end
   end
@@ -2627,28 +2626,31 @@ class Purchase < ApplicationRecord
     end
   end
 
-  # Store original installment plan data at purchase time
+  # Store original installment plan data at purchase time to lock terms.
+  # This ensures that changes to product price or installment configuration
   def store_original_installment_data!(validate: true)
-    return unless is_installment_payment?
+    return unless is_installment_payment? && link&.installment_plan.present?
+    return if original_installment_plan_id.present? # Already stored
 
-    self.original_installment_plan_id = link.installment_plan.id
-    self.original_purchase_price_cents = displayed_price_cents
-    save!(validate: validate)
+    # Use the base product price before any discounts/offer codes are applied
+    # This ensures we lock the original product price, not the final calculated price
+    base_price = link.price_cents || link.default_price&.price_cents || 0
+
+    attributes = {
+      original_installment_plan_id: link.installment_plan.id,
+      original_purchase_price_cents: base_price
+    }
+
+    validate ? update!(attributes) : update_columns(attributes)
   end
 
-  # Override fetch_installment_plan to use original plan
+  # Fetch the installment plan for this purchase.
+  # For installment purchases, uses the locked original plan to maintain
   def fetch_installment_plan
-    if is_installment_payment? && original_installment_plan_id.present?
-      begin
-        ProductInstallmentPlan.find(original_installment_plan_id)
-      rescue ActiveRecord::RecordNotFound
-        # Fallback to current product's installment plan if original is not found
-        link.installment_plan
-      end
-    else
-      # Fallback to current product's installment plan
-      link.installment_plan
-    end
+    return link.installment_plan unless is_installment_payment? && original_installment_plan_id.present?
+
+    # Fallback to current product plan if original plan was deleted
+    ProductInstallmentPlan.find_by(id: original_installment_plan_id) || link.installment_plan
   end
 
   def calculate_installment_payment_price_cents(total_price_cents)
@@ -3851,5 +3853,4 @@ class Purchase < ApplicationRecord
         Iffy::Product::IngestJob.perform_async(link.id)
       end
     end
-
 end

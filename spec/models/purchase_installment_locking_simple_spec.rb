@@ -2,145 +2,86 @@
 
 require "spec_helper"
 
-RSpec.describe "Purchase Installment Locking - Simple Tests", type: :model do
+describe Purchase do
   let(:seller) { create(:user) }
   let(:buyer) { create(:user) }
-  let(:product) { create(:product, user: seller, price_cents: 1000) }
-  let(:installment_plan) { create(:product_installment_plan, link: product, number_of_installments: 3) }
+  let(:product) { create(:product, :with_installment_plan, user: seller, price_cents: 1000) }
+  let(:installment_plan) { product.installment_plan }
 
-  before do
-    product.installment_plan = installment_plan
-    product.save!
-  end
+  describe "#store_original_installment_data!" do
+    context "when purchase is installment payment" do
+      let(:purchase) { create(:installment_plan_purchase, link: product, purchaser: buyer) }
 
-  describe "store_original_installment_data!" do
-    it "stores original installment plan data" do
-      # Create a purchase manually to avoid validation issues
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful"
-      )
-      purchase.is_installment_payment = true
-      purchase.save!(validate: false)
+      it "stores installment plan id and original price" do
+        purchase.store_original_installment_data!
+        purchase.reload
 
-      # Ensure the product has the installment plan
-      product.reload
-
-      expect(purchase.is_installment_payment?).to be true
-      expect(purchase.link.installment_plan).to eq(installment_plan)
-
-      purchase.store_original_installment_data!(validate: false)
-      purchase.reload
-
-      expect(purchase.original_installment_plan_id).to eq(installment_plan.id)
-      expect(purchase.original_purchase_price_cents).to eq(1000)
+        expect(purchase.original_installment_plan_id).to eq(installment_plan.id)
+        expect(purchase.original_purchase_price_cents).to eq(1000)
+      end
     end
 
-    it "does not store data for non-installment purchases" do
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful"
-      )
-      # Don't set is_installment_payment flag
-      purchase.save!(validate: false)
+    context "when purchase is not installment payment" do
+      let(:purchase) { create(:purchase, link: product, purchaser: buyer) }
 
-      purchase.store_original_installment_data!
+      it "does not store installment data" do
+        purchase.store_original_installment_data!
+        purchase.reload
 
-      expect(purchase.original_installment_plan_id).to be_nil
-      expect(purchase.original_purchase_price_cents).to be_nil
+        expect(purchase.original_installment_plan_id).to be_nil
+        expect(purchase.original_purchase_price_cents).to be_nil
+      end
     end
   end
 
-  describe "fetch_installment_plan" do
-    it "uses original installment plan when available" do
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful",
-        original_installment_plan_id: installment_plan.id
-      )
-      purchase.is_installment_payment = true
-      purchase.save!(validate: false)
+  describe "#fetch_installment_plan" do
+    context "when original installment plan exists" do
+      let(:purchase) do
+        create(:installment_plan_purchase,
+               link: product,
+               purchaser: buyer,
+               original_installment_plan_id: installment_plan.id)
+      end
 
-      expect(purchase.fetch_installment_plan).to eq(installment_plan)
+      it "returns original installment plan" do
+        expect(purchase.fetch_installment_plan).to eq(installment_plan)
+      end
     end
 
-    it "falls back to current product installment plan when original is not available" do
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful"
-      )
-      purchase.is_installment_payment = true
-      purchase.save!(validate: false)
+    context "when original installment plan does not exist" do
+      let(:purchase) { create(:installment_plan_purchase, link: product, purchaser: buyer) }
 
-      expect(purchase.fetch_installment_plan).to eq(product.installment_plan)
+      it "returns current product installment plan" do
+        expect(purchase.fetch_installment_plan).to eq(product.installment_plan)
+      end
     end
   end
 
-  describe "minimum_paid_price_cents_per_unit_before_discount" do
-    it "uses original purchase price for installment purchases" do
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful",
-        original_purchase_price_cents: 1000,
-        quantity: 1
-      )
-      purchase.is_installment_payment = true
-      purchase.save!(validate: false)
+  describe "#minimum_paid_price_cents_per_unit_before_discount" do
+    context "when purchase is installment payment" do
+      let(:purchase) do
+        create(:installment_plan_purchase,
+               link: product,
+               purchaser: buyer,
+               original_purchase_price_cents: 1000,
+               quantity: 1)
+      end
 
-      # Change the product price
-      product.update!(price_cents: 2000)
+      it "returns original purchase price when product price changes" do
+        product.update!(price_cents: 2000)
 
-      expect(purchase.minimum_paid_price_cents_per_unit_before_discount).to eq(1000)
+        expect(purchase.minimum_paid_price_cents_per_unit_before_discount).to eq(1000)
+      end
     end
 
-    it "uses current product price for non-installment purchases" do
-      purchase = Purchase.new(
-        link: product,
-        purchaser: buyer,
-        seller: seller,
-        displayed_price_cents: 1000,
-        price_cents: 1000,
-        total_transaction_cents: 1000,
-        email: "test@example.com",
-        purchase_state: "successful"
-      )
-      # Don't set is_installment_payment flag
-      purchase.save!(validate: false)
+    context "when purchase is not installment payment" do
+      let(:purchase) { create(:purchase, link: product, purchaser: buyer, quantity: 1) }
 
-      # Change the product price
-      product.update!(price_cents: 2000)
+      it "returns current product price when product price changes" do
+        product.update!(price_cents: 2000)
 
-      expect(purchase.minimum_paid_price_cents_per_unit_before_discount).to eq(2000)
+        expect(purchase.minimum_paid_price_cents_per_unit_before_discount).to eq(2000)
+      end
     end
   end
 end
