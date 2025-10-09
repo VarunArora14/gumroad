@@ -1279,7 +1279,7 @@ class Purchase < ApplicationRecord
   def minimum_paid_price_cents_per_unit_before_discount
     # Use original purchase price for installment purchases to lock pricing
     if is_installment_payment? && original_purchase_price_cents.present?
-      # return 0 if quantity.zero?
+      return 0 if quantity.zero?
       original_purchase_price_cents / quantity
     else
       base_product_price_cents + variant_extra_cost
