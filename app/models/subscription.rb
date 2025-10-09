@@ -623,7 +623,13 @@ class Subscription < ApplicationRecord
 
   def recurrence
     if is_installment_plan
-      last_payment_option.installment_plan.recurrence
+      # Use snapshot data if available (for subscriptions created after snapshotting was implemented)
+      if original_purchase&.installment_plan_id.present?
+        original_purchase.installment_plan.recurrence
+      else
+        # Fallback to current plan for legacy subscriptions
+        last_payment_option.installment_plan.recurrence
+      end
     else
       price.recurrence
     end

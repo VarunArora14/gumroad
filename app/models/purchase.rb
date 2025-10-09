@@ -111,6 +111,7 @@ class Purchase < ApplicationRecord
   has_one :affiliate_credit
   has_many :affiliate_partial_refunds
   belongs_to :affiliate, optional: true
+  belongs_to :installment_plan, class_name: "ProductInstallmentPlan", optional: true
 
   has_one :purchase_sales_tax_info
   has_one :purchase_taxjar_info
@@ -348,6 +349,7 @@ class Purchase < ApplicationRecord
   before_create :validate_quantity
   before_create :assign_is_multiseat_license
   before_create :check_for_fraud
+  before_create :capture_installment_plan_snapshot
 
   before_save :assign_default_rental_expired
   before_save :to_mongo
@@ -2642,6 +2644,34 @@ class Purchase < ApplicationRecord
       link.save!
     end
 
+    def calculate_installment_payment_price_cents(total_price_cents)
+      return unless is_installment_payment
+
+      # Determine which installment this is (0-indexed)
+      nth_installment = subscription&.purchases&.successful&.count || 0
+
+      # Use snapshot data if available (for purchases made after snapshotting was implemented)
+      if installment_payment_amounts_cents.present?
+        amounts = JSON.parse(installment_payment_amounts_cents)
+        return amounts[nth_installment] || amounts.last
+      end
+
+      # Fallback to current plan for legacy purchases
+      current_plan = fetch_installment_plan
+      return unless current_plan
+
+      installment_amounts = current_plan.calculate_installment_payment_price_cents(total_price_cents)
+      installment_amounts[nth_installment] || installment_amounts.last
+    end
+
+    def fetch_installment_plan
+      # Use snapshot if available
+      return installment_plan if installment_plan_id.present?
+
+      # Fallback to current plan for legacy purchases
+      subscription&.last_payment_option&.installment_plan
+    end
+
     def process_without_charging!
       set_price_and_rate
       calculate_fees
@@ -3384,14 +3414,6 @@ class Purchase < ApplicationRecord
       customizable_price? ? perceived_price_cents : nil
     end
 
-    def calculate_installment_payment_price_cents(total_price_cents)
-      return unless is_installment_payment
-
-      nth_installment = subscription&.purchases&.successful&.count || 0
-      installment_payments = fetch_installment_plan.calculate_installment_payment_price_cents(total_price_cents)
-      installment_payments[nth_installment] || installment_payments.last
-    end
-
     def calculate_price_range_cents
       return unless price_range
 
@@ -3821,7 +3843,19 @@ class Purchase < ApplicationRecord
       end
     end
 
-    def fetch_installment_plan
-      installment_plan || subscription&.last_payment_option&.installment_plan
+    def capture_installment_plan_snapshot
+      return unless is_installment_payment
+
+      current_plan = fetch_installment_plan
+      return unless current_plan
+
+      # Calculate the total price for the installment calculation
+      # Use the price_cents before any fees are applied
+      total_price_cents = price_cents || 0
+
+      # Store the snapshot
+      self.installment_plan_id = current_plan.id
+      self.installment_number_of_installments = current_plan.number_of_installments
+      self.installment_payment_amounts_cents = current_plan.calculate_installment_payment_price_cents(total_price_cents).to_json
     end
 end
