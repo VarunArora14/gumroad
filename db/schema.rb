@@ -1739,8 +1739,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_09_171251) do
     t.bigint "price_id"
     t.string "recommended_by"
     t.datetime "deleted_at", precision: nil
-    t.bigint "original_installment_plan_id"
-    t.integer "original_purchase_price_cents"
     t.bigint "installment_plan_id"
     t.integer "installment_number_of_installments"
     t.text "installment_payment_amounts_cents"
@@ -1756,7 +1754,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_09_171251) do
     t.index ["link_id", "purchase_state", "created_at"], name: "index_purchases_on_link_id_and_purchase_state_and_created_at"
     t.index ["link_id"], name: "index_purchases_on_link_id"
     t.index ["offer_code_id"], name: "index_purchases_on_offer_code_id"
-    t.index ["original_installment_plan_id"], name: "index_purchases_on_original_installment_plan_id"
     t.index ["paypal_order_id"], name: "index_purchases_on_paypal_order_id"
     t.index ["preorder_id"], name: "index_purchases_on_preorder_id"
     t.index ["purchase_chargeback_balance_id"], name: "index_purchase_chargeback_balance_id"

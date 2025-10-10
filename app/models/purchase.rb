@@ -2664,14 +2664,6 @@ class Purchase < ApplicationRecord
       installment_amounts[nth_installment] || installment_amounts.last
     end
 
-    def fetch_installment_plan
-      # Use snapshot if available
-      return installment_plan if installment_plan_id.present?
-
-      # Fallback to current plan for legacy purchases
-      subscription&.last_payment_option&.installment_plan
-    end
-
     def process_without_charging!
       set_price_and_rate
       calculate_fees
@@ -3841,6 +3833,14 @@ class Purchase < ApplicationRecord
       if rand < probability
         Iffy::Product::IngestJob.perform_async(link.id)
       end
+    end
+
+    def fetch_installment_plan
+      # Use snapshot if available
+      return installment_plan if installment_plan_id.present?
+
+      # Fallback to current plan for legacy purchases
+      subscription&.last_payment_option&.installment_plan
     end
 
     def capture_installment_plan_snapshot
