@@ -53,8 +53,10 @@ class SalesTaxCalculator
     def calculate_with_taxjar
       return unless is_us_taxable_state || is_ca_taxable
 
+      origin_country = GumroadAddress::COUNTRY&.alpha2 || Compliance::Countries::USA.alpha2
+
       origin = {
-        country: GumroadAddress::COUNTRY.alpha2,
+        country: origin_country,
         state: GumroadAddress::STATE,
         zip: GumroadAddress::ZIP
       }

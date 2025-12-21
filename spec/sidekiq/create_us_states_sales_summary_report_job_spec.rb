@@ -33,6 +33,7 @@ describe CreateUsStatesSalesSummaryReportJob do
     before do
       travel_to(Time.find_zone("UTC").local(2022, 8, 10)) do
         product = create(:product, price_cents: 100_00, native_type: "digital")
+        create(:merchant_account, user: product.user)
 
         @purchase1 = create(:purchase_in_progress, link: product, was_product_recommended: true, country: "United States", zip_code: "98121") # King County, Washington
         @purchase2 = create(:purchase_in_progress, link: product, was_product_recommended: true, country: "United States", zip_code: "53703") # Madison, Wisconsin
@@ -43,7 +44,10 @@ describe CreateUsStatesSalesSummaryReportJob do
         @purchase7 = create(:purchase_in_progress, link: product, country: "United States", zip_code: "53202", gumroad_tax_cents: 850) # Milwaukee, Wisconsin
 
         @purchase_to_refund = create(:purchase_in_progress, link: product, country: "United States", zip_code: "98604", gumroad_tax_cents: 780) # Hockinson County, Washington
-        refund_flow_of_funds = FlowOfFunds.build_simple_flow_of_funds(Currency::USD, 30_00)
+        @purchase_to_refund.chargeable = create(:chargeable)
+        @purchase_to_refund.process!
+        @purchase_to_refund.update_balance_and_mark_successful!
+
         @purchase_to_refund.refund_purchase!(refund_flow_of_funds, nil)
 
         @purchase_without_taxjar_info = create(:purchase, link: product, country: "United States", zip_code: "98612", gumroad_tax_cents: 650) # Wahkiakum County, Washington

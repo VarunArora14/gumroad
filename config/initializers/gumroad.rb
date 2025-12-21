@@ -23,14 +23,25 @@ GUMROAD_MERCHANT_DESCRIPTOR_URL = GlobalConfig.get("MERCHANT_DESCRIPTOR_URL", "g
 GUMROAD_LOGO_URL = GlobalConfig.get("LOGO_URL", "https://gumroad.com/button/button_logo.png")
 
 module GumroadAddress
-  STREET = GlobalConfig.get("ADDRESS_STREET", "548 Market St")
-  CITY = GlobalConfig.get("ADDRESS_CITY", "San Francisco")
-  STATE = GlobalConfig.get("ADDRESS_STATE", "CA")
-  ZIP = GlobalConfig.get("ADDRESS_ZIP", "94104")
-  ZIP_PLUS_FOUR = "#{ZIP}-#{GlobalConfig.get("ADDRESS_ZIP_PLUS_FOUR", "5401")}"
-  COUNTRY = ISO3166::Country[GlobalConfig.get("ADDRESS_COUNTRY", "US")]
+  STREET = "548 Market St"
+  CITY = "San Francisco"
+  STATE = "CA"
+  ZIP = "94104"
+  ZIP_PLUS_FOUR = "9401-5401"
+
+  # Normalize configured country and try multiple lookups; fallback to US
+  configured_country = GlobalConfig.get("ADDRESS_COUNTRY", "US").to_s.strip
+  resolved_country = begin
+    ISO3166::Country[configured_country.upcase] ||
+      ISO3166::Country.find_country_by_alpha3(configured_country.upcase) ||
+      ISO3166::Country.find_country_by_name(configured_country)
+  rescue StandardError
+    nil
+  end
+  COUNTRY = resolved_country || ISO3166::Country["US"]
 
   def self.full
-    "#{STREET}, #{CITY}, #{STATE} #{ZIP_PLUS_FOUR}, #{COUNTRY.alpha3}"
+    country_code = COUNTRY&.alpha3 || "USA"
+    "#{STREET}, #{CITY}, #{STATE} #{ZIP_PLUS_FOUR}, #{country_code}"
   end
 end

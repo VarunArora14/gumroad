@@ -31,11 +31,13 @@ describe CreateCanadaMonthlySalesReportJob do
       subscription = nil
       travel_to(Time.zone.local(2014, 12, 1)) do
         subscription_product = create(:subscription_product, price_cents: 100_00)
+        create(:merchant_account, user: subscription_product.user)
         subscription = create(:subscription, link_id: subscription_product.id)
         create(:purchase, link: subscription_product, is_original_subscription_purchase: true, subscription:, was_product_recommended: true, country: "Canada", state: nil)
       end
       travel_to(Time.zone.local(2015, 1, 1)) do
         product = create(:product, price_cents: 100_00, native_type: "digital")
+        create(:merchant_account, user: product.user)
 
         @purchase1 = create(:purchase_in_progress, link: product, was_product_recommended: true, country: "Canada", state: "ON", ip_country: "Canada")
         @purchase2 = create(:purchase_in_progress, link: product, was_product_recommended: true, country: "Canada", state: "QC", ip_country: "Canada")
