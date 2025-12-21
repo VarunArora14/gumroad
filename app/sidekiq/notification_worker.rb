@@ -15,12 +15,14 @@ class NotificationWorker
   # NotificationWorker.perform_async("payments", "Canada Sales Reporting", "Canada 2024-11 sales report is ready - https://...", { "color" => "green" })
   # NotificationWorker.perform_async("payments", "VAT Reporting", "Report ready", { "color" => "gray", attachments: [{ title: "Link", text: "URL" }] })
   def perform(notification_category, source, message_text, options = {})
-    # Normalize string keys
+    # Normalize to string keys
     options = options.transform_keys(&:to_s)
+
     color = options["color"] || "gray"
     attachments = Array(options["attachments"])
     notifications_email = GlobalConfig.get("NOTIFICATIONS_EMAIL_ADDRESS", "notifications@gumroad.com")
 
+    # Send email if configured AND feature is active
     if notifications_email.present? && Feature.active?(:send_notifications_via_email)
       NotificationMailer.with(
         notification_category:,
@@ -31,7 +33,7 @@ class NotificationWorker
       ).notification.deliver_now
     end
 
-    # Send to Slack unless feature flag is active
+    # Send to Slack if feature flag is active
     if Feature.active?(:send_notifications_via_slack)
       slack_options = options.merge("attachments" => attachments)
       SlackMessageWorker.perform_async(notification_category, source, message_text, color, slack_options)

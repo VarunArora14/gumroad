@@ -9,6 +9,8 @@ describe NotificationWorker do
     let(:message_text) { "Canada 2024-11 sales report is ready - https://example.com/report.csv" }
 
     before do
+      allow(Feature).to receive(:active?).with(:send_notifications_via_email).and_return(true)
+      allow(Feature).to receive(:active?).with(:send_notifications_via_slack).and_return(false)
       allow(GlobalConfig).to receive(:get).and_call_original
       allow(GlobalConfig).to receive(:get).with("NOTIFICATIONS_EMAIL_ADDRESS").and_return("notifications@gumroad.com")
     end
